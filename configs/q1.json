@@ -1,0 +1,7 @@
+{
+  "parameters": {"L": 0.25, "R": 0.02, "T0": 28.0, "C0": 2.55, "rho": 820.0, "cp": 2600.0, "k": 0.36, "h": 25.0, "hm": 8e-7, "D_prefactor": 7e-9, "D_exponent": 0.89},
+  "input_sha256": {"environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7", "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4", "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"},
+  "solver": {"method": "BDF", "rtol": 1e-9, "atol_T": 1e-10, "atol_C": 1e-12, "max_step": 5.0},
+  "budgets": {"space_T": 0.0008, "space_C": 0.000008, "time_T": 0.0002, "time_C": 0.000002},
+  "grids": [40, 80, 160, 320, 640, 1280, 2560, 5120, 10240]
+}
