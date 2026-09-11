@@ -21,7 +21,7 @@ def boundary_check(sol, grid, p, env):
     records = {}
     for name,u,a,beta,exterior,scale in [
         ("T",sol.temperature_C,p["k"],p["h"],Te,p["h"]*13.513),
-        ("C",sol.moisture,diffusivity(sol.moisture[:,-1])[0],p["hm"],Ce,p["hm"]*(2.55-0.01963))]:
+        ("C",sol.moisture,diffusivity(sol.moisture[:,-1],p["D_prefactor"],p["D_exponent"])[0],p["hm"],Ce,p["hm"]*(2.55-0.01963))]:
         gradient = (3*u[:,-1]-4*u[:,-2]+u[:,-3])/(2*grid.dr)
         residual = abs(-a*gradient-beta*(u[:,-1]-exterior))/scale
         early = (sol.times>=1)&(sol.times<=60)
@@ -42,7 +42,7 @@ def balance_check(sol,grid,p):
 
 
 def analytic_check(grid,p,settings):
-    D0 = float(diffusivity(np.array([p["C0"]]))[0][0])
+    D0 = float(diffusivity(np.array([p["C0"]]),p["D_prefactor"],p["D_exponent"])[0][0])
     times = np.array([1.,2,5,10,30,60,100,300,600,1800])
     model = RadialModel(grid,p,lambda t:(38.,0.02),constant_D=D0)
     sol = integrate(model,settings,breaks=[0,1800],output_times=times)

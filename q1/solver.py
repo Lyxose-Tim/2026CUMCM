@@ -43,6 +43,14 @@ def integrate(model, settings, *, breaks=None, output_times=None, initial=None,
     if np.any(np.diff(times) <= 0) or times[0] < breaks[0] or times[-1] > breaks[-1]:
         raise ValueError("Output times must increase within integration interval")
     state = np.r_[np.full(n,p["T0"]),np.full(n,p["C0"])] if initial is None else np.array(initial,dtype=float)
+    if check_envelope and not callable(getattr(model.environment,"history_extrema",None)):
+        raise ValueError("Envelope checks require exact environment.history_extrema(t)")
+    initial_bounds = (state[:n].min(),state[:n].max(),state[n:].min(),state[n:].max())
+
+    def envelope_bounds(t):
+        loT,hiT,loC,hiC = model.environment.history_extrema(t)
+        return (np.minimum(initial_bounds[0],loT),np.maximum(initial_bounds[1],hiT),
+                np.minimum(initial_bounds[2],loC),np.maximum(initial_bounds[3],hiC))
     field = np.empty((len(times),2*n))
     cumulative_out = np.zeros((len(times),2))
     quad_check_out = np.zeros((len(times),2))
@@ -108,8 +116,8 @@ def integrate(model, settings, *, breaks=None, output_times=None, initial=None,
                     if np.any(C <= 0) or not np.all(np.isfinite(y)):
                         raise RuntimeError("Illegal accepted state")
                     if check_envelope:
-                        upper_T = max(p["T0"], float(model.environment(right)[0]))
-                        if T.min() < p["T0"]-1e-7 or T.max() > upper_T+1e-7 or C.min() < 0.01963-1e-9 or C.max() > p["C0"]+1e-9:
+                        loT,hiT,loC,hiC = envelope_bounds(right)
+                        if T.min() < loT-1e-7 or T.max() > hiT+1e-7 or C.min() < loC-1e-9 or C.max() > hiC+1e-9:
                             raise RuntimeError(f"Accepted-state envelope failed at t={right}")
                     segment_rows.append([right,right-left,T.min(),T.max(),C.min(),C.max(),T[-1],C[-1],np.dot(g.volume,T)/g.volume.sum(),np.dot(g.volume,C)/g.volume.sum()])
                     dense = solver.dense_output()
@@ -143,8 +151,8 @@ def integrate(model, settings, *, breaks=None, output_times=None, initial=None,
     if np.any(field[:,n:] <= 0) or not np.all(np.isfinite(field)):
         raise RuntimeError("Invalid dense output")
     if check_envelope:
-        upper = np.maximum(p["T0"], model.environment(times)[0])
-        if np.any(field[:,:n] < p["T0"]-1e-7) or np.any(field[:,:n] > upper[:,None]+1e-7) or np.any(field[:,n:] > p["C0"]+1e-9) or np.any(field[:,n:] < 0.01963-1e-9):
+        loT,hiT,loC,hiC = envelope_bounds(times)
+        if np.any(field[:,:n] < loT[:,None]-1e-7) or np.any(field[:,:n] > hiT[:,None]+1e-7) or np.any(field[:,n:] > hiC[:,None]+1e-9) or np.any(field[:,n:] < loC[:,None]-1e-9):
             raise RuntimeError("Output envelope failed")
     diag = {**total_counts,"method":settings["method"],"settings":settings,"seconds":time.perf_counter()-started,"trial_failures":failures,"accepted_steps":len(accepted),"audited":audit}
     return Solution(times,field[:,:n],field[:,n:],np.asarray(accepted),cumulative_out,quad_check_out,diag)
