@@ -2,9 +2,9 @@
 
 ## A题：药材的烘干问题
 
-小组建模与论文工作入口。当前已完成题目及附件分析、四问模型设计和实施计划；数值求解、结果文件与论文仍需按清单推进。
+小组建模与论文工作入口。第一问的有效径向数值基准、表1–2、result1.xlsx、图表和复现验证已完成，等待小组交叉审核。第二至第四问数值求解及整篇论文仍需按清单推进。
 
-第一问已认领正式实现，分支 `feat/q1-radial-baseline`；执行依据为[正式模型契约](reports/Q1_MODEL_SPEC.md)。参考文档仍由[PR #1](https://github.com/Lyxose-Tim/2026CUMCM/pull/1)独立管理。实现进度见待办，数值验证与小组交叉审核分别记录。
+第一问实现分支 `feat/q1-radial-baseline`；依据为[正式模型契约](reports/Q1_MODEL_SPEC.md)，交付见[结果报告](reports/Q1_RESULTS_REPORT.md)、[验证报告](reports/Q1_VERIFY_REPORT.md)、[result1.xlsx](results/result1.xlsx)和[复现说明](REPRODUCE.md)。参考文档仍由[PR #1](https://github.com/Lyxose-Tim/2026CUMCM/pull/1)独立管理，按固定提交只读引用。数值验证与小组交叉审核分别记录。
 
 ### 阅读顺序
 

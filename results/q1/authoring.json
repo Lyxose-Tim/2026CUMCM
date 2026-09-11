@@ -1,0 +1,19 @@
+{
+  "node_version": "24.19.0",
+  "artifact_tool_version": "2.8.59",
+  "runtime_bundle": "26.904.11930",
+  "workbook_command": "<bundled-node> scripts/build_result1.mjs",
+  "figure_command": "python -m q1.figures",
+  "readback_command": "python -m q1.check_export",
+  "report_command": "python -m q1.reports",
+  "workbook_font": "Microsoft YaHei",
+  "figure_font": "Microsoft YaHei",
+  "visual_check": {
+    "workbook_sheets": ["温度", "水分浓度"],
+    "workbook_preview_range": "A1:H10",
+    "pdfs": ["environment.pdf", "radial_profiles.pdf", "center_surface_response.pdf", "convergence.pdf"],
+    "pdf_render_method": "Poppler pdftoppm; first page; 1400 pixel preview",
+    "passed": true,
+    "notes": "Both workbook sheets show readable headers and four decimal values. All four vector figures show readable Chinese axes, legends and plotted curves without clipping."
+  }
+}

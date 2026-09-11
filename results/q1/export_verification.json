@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "numeric_result_cells_checked": 75600,
+  "workbook_sha256": "e40b93f454859f00b1076c5f1bc369f60e30c2a460878d64dc5aa4763c730018",
+  "table_values_match": true,
+  "figure_source_values_match": true,
+  "sheets": [
+    "温度",
+    "水分浓度"
+  ],
+  "range_per_sheet": "A1:V1801",
+  "rounding": "Decimal(str(float)); ROUND_HALF_UP; 4 decimal places",
+  "original_template_sha256": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4"
+}
