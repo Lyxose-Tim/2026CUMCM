@@ -1,0 +1,46 @@
+{
+  "parameters": {
+    "L": 0.25,
+    "R": 0.02,
+    "T0": 28.0,
+    "C0": 2.55,
+    "h": 25.0,
+    "hm": 8e-7,
+    "rho_intercept": 650.0,
+    "rho_slope": 128.0,
+    "cp_intercept": 1450.0,
+    "cp_scale": 2736.0,
+    "k_intercept": 0.21,
+    "k_scale": 0.38,
+    "D_prefactor": 0.0024,
+    "D_moisture_exponent": 0.45,
+    "D_temperature_exponent_K": 3850.0
+  },
+  "input_sha256": {
+    "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+    "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+    "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+  },
+  "horizon_s": 259200,
+  "environment": {
+    "observed_end_s": 14400,
+    "mean_window_start_s": 10800,
+    "default_extension": "last_hour_mean",
+    "scenario_extensions": ["terminal_hold", "nominal"]
+  },
+  "solver": {
+    "method": "BDF",
+    "rtol": 1e-10,
+    "atol_T": 1e-11,
+    "atol_C": 1e-13,
+    "max_step_observed": 30.0,
+    "max_step_extended": 300.0
+  },
+  "budgets": {
+    "space_T": 0.0008,
+    "space_C": 0.000008,
+    "time_T": 0.0002,
+    "time_C": 0.000002
+  },
+  "grids": [40, 80, 160, 320, 640, 1280, 2560, 5120, 10240, 20480]
+}
