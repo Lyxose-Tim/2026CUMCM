@@ -5,4 +5,4 @@ __pycache__/
 .scratch/
 *.pyc
 results/q1/cache/
-
+*.inspect.ndjson

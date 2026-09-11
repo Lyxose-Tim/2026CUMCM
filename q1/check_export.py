@@ -58,6 +58,10 @@ def check(directory="results/q1",workbook="results/result1.xlsx"):
             raise ValueError("Profile figure data mismatch")
     result = {"passed":True,"numeric_result_cells_checked":count,"workbook_sha256":sha256(workbook),"table_values_match":True,"figure_source_values_match":True,"sheets":["温度","水分浓度"],"range_per_sheet":"A1:V1801","rounding":"Decimal(str(float)); ROUND_HALF_UP; 4 decimal places","original_template_sha256":m["inputs"]["sha256"]["template"]}
     write_json(directory/"export_verification.json",result)
+    v["export_passed"] = True
+    write_json(directory/"verification.json",v)
+    m["verification_sha256"] = sha256(directory/"verification.json")
+    write_json(directory/"archive"/"manifest.json",m)
     return result
 
 

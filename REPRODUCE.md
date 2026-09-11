@@ -29,6 +29,7 @@ Excel作者端使用Codex捆绑Node与 `@oai/artifact-tool`，不依赖数值虚
 ```powershell
 & '<bundled-node-path>' scripts/build_result1.mjs
 ./.venv/Scripts/python.exe -m q1.check_export
+./.venv/Scripts/python.exe -m q1.reproduce --data-root 'E:/Code_from_class/2026A/A题'
 ./.venv/Scripts/python.exe -m q1.reports
 ```
 
