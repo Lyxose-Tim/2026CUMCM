@@ -23,10 +23,10 @@
 主要基线为：
 
 - [正式模型契约](Q1_MODEL_SPEC.md)、[原参数结果报告](Q1_RESULTS_REPORT.md)、[原参数验证报告](Q1_VERIFY_REPORT.md)。
-- 基准交付提交：0c15e70e89dfc9ce64fc9bd31f135aee20aec0db，[PR #2](https://github.com/Lyxose-Tim/2026CUMCM/pull/2)。
-- 灵敏度及审核整改版本：3a0a83761522219921d193aba582bed2b8413604，[PR #5](https://github.com/Lyxose-Tim/2026CUMCM/pull/5)。
+- 基准交付提交：0c15e70e89dfc9ce64fc9bd31f135aee20aec0db；[PR #2](https://github.com/Lyxose-Tim/2026CUMCM/pull/2)已获批准并合入main，合并提交为29249836e47235d2375b0fcf4c04711b673abed9。
+- 灵敏度及完整写作底稿的获批版本：8be65357afe36dd65728c70a35c096d8b970a736，[PR #5](https://github.com/Lyxose-Tim/2026CUMCM/pull/5)。更早的3a0a837仅作为整改说明与ZIP证据的历史版本，第15节保留各阶段真实身份。
 - 前期参考方案按[固定提交68f44ba](https://github.com/Lyxose-Tim/2026CUMCM/blob/68f44bace3cfe8787a98160f94ca8509edd6e580/reports/Q1_REFERENCE_PLAN.md)引用，不把其“待执行”状态当作当前结果状态。
-- 整理时PR #2尚未合入，PR #5为非草稿、未合并；最新复审认可追溯整改并独立通过37项测试，但GitHub正式审核状态仍为CHANGES_REQUESTED。该平台快照不等于数值失败，也不等于完整方案已经验收。
+- 审核状态更新：2026-09-11，Lyxose-Tim对PR #5的8be6535提交正式APPROVED，独立审计及37项测试通过，认可数值、追溯、无Git路径和Issue #4范围；本轮按其要求修正文档状态。PR #5已改为面向main，合并进度以PR记录为准。上述代码与文档审核不等于真实药材实验验证。
 
 **写作时保留物理条件与数值证据；本地路径、Git审核往来和工作备注移至内部底稿或支撑材料，不直接放入论文正文。**
 
@@ -1059,6 +1059,7 @@ CV=标准差/均值适用于有意义零点的比率尺度，均值接近零时�
 | 灵敏度整改后计算代码 | 2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f | 33次重算的代码身份 |
 | 灵敏度结果提交 | 5f4af91154b247ed351344811413165acbf5d25d | 实际ZIP验证所打包的版本 |
 | 灵敏度整改说明/ZIP证据 | 3a0a83761522219921d193aba582bed2b8413604 | 本文汇总的扩展证据版本 |
+| 完整建模底稿及获批审核对象 | 8be65357afe36dd65728c70a35c096d8b970a736 | PR #5最新实质内容的审核对象；后续状态文字修正另由Git历史追溯 |
 
 计算完成后才能提交结果，因此计算提交号与结果提交号可能不同。不能靠反复改写commit制造“包含结果的提交号等于自己的记录”；应核对实际依赖源码和参数。
 

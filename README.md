@@ -2,11 +2,11 @@
 
 ## A题：药材的烘干问题
 
-小组建模与论文工作入口。第一问的有效径向数值基准、表1–2、result1.xlsx、图表和复现验证已完成，等待小组交叉审核。第二至第四问数值求解及整篇论文仍需按清单推进。
+小组建模与论文工作入口。第一问的有效径向数值基准、表1–2、result1.xlsx、图表和复现验证已完成，基准PR #2已获批准并合入main。第二至第四问数值求解及整篇论文仍需按清单推进。
 
-第一问实现分支 `feat/q1-radial-baseline`；依据为[正式模型契约](reports/Q1_MODEL_SPEC.md)，交付见[结果报告](reports/Q1_RESULTS_REPORT.md)、[验证报告](reports/Q1_VERIFY_REPORT.md)、[result1.xlsx](results/result1.xlsx)和[复现说明](REPRODUCE.md)。参考文档仍由[PR #1](https://github.com/Lyxose-Tim/2026CUMCM/pull/1)独立管理，按固定提交只读引用。数值验证与小组交叉审核分别记录。
+第一问基准由[PR #2](https://github.com/Lyxose-Tim/2026CUMCM/pull/2)交付，main合并提交为 `2924983`；依据为[正式模型契约](reports/Q1_MODEL_SPEC.md)，交付见[结果报告](reports/Q1_RESULTS_REPORT.md)、[验证报告](reports/Q1_VERIFY_REPORT.md)、[result1.xlsx](results/result1.xlsx)和[复现说明](REPRODUCE.md)。参考文档仍由[PR #1](https://github.com/Lyxose-Tim/2026CUMCM/pull/1)独立管理，按固定提交只读引用。历史计算报告保留生成时的版本与状态，当前协作进度以本入口、todo和PR记录为准。
 
-评测后续 Issue #3/#4 由 `feat/q1-sensitivity` 叠加分支交付：[参数灵敏度结果](reports/Q1_SENSITIVITY_REPORT.md)包含12组扰动、极端工况复核和独立图源；[鲁棒性设计](reports/Q1_ROBUSTNESS_DESIGN.md)明确联合/环境扰动及CV的适用范围。原基准文件保留，尚未执行联合随机实验或实物验证。需待PR #2及本轮改动分别审核，不直接合并main。
+评测后续 Issue #3/#4 由[PR #5](https://github.com/Lyxose-Tim/2026CUMCM/pull/5)向main交付，审核人已批准 `8be6535` 的数值证据、追溯、无Git路径和Issue范围，本轮同步修正其提出的文档状态问题。[参数灵敏度结果](reports/Q1_SENSITIVITY_REPORT.md)包含12组扰动、极端工况复核和独立图源；[鲁棒性设计](reports/Q1_ROBUSTNESS_DESIGN.md)明确联合/环境扰动及CV的适用范围。原基准文件保留，联合随机实验和实物验证仍未执行；Issue #4仅对应设计与文档交付。合并进度以PR记录为准，按用户已授权的“审核通过且无问题”条件执行。
 
 ### 阅读顺序
 
