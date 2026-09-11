@@ -1,12 +1,14 @@
 """Fresh-process reintegration of a selected checked sensitivity scenario."""
 import argparse
+import importlib.metadata
 from pathlib import Path
 
 from .archive import write_json
-from .inputs import read_inputs, sha256
+from .inputs import read_inputs
 from .sensitivity import run_job, load_series
 from .sensitivity_metrics import compare, within_budget
 from .sensitivity_report import verified_runs
+from .provenance import source_snapshot, artifact_sha256, HASH_SCHEME, git_commit
 
 
 def main():
@@ -22,19 +24,17 @@ def main():
         raise ValueError("Reproduction destination must be new; choose another --output")
     m,v,records=verified_runs(root)
     original=records[args.run]
-    for path,expected in original["source_hashes"].items():
-        if sha256(path)!=expected:
-            raise ValueError(f"Numerical source changed: {path}; reproduce the recorded commit")
     env,inputs=read_inputs(args.data_root,m["configuration"])
     job={"key":args.run,"case":original["case"],"N":original["N"],"settings":original["settings"],
-         "inputs":inputs,"observations":env.observations.tolist(),"source_hashes":original["source_hashes"],"directory":str(out)}
+         "inputs":inputs,"observations":env.observations.tolist(),"source":source_snapshot(),
+         "dependencies":{name:importlib.metadata.version(name) for name in m["dependencies"]},"directory":str(out)}
     _,new=run_job(job)
     a=load_series(root/"runs"/args.run/"series.npz")
     b=load_series(out/"series.npz")
     difference=compare(a,b)
     passed=new["passed"] and within_budget(difference,m["configuration"]["budgets"],"time")
-    record={"passed":passed,"reintegrated_run":args.run,"cache_used":False,
-            "comparison":difference,"new_run_record":str(out/"run.json"),"new_run_sha256":sha256(out/"run.json"),
+    record={"passed":passed,"artifact_hash_scheme":HASH_SCHEME,"source_digest":new["source_digest"],"code_commit":git_commit(),"reintegrated_run":args.run,"cache_used":False,
+            "comparison":difference,"new_run_record":(out/"run.json").as_posix(),"new_run_sha256":artifact_sha256(out/"run.json"),
             "original_run_sha256":m["run_records"][args.run],"accepted_steps":new["diagnostics"]["accepted_steps"],
             "command":["python","-m","q1.sensitivity_reproduce","--data-root","<path-to-A题>","--directory",args.directory,
                        "--run",args.run,"--output",args.output]}

@@ -9,6 +9,7 @@ from .archive import write_json
 from .inputs import read_config, sha256
 from .sensitivity import load_series
 from .sensitivity_metrics import METRICS, UNITS
+from .provenance import artifact_sha256, verify_sources, HASH_SCHEME
 
 
 LABELS = {"h":"h","hm":"hm","D_prefactor":"D前因子"}
@@ -29,22 +30,27 @@ def read_csv(path):
 
 def verified_runs(root):
     manifest=read_config(root/"manifest.json")
-    if manifest["status"]!="numerically_verified" or sha256(root/"verification.json")!=manifest["verification_sha256"]:
+    if manifest["status"]!="numerically_verified" or artifact_sha256(root/"verification.json")!=manifest["verification_sha256"]:
         raise ValueError("Unverified or stale sensitivity results cannot be exported")
+    if manifest.get("artifact_hash_scheme")!=HASH_SCHEME:
+        raise ValueError("Unverified legacy artifact hashes; rerun using the portable provenance scheme")
+    verify_sources(manifest)
     verification=read_config(root/"verification.json")
     if verification["status"]!="numerically_verified":
         raise ValueError("Sensitivity verification did not pass")
     records={}
     for key,expected in manifest["run_records"].items():
         folder=root/"runs"/key
-        if sha256(folder/"run.json")!=expected:
+        if artifact_sha256(folder/"run.json")!=expected:
             raise ValueError(f"Run record hash mismatch: {key}")
         rec=read_config(folder/"run.json")
-        if not rec["passed"] or not all(sha256(folder/f)==h for f,h in rec["files"].items()):
+        if rec.get("artifact_hash_scheme")!=HASH_SCHEME or rec.get("source_digest")!=manifest["source_digest"] or rec.get("source_hashes")!=manifest["source_hashes"]:
+            raise ValueError(f"Mixed source provenance: {key}")
+        if not rec["passed"] or not all(artifact_sha256(folder/f)==h for f,h in rec["files"].items()):
             raise ValueError(f"Invalid run archive: {key}")
         records[key]=rec
     protected=read_config(root/"protected_baseline.json")
-    if not all(sha256(p)==h for p,h in protected.items()):
+    if not all(artifact_sha256(p)==h for p,h in protected.items()):
         raise ValueError("Protected baseline artifacts have changed")
     return manifest,verification,records
 
@@ -221,10 +227,11 @@ def generate(root=Path("results/q1_sensitivity"),figure_dir=Path("figures/q1_sen
     report.parent.mkdir(parents=True,exist_ok=True)
     report.write_text("\n".join(lines),encoding="utf-8")
     artifacts=list(source.glob("*"))+list(figure_dir.glob("*.pdf"))+[report]
-    write_json(root/"export_verification.json",{"passed":True,"max_endpoint_readback_difference":max_readback,
+    write_json(root/"export_verification.json",{"passed":True,"artifact_hash_scheme":HASH_SCHEME,"current_source_match":verify_sources(manifest),"max_endpoint_readback_difference":max_readback,
                 "verified_raw_run_records":len(records),"font":font,"csv_and_figures_same_source":True,
-                "artifact_sha256":{p.as_posix():sha256(p) for p in artifacts},
-                "generator_sha256":sha256(Path(__file__)),"verification_sha256":sha256(root/"verification.json")})
+                "artifact_sha256":{p.as_posix():artifact_sha256(p) for p in artifacts},
+                "generator_sha256":artifact_sha256(Path(__file__)),"generator_raw_sha256":sha256(Path(__file__)),
+                "verification_sha256":artifact_sha256(root/"verification.json")})
     print(f"Generated checked sensitivity report and figures; endpoint readback {max_readback:.3e}")
 
 
