@@ -1,0 +1,113 @@
+{
+  "fingerprint": "7526f199b8953a8a03bed7c0ab2975c849ce628cb60aa3fa4fb85dd9d3a63b76",
+  "case": {
+    "id": "D_prefactor_minus20",
+    "parameter": "D_prefactor",
+    "relative_change": -0.2,
+    "parameters": {
+      "L": 0.25,
+      "R": 0.02,
+      "T0": 28.0,
+      "C0": 2.55,
+      "rho": 820.0,
+      "cp": 2600.0,
+      "k": 0.36,
+      "h": 25.0,
+      "hm": 8e-07,
+      "D_prefactor": 5.6000000000000005e-09,
+      "D_exponent": 0.89
+    }
+  },
+  "N": 5120,
+  "settings": {
+    "method": "BDF",
+    "rtol": 1e-11,
+    "atol_T": 1e-12,
+    "atol_C": 1e-14,
+    "max_step": 2.5
+  },
+  "inputs": {
+    "sha256": {
+      "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+      "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+      "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+    },
+    "source_names": {
+      "environment": "附件\\附件1.xlsx",
+      "template": "附件\\附件3\\result1.xlsx",
+      "problem": "A题.pdf"
+    },
+    "template_A1": "时间\\到药材中心的距离"
+  },
+  "source_hashes": {
+    "q1/inputs.py": "08ac749c16710ba6efe733112311adcf1ab1dcb3c4e69b84e852ae95e2f3aa0d",
+    "q1/fvm.py": "1dd9fb6539d7b190b8ed4a3f53806e637852ac8c9507f2fa595fbdea31ea23e6",
+    "q1/solver.py": "50740ae52bc2da0504090ef1f9f6afd834140e595a7acc183e51e19550d8e0f0",
+    "q1/validation.py": "81c42c578482c6363f6818ebb988170686575d45013615c1b09085af5a35ebb8",
+    "q1/reference.py": "830e01ecc6a0606970db3074563652c6a4b39d35d9873ad38858b051f533a4c8",
+    "q1/sensitivity.py": "74b6862ec08142ca9eed6bc06f56daef4d20a11c23d8a68af88e1ff5d05505ac",
+    "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
+    "configs/q1.json": "b91a004a6feee1971946182974d12244a88993d44c3b990cb0fbfd773ccb2267",
+    "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
+    "requirements.lock.txt": "b056a1c86a34d1308c246524f270ffd717469c318a2169fa371a0efbae102b7f"
+  },
+  "diagnostics": {
+    "nfev": 6461,
+    "njev": 31,
+    "nlu": 718,
+    "method": "BDF",
+    "settings": {
+      "method": "BDF",
+      "rtol": 1e-11,
+      "atol_T": 1e-12,
+      "atol_C": 1e-14,
+      "max_step": 2.5
+    },
+    "seconds": 7.860771700000441,
+    "trial_failures": [
+      {
+        "segment_start": 0.0,
+        "attempt": 1,
+        "trial_time": 2.4858760481636417,
+        "node": 5120,
+        "value": -0.026586067554263515,
+        "phase": "initial_step_estimation",
+        "current_step": null,
+        "trial_offset_from_segment_start": 2.4858760481636417
+      }
+    ],
+    "accepted_steps": 3195,
+    "audited": true
+  },
+  "balance": {
+    "T": {
+      "max_balance": 6.21666900662383e-11,
+      "max_quadrature_difference": 1.885080326686263e-16,
+      "passed": true
+    },
+    "C": {
+      "max_balance": 5.590463513379079e-12,
+      "max_quadrature_difference": 6.217381746828897e-18,
+      "passed": true
+    }
+  },
+  "boundary": {
+    "T": {
+      "early": 2.7935653556889777e-08,
+      "late": 3.0994698201476e-08,
+      "passed": true
+    },
+    "C": {
+      "early": 1.4981042626322491e-05,
+      "late": 3.7122899718324646e-07,
+      "passed": true
+    }
+  },
+  "accepted_and_output_envelopes_passed": true,
+  "passed": true,
+  "files": {
+    "series.npz": "e79fa2b147c27fccc3119f34a7aef857b23e711306f18a30d122898fc43ef26a",
+    "balance.csv": "42aed251227c582796666f276c7a86440f2319889b557f2b57c01660b377ddcc",
+    "accepted_steps.csv": "752ea4c763a3b4b2b4a2131ee5e95b861356f3f77fe9b86bc68cce17f90c56a5"
+  }
+}

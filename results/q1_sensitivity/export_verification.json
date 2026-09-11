@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "max_endpoint_readback_difference": 4.440892098500626e-16,
+  "verified_raw_run_records": 33,
+  "font": "Microsoft YaHei",
+  "csv_and_figures_same_source": true,
+  "artifact_sha256": {
+    "results/q1_sensitivity/figure_data/elasticities.csv": "69bfeadd3447ff432e67f735a2f367bb287b1061ef687f0ab2335b0d73325ee3",
+    "results/q1_sensitivity/figure_data/endpoints.csv": "6788c6612c5497c435412ac2e3fa70672aed4a4562e7a31e1962d1241a618f86",
+    "results/q1_sensitivity/figure_data/field_differences.csv": "8df2e7763f184b2f962f894216ac3fca4aa3dbbfc25903b1774e541dd94a0cfa",
+    "results/q1_sensitivity/figure_data/font.txt": "cc1270af27babccc8b1bac82143d63ec579f2b1c57ae6defd96a7782fac342a4",
+    "results/q1_sensitivity/figure_data/numeric_checks.csv": "f36484a215532af0c0e3dcc63aea4c999c75a32e93d143cd764d70dbf8123de3",
+    "results/q1_sensitivity/figure_data/response.csv": "f8fd3e629c973681db0677e80b6960ef39fba42b6e3807872c1d1e13a3e4322b",
+    "figures/q1_sensitivity/extreme_scenario_convergence.pdf": "ad64caad506806b187861cad57ab5581c0d17038863acd414779acc5c771c6d5",
+    "figures/q1_sensitivity/finite_perturbation_nonlinearity.pdf": "da69740e18e652cbe392a6243ef0da7457bc4e824c07c11e4d6f114ea5e6d689",
+    "figures/q1_sensitivity/parameter_response.pdf": "439503adb74d4e133ac91a7cd72a307603aedb85994c5458a6a5cf7634e54d60",
+    "reports/Q1_SENSITIVITY_REPORT.md": "81486e56971ddc81f7ef44337dbca71c57af7f12240f77268727e304d398e218"
+  },
+  "generator_sha256": "96373342304ee1214aa5bd513bce62b224645bf4706492b551d10ca0709739ff",
+  "verification_sha256": "16f4240eda95b1335491062a6121f3ece3d5c8e276f3b7d12f19f83cd5e220c5"
+}

@@ -8,3 +8,6 @@
 - [result1.xlsx](../results/result1.xlsx)
 - [复现说明](../REPRODUCE.md)
 - [全精度归档清单](../results/q1/archive/manifest.json)
+- [第一问12组单因素灵敏度与数值复核](Q1_SENSITIVITY_REPORT.md)
+- [第一问扰动鲁棒性设计和CV规范](Q1_ROBUSTNESS_DESIGN.md)（设计交付，联合/环境实验未运行）
+- [灵敏度全精度情景清单](../results/q1_sensitivity/manifest.json)

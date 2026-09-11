@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "reintegrated_run": "D_prefactor_minus20_N20480_BDF_base",
+  "cache_used": false,
+  "comparison": {
+    "T": {
+      "max_abs": 0.0,
+      "time_s": 1.0,
+      "radius_cm": 0.0,
+      "early_surface_max": 0.0,
+      "mean_max_abs": 0.0
+    },
+    "C": {
+      "max_abs": 0.0,
+      "time_s": 1.0,
+      "radius_cm": 0.0,
+      "early_surface_max": 0.0,
+      "mean_max_abs": 0.0
+    }
+  },
+  "new_run_record": "results\\q1_sensitivity\\reproduction\\run.json",
+  "new_run_sha256": "2c932803d88cb06f29fc4326d2e389f87f96bcc61ce82568fa9eb13b5ed91c94",
+  "original_run_sha256": "475e155abc24893f3036043a36a55cc18261458543e70a1f2834d6927ab00b04",
+  "accepted_steps": 3228,
+  "command": [
+    "python",
+    "-m",
+    "q1.sensitivity_reproduce",
+    "--data-root",
+    "<path-to-A题>",
+    "--directory",
+    "results/q1_sensitivity",
+    "--run",
+    "D_prefactor_minus20_N20480_BDF_base",
+    "--output",
+    "results/q1_sensitivity/reproduction"
+  ]
+}

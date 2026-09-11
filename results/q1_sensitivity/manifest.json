@@ -1,0 +1,166 @@
+{
+  "status": "numerically_verified",
+  "configuration": {
+    "parameters": {
+      "L": 0.25,
+      "R": 0.02,
+      "T0": 28.0,
+      "C0": 2.55,
+      "rho": 820.0,
+      "cp": 2600.0,
+      "k": 0.36,
+      "h": 25.0,
+      "hm": 8e-07,
+      "D_prefactor": 7e-09,
+      "D_exponent": 0.89
+    },
+    "input_sha256": {
+      "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+      "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+      "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+    },
+    "solver": {
+      "method": "BDF",
+      "rtol": 1e-11,
+      "atol_T": 1e-12,
+      "atol_C": 1e-14,
+      "max_step": 2.5
+    },
+    "budgets": {
+      "space_T": 0.0008,
+      "space_C": 8e-06,
+      "time_T": 0.0002,
+      "time_C": 2e-06
+    },
+    "grids": [
+      40,
+      80,
+      160,
+      320,
+      640,
+      1280,
+      2560,
+      5120,
+      10240,
+      20480
+    ]
+  },
+  "design": {
+    "parameters": [
+      "h",
+      "hm",
+      "D_prefactor"
+    ],
+    "relative_changes": [
+      -0.2,
+      -0.1,
+      0.1,
+      0.2
+    ],
+    "production_N": 20480,
+    "extreme_grids": [
+      5120,
+      10240,
+      20480
+    ],
+    "time_refinement_factor": 0.1,
+    "radau_cases": [
+      "hm_plus20",
+      "D_prefactor_minus20"
+    ],
+    "design": "one_at_a_time_bounded_scenarios_not_probability_distribution",
+    "baseline_commit": "0c15e70e89dfc9ce64fc9bd31f135aee20aec0db"
+  },
+  "source_hashes": {
+    "q1/inputs.py": "08ac749c16710ba6efe733112311adcf1ab1dcb3c4e69b84e852ae95e2f3aa0d",
+    "q1/fvm.py": "1dd9fb6539d7b190b8ed4a3f53806e637852ac8c9507f2fa595fbdea31ea23e6",
+    "q1/solver.py": "50740ae52bc2da0504090ef1f9f6afd834140e595a7acc183e51e19550d8e0f0",
+    "q1/validation.py": "81c42c578482c6363f6818ebb988170686575d45013615c1b09085af5a35ebb8",
+    "q1/reference.py": "830e01ecc6a0606970db3074563652c6a4b39d35d9873ad38858b051f533a4c8",
+    "q1/sensitivity.py": "74b6862ec08142ca9eed6bc06f56daef4d20a11c23d8a68af88e1ff5d05505ac",
+    "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
+    "configs/q1.json": "b91a004a6feee1971946182974d12244a88993d44c3b990cb0fbfd773ccb2267",
+    "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
+    "requirements.lock.txt": "b056a1c86a34d1308c246524f270ffd717469c318a2169fa371a0efbae102b7f"
+  },
+  "inputs": {
+    "sha256": {
+      "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+      "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+      "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+    },
+    "source_names": {
+      "environment": "附件\\附件1.xlsx",
+      "template": "附件\\附件3\\result1.xlsx",
+      "problem": "A题.pdf"
+    },
+    "template_A1": "时间\\到药材中心的距离"
+  },
+  "code_commit": "6ab665b2c0a361059cecbf560bfee782bc23e9bb",
+  "python": "3.12.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "command": [
+    "python",
+    "-m",
+    "q1.sensitivity",
+    "--data-root",
+    "<path-to-A题>",
+    "--directory",
+    "results/q1_sensitivity",
+    "--workers",
+    "2"
+  ],
+  "dependencies": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.1",
+    "pytest": "9.1.1"
+  },
+  "thread_environment": {
+    "OPENBLAS_NUM_THREADS": "1",
+    "OMP_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1"
+  },
+  "axis_order": [
+    "time_s",
+    "formal_radius_m"
+  ],
+  "dtype": "float64",
+  "runs": 33,
+  "verification_sha256": "16f4240eda95b1335491062a6121f3ece3d5c8e276f3b7d12f19f83cd5e220c5",
+  "run_records": {
+    "D_prefactor_minus10_N20480_BDF_base": "60d5d418400e01ffb1393b19cab4ddf763bba937e370a0625484fe546fec9103",
+    "D_prefactor_minus20_N10240_BDF_base": "ead1f1edc78ac0b24477a08170712a80ee193e79f3fded2227b8402ed3fb1681",
+    "D_prefactor_minus20_N20480_BDF_base": "475e155abc24893f3036043a36a55cc18261458543e70a1f2834d6927ab00b04",
+    "D_prefactor_minus20_N20480_BDF_tight": "d18025defc20cd3efc0209f49fadcf7ff5e555c86d6749a13f439c90726c026b",
+    "D_prefactor_minus20_N20480_Radau_tight": "58d609ef6a83ee91e5842b274548e76f2431229d394ff774b859f54376983be0",
+    "D_prefactor_minus20_N5120_BDF_base": "a864c8fab8a7d698935e7a4f8495453688d1c811473c4fd27988f46f3fde1fcb",
+    "D_prefactor_plus10_N20480_BDF_base": "e24954722e67fb048b7c7a92e16789822d1df64822e1de9b0036940d57481524",
+    "D_prefactor_plus20_N10240_BDF_base": "be466b760d40a5c6cad43e461d7883c7aa007ba88aebb5ce7af88a25a9aca74e",
+    "D_prefactor_plus20_N20480_BDF_base": "2726efbcd0e946eff222db81ee0e8d87b472a401b13e2c47b0d4c74dc5454517",
+    "D_prefactor_plus20_N20480_BDF_tight": "202ec97d4a8288de86e17e7d3922223c2f6bd2e39a4fc7ccc89c0beb80b92f0d",
+    "D_prefactor_plus20_N5120_BDF_base": "b6519b184be8c7c792590f33274dc0f213d02cf9f1b718003cf04052ee028008",
+    "baseline_N20480_BDF_base": "176993ce61b3ebc9302dcb2985b16357508b0ba2d88cf84674efc30a871109ba",
+    "h_minus10_N20480_BDF_base": "2884fe89a76efaa7d95a3584f9ffbd6f3e24bc30a3925cf9197fbd6badc7b311",
+    "h_minus20_N10240_BDF_base": "cb585aaf298fa48e4eed94e071d2f11652d137562c2bf00370db269f521d62f2",
+    "h_minus20_N20480_BDF_base": "57a0f5d021bcdc845ab7b276ca492552d2de085a39033b83c5179de3b587441f",
+    "h_minus20_N20480_BDF_tight": "3db2bed9890b3b13e310245114aee426b4a1c4b1d36cdf1a21a19d5a6b3a1a29",
+    "h_minus20_N5120_BDF_base": "344995c1010cd65e956dd586e70e572c37ee304ce4d71e3d579cabbe7fc0f5c8",
+    "h_plus10_N20480_BDF_base": "ce89841d308576ba79c4ac9e889f9b5362fccfec40efbb362ae4eceb74af9af8",
+    "h_plus20_N10240_BDF_base": "f1145e5318cdc3f78c66ff1734668260ce60283e9bde626adf0fc40a34ffdbd1",
+    "h_plus20_N20480_BDF_base": "fcedd1a5d893d1059f81ffde7529d96eb6d0c70c2dfd82b32cfc24dc93e693f2",
+    "h_plus20_N20480_BDF_tight": "add99f4f75b3b497f4387b24760cb3cc4aaad14826f859e7157450229bd01dc0",
+    "h_plus20_N5120_BDF_base": "45b3070a4ca33f010925c01da8b8e3d2eb8a455e25f0ef0508d61b6c84f8e49d",
+    "hm_minus10_N20480_BDF_base": "472485bb102cc849176905d64b2644cfc879374a3ba5972f98c5723adf8403d9",
+    "hm_minus20_N10240_BDF_base": "5bc9efef87980c25fae441bcdcc0ca272c5e9fa0993c4621f6f883a1d313221f",
+    "hm_minus20_N20480_BDF_base": "ac84ecfb53ffc764ab66556abd620a00a4a49036ec0b06d5e4e3a22a2c09b8ce",
+    "hm_minus20_N20480_BDF_tight": "f6bab01588fdb5d37acba579575f2915c71a8c9c377b536c8fadfc4bf38e9c9f",
+    "hm_minus20_N5120_BDF_base": "6ec0aaccdd5cf228470ef599815ffa219aac7f2d2e558ddba2c1c66819564ed9",
+    "hm_plus10_N20480_BDF_base": "be38d7a7d49028af96d09a2b8ceb86948d69f1e2f1e606e3e029a241e6671e5b",
+    "hm_plus20_N10240_BDF_base": "7ec66b22bc276f1054e75c54c29c075b43a8bfa89f32bc0450a7517bceba0f8e",
+    "hm_plus20_N20480_BDF_base": "263142638a72961b0c50520027402ec4a76d0ba5def473a8633fda5d5e9f1b7f",
+    "hm_plus20_N20480_BDF_tight": "42d5234889ccc57ca7904305c3188e44062c69c50d612254cc729ed003523bb9",
+    "hm_plus20_N20480_Radau_tight": "302bfc0d71154583b73c80a6bc992ad85a5c9b4205012ae75efa6d77de1edf7d",
+    "hm_plus20_N5120_BDF_base": "769edc9efd417cc33f975cc8370094157277046004ba2f03269545a9c503804a"
+  }
+}

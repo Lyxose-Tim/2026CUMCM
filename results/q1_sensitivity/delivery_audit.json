@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "production_scenarios": 13,
+  "numerical_runs": 33,
+  "additional_fresh_reintegration": 1,
+  "formal_field_values_checked": 2496186,
+  "unit_tests_passed": 31,
+  "local_document_links_passed": true,
+  "old_artifacts_unchanged": true,
+  "reproduction_passed": true,
+  "endpoint_csv_readback_max_abs": 4.440892098500626e-16,
+  "visual_review": {
+    "passed": true,
+    "method": "Poppler rasterization followed by visual inspection",
+    "checks": [
+      "Chinese glyphs present",
+      "axes and legends readable",
+      "no clipping",
+      "no large in-figure titles",
+      "figures read archived CSVs"
+    ],
+    "pdf_sha256": {
+      "figures/q1_sensitivity/extreme_scenario_convergence.pdf": "ad64caad506806b187861cad57ab5581c0d17038863acd414779acc5c771c6d5",
+      "figures/q1_sensitivity/finite_perturbation_nonlinearity.pdf": "da69740e18e652cbe392a6243ef0da7457bc4e824c07c11e4d6f114ea5e6d689",
+      "figures/q1_sensitivity/parameter_response.pdf": "439503adb74d4e133ac91a7cd72a307603aedb85994c5458a6a5cf7634e54d60"
+    }
+  },
+  "code_commit": "7efdef2a8a60318bc5d00faf5238ed2ef937d02c",
+  "reporting_source_sha256": {
+    "q1/sensitivity_report.py": "96373342304ee1214aa5bd513bce62b224645bf4706492b551d10ca0709739ff",
+    "q1/sensitivity_reproduce.py": "948ead9311c2cdd2b77424765da9bb7ea38050390e6ab427eb01e76edc384386"
+  },
+  "verification_sha256": "16f4240eda95b1335491062a6121f3ece3d5c8e276f3b7d12f19f83cd5e220c5",
+  "export_verification_sha256": "4f03d7f3d9dff421ea9bd3f01722265d0f902935f94cb0d5b0c1444f5a9e9ea1"
+}

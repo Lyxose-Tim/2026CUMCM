@@ -6,6 +6,8 @@
 
 第一问实现分支 `feat/q1-radial-baseline`；依据为[正式模型契约](reports/Q1_MODEL_SPEC.md)，交付见[结果报告](reports/Q1_RESULTS_REPORT.md)、[验证报告](reports/Q1_VERIFY_REPORT.md)、[result1.xlsx](results/result1.xlsx)和[复现说明](REPRODUCE.md)。参考文档仍由[PR #1](https://github.com/Lyxose-Tim/2026CUMCM/pull/1)独立管理，按固定提交只读引用。数值验证与小组交叉审核分别记录。
 
+评测后续 Issue #3/#4 由 `feat/q1-sensitivity` 叠加分支交付：[参数灵敏度结果](reports/Q1_SENSITIVITY_REPORT.md)包含12组扰动、极端工况复核和独立图源；[鲁棒性设计](reports/Q1_ROBUSTNESS_DESIGN.md)明确联合/环境扰动及CV的适用范围。原基准文件保留，尚未执行联合随机实验或实物验证。需待PR #2及本轮改动分别审核，不直接合并main。
+
 ### 阅读顺序
 
 | 文档 | 用途 | 建议阅读者 |
@@ -27,7 +29,7 @@
 
 1. 全组通读指导计划，确认长期环境、传质边界、潜热和材料收缩的基准假设。
 2. 认领A（机理与推导）、B（数值与数据）、C（论文与核查）三个角色，并在待办任务后标注负责人。
-3. 按下列结构准备小组已有的题面和附件。数据文件名、单位与字段约定见建模设计报告；当前仓库内容为指导文档。
+3. 按下列结构准备小组已有的题面和附件。数据文件名、单位与字段约定见建模设计报告；仓库同时包含指导文档和已验证的第一问实现。
 4. 先实现问题一的“输入—求解—验证—导出”，再扩展第二至第四问。
 
 ```text
