@@ -102,4 +102,10 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        sys.exit(main())
+    except Exception as exc:
+        # Persist fatal diagnostics even if a solver never returns a Solution.
+        output = sys.argv[sys.argv.index("--output")+1] if "--output" in sys.argv else "results/q1"
+        write_json(Path(output)/"failure.json",{"type":type(exc).__name__,"message":str(exc),"export_allowed":False})
+        raise

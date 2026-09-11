@@ -135,7 +135,7 @@ def integrate(model, settings, *, breaks=None, output_times=None, initial=None,
                     total_counts[key] += getattr(solver,key)
                 break
             except NonpositiveMoisture as exc:
-                failures.append({"segment_start":float(a),"attempt":attempt+1,"trial_time":last_rhs["t"],"node":exc.node,"value":exc.value,"current_step":None if solver is None else float(solver.h_abs)})
+                failures.append({"segment_start":float(a),"attempt":attempt+1,"trial_time":last_rhs["t"],"node":exc.node,"value":exc.value,"phase":"initial_step_estimation" if solver is None else "nonlinear_step","current_step":None if solver is None else float(solver.h_abs),"trial_offset_from_segment_start":last_rhs["t"]-float(a)})
                 if attempt == 2:
                     raise RuntimeError(f"Three nonpositive trial failures: {failures}") from exc
     if position != len(times):

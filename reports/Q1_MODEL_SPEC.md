@@ -116,6 +116,8 @@ N为20倍数，正式21个半径直接取节点jN/20。归档包括t=0；主Exce
 
 ## 6. 交付和来源
 
+执行变更记录：初轮N=2560→5120、5120→10240的最大含水率差分别为1.8281e-5、4.5605e-6 kg/kg，只有一次进入空间预算。用户随后明确授权将上限扩到20480，其他验收阈值保持不变。同时，细网格温度差小于时间设置差，故正式空间组改为rtol=1e-11、atolT=1e-12、atolC=1e-14、max_step=2.5 s，并按原规则进一步收紧复核。初轮诊断单独保留，不能作为已通过的空间验收。
+
 同一全精度归档生成表1–2（7时刻×5半径）、results/result1.xlsx（温度/水分浓度，A1:V1801）、矢量PDF和图源数据。Decimal ROUND_HALF_UP四位，展示舍入误差至多5e-5，独立于离散预算。记录输入哈希、代码提交、依赖实际版本和运行命令。分模型、代码测试、结果报告提交；只通过PR交付，不合并main。小组交叉审核仍需单独认领。
 
 理论补充：[SciPy积分器](https://docs.scipy.org/doc/scipy/reference/generated/scipy.integrate.solve_ivp.html)、[COMSOL水分输运](https://doc.comsol.com/6.4/doc/com.comsol.help.heat/heat_ug_theory.07.080.html)、[NIST纯水表](https://www.nist.gov/document/nistir5078-tab1pdf)。外部资料不作为药材题给参数。
