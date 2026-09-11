@@ -26,7 +26,9 @@ class Environment:
             raise ValueError("Expected 31 finite records at 0:60:1800 seconds")
         if np.any(a[:,2] <= 0):
             raise ValueError("Equivalent moisture drive must be positive")
-        self.observations = a
+        self.observations = a.copy()
+        self._history_min = np.minimum.accumulate(a[:,1:], axis=0)
+        self._history_max = np.maximum.accumulate(a[:,1:], axis=0)
 
     def __call__(self, t):
         t = np.asarray(t)
@@ -34,6 +36,19 @@ class Environment:
             raise ValueError("Q1 environment only defined on [0, 1800] s")
         a = self.observations
         return np.interp(t, a[:,0], a[:,1]), np.interp(t, a[:,0], a[:,2])
+
+    def history_extrema(self, t):
+        """Exact extrema of the piecewise linear forcing on [0,t].
+
+        An interior query adds its interpolated endpoint, not the next knot.
+        Return Tmin,Tmax,Cmin,Cmax; initial material bounds are added by solver.
+        """
+        T, C = self(t)  # Also rejects nonfinite/out-of-range queries.
+        j = np.searchsorted(self.observations[:,0], t, side="right") - 1
+        current = np.stack((T,C), axis=-1)
+        low = np.minimum(self._history_min[j], current)
+        high = np.maximum(self._history_max[j], current)
+        return low[...,0], high[...,0], low[...,1], high[...,1]
 
 
 def read_inputs(data_root, config):

@@ -1,0 +1,75 @@
+{
+  "reviewed_head": "9b2b5b03b43fff7156a0d9ce73b4063603fed40e",
+  "calculation_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
+  "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+  "reviewed_source_comparison": [
+    {
+      "path": "q1/inputs.py",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": true,
+      "recorded_hash_is_lf_or_crlf_variant": false
+    },
+    {
+      "path": "q1/fvm.py",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": true,
+      "recorded_hash_is_lf_or_crlf_variant": true
+    },
+    {
+      "path": "q1/solver.py",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": true,
+      "recorded_hash_is_lf_or_crlf_variant": false
+    },
+    {
+      "path": "q1/validation.py",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": true,
+      "recorded_hash_is_lf_or_crlf_variant": false
+    },
+    {
+      "path": "q1/reference.py",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": true,
+      "recorded_hash_is_lf_or_crlf_variant": true
+    },
+    {
+      "path": "q1/sensitivity.py",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": false,
+      "recorded_hash_is_lf_or_crlf_variant": true
+    },
+    {
+      "path": "q1/sensitivity_metrics.py",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": false,
+      "recorded_hash_is_lf_or_crlf_variant": true
+    },
+    {
+      "path": "configs/q1.json",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": true,
+      "recorded_hash_is_lf_or_crlf_variant": true
+    },
+    {
+      "path": "configs/q1_sensitivity.json",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": false,
+      "recorded_hash_is_lf_or_crlf_variant": true
+    },
+    {
+      "path": "requirements.lock.txt",
+      "same_git_text": true,
+      "raw_differs_from_git_blob": true,
+      "recorded_hash_is_lf_or_crlf_variant": true
+    }
+  ],
+  "rerun_count": 33,
+  "max_field_changes": {
+    "temperature_C": 0.0,
+    "moisture": 0.0,
+    "mean_temperature_C": 0.0,
+    "mean_moisture": 0.0
+  },
+  "old_archive_rejected_by_new_export": true
+}

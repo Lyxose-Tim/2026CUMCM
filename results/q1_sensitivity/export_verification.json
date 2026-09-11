@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "artifact_hash_scheme": "sha256-text-lf-v1",
+  "current_source_match": {
+    "matches": true,
+    "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+    "current_code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
+    "raw_byte_differences": []
+  },
+  "max_endpoint_readback_difference": 4.440892098500626e-16,
+  "verified_raw_run_records": 33,
+  "font": "Microsoft YaHei",
+  "csv_and_figures_same_source": true,
+  "artifact_sha256": {
+    "results/q1_sensitivity/figure_data/elasticities.csv": "cdd906f3ff8a404e213eccae4cb301971041cdd6d1dd9b211ab936bd7a95e058",
+    "results/q1_sensitivity/figure_data/endpoints.csv": "074f6737ed5699156f74e738b2ff786f3eda72eda3a87f0db1780aa5c42c3c2b",
+    "results/q1_sensitivity/figure_data/field_differences.csv": "1209f1c86c7c4732f24e82ea2a85a3eda809003bf4fa584474e6758ecaf9d9f9",
+    "results/q1_sensitivity/figure_data/font.txt": "a112eb5d272f9f4d5078de515435a816ecef2849060dd0d47b75f97a2b369485",
+    "results/q1_sensitivity/figure_data/numeric_checks.csv": "49e36cb88406b0fe9fbee76a67bddf315c5a22a74cb4b463be1d8c99a7397f9d",
+    "results/q1_sensitivity/figure_data/response.csv": "a784004bdf44557a0eab04b27fc1b054fcc2b69b9eee791f34a9b3fb7506e463",
+    "figures/q1_sensitivity/extreme_scenario_convergence.pdf": "20c22ee3683f3eb8609539fb8f783bd60a23471606a1e047ef9280e483d6720b",
+    "figures/q1_sensitivity/finite_perturbation_nonlinearity.pdf": "76aa0c58df2232625ccf9b7b2cbf9202477833fda6342f73ba9192da41858f9e",
+    "figures/q1_sensitivity/parameter_response.pdf": "a45b9ac28c72fc40cc9c07c39402f65374239db5cc1ce326b2bdaa82bd53d90d",
+    "reports/Q1_SENSITIVITY_REPORT.md": "9d5b7d8a436e7ace46d2641ecf203eb2ebc556507e4481dde022d07edd94f17f"
+  },
+  "generator_sha256": "881948a6c31af1a4ab8653b2e34d580cdef7c71831049817466a3fe445961481",
+  "generator_raw_sha256": "881948a6c31af1a4ab8653b2e34d580cdef7c71831049817466a3fe445961481",
+  "verification_sha256": "4456af5c722c99da4cf54d55a0fd437048ad8003a4fd6b6c331e3526584fe7c9"
+}

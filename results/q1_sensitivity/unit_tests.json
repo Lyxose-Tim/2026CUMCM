@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "count": 37,
+  "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+  "test_source_hashes": {
+    "q1/sensitivity_audit.py": "4d374853216a5ae2ca1b92813ccc39457fc8e34a2680eff4850f777efaa674e8",
+    "q1/sensitivity_report.py": "881948a6c31af1a4ab8653b2e34d580cdef7c71831049817466a3fe445961481",
+    "q1/sensitivity_reproduce.py": "1c46557d2ddc5dd89ef077d78bfb18c9a4297e08adbe86824e635545e0b66f2b",
+    "tests/test_export.py": "ae51fe418e57dec439d8cb7ca621476a52aa36d2813e7aee32eb27dae5129b47",
+    "tests/test_integration.py": "12b7a4d4e46ca20575526a3240c397a93c42731579a662ee00ab583e3f4a275c",
+    "tests/test_provenance.py": "68fc81518024e2eae5236fcb3c45c8cda9ab5619554de8833cf6d92962027d67",
+    "tests/test_sensitivity.py": "9b62d4a9395982b0ea7a20d3ee05e04016f52054e063eb513e02d7bdba758e75",
+    "tests/test_spatial.py": "23e46f7727d1ab435a59ff5c1d743ebcc6fe0566b826d16f912a8f60cf7bf1b5"
+  },
+  "log_sha256": "af46e10d662b3337d2215effcfbc0c0a79f8569659e97f5ebc6168adf43780b4",
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "-q",
+    "--basetemp",
+    "<new-workspace-scratch-path>",
+    "-p",
+    "no:cacheprovider"
+  ]
+}

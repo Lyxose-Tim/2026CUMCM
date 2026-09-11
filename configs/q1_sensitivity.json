@@ -1,0 +1,10 @@
+{
+  "parameters": ["h", "hm", "D_prefactor"],
+  "relative_changes": [-0.2, -0.1, 0.1, 0.2],
+  "production_N": 20480,
+  "extreme_grids": [5120, 10240, 20480],
+  "time_refinement_factor": 0.1,
+  "radau_cases": ["hm_plus20", "D_prefactor_minus20"],
+  "design": "one_at_a_time_bounded_scenarios_not_probability_distribution",
+  "baseline_commit": "0c15e70e89dfc9ce64fc9bd31f135aee20aec0db"
+}

@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "artifact_hash_scheme": "sha256-text-lf-v1",
+  "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+  "code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
+  "reintegrated_run": "D_prefactor_minus20_N20480_BDF_base",
+  "cache_used": false,
+  "comparison": {
+    "T": {
+      "max_abs": 0.0,
+      "time_s": 1.0,
+      "radius_cm": 0.0,
+      "early_surface_max": 0.0,
+      "mean_max_abs": 0.0
+    },
+    "C": {
+      "max_abs": 0.0,
+      "time_s": 1.0,
+      "radius_cm": 0.0,
+      "early_surface_max": 0.0,
+      "mean_max_abs": 0.0
+    }
+  },
+  "new_run_record": "results/q1_sensitivity/reproduction/run.json",
+  "new_run_sha256": "fd374c1bdda95b01c3fa6da10271559e8e65cb4cab67a062864331e91f447dbf",
+  "original_run_sha256": "c4aaf90c684963b62e25891a857f6e8de23ae3ad5e9ec2400679147ea758385b",
+  "accepted_steps": 3228,
+  "command": [
+    "python",
+    "-m",
+    "q1.sensitivity_reproduce",
+    "--data-root",
+    "<path-to-A题>",
+    "--directory",
+    "results/q1_sensitivity",
+    "--run",
+    "D_prefactor_minus20_N20480_BDF_base",
+    "--output",
+    "results/q1_sensitivity/reproduction"
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "fingerprint": "3c277c39660da18b42e95fc3d934543d1e626fb6481c15ac145fcbf94e453932",
+  "case": {
+    "id": "D_prefactor_plus20",
+    "parameter": "D_prefactor",
+    "relative_change": 0.2,
+    "parameters": {
+      "L": 0.25,
+      "R": 0.02,
+      "T0": 28.0,
+      "C0": 2.55,
+      "rho": 820.0,
+      "cp": 2600.0,
+      "k": 0.36,
+      "h": 25.0,
+      "hm": 8e-07,
+      "D_prefactor": 8.399999999999999e-09,
+      "D_exponent": 0.89
+    }
+  },
+  "N": 10240,
+  "settings": {
+    "method": "BDF",
+    "rtol": 1e-11,
+    "atol_T": 1e-12,
+    "atol_C": 1e-14,
+    "max_step": 2.5
+  },
+  "inputs": {
+    "sha256": {
+      "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+      "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+      "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+    },
+    "source_names": {
+      "environment": "附件\\附件1.xlsx",
+      "template": "附件\\附件3\\result1.xlsx",
+      "problem": "A题.pdf"
+    },
+    "template_A1": "时间\\到药材中心的距离"
+  },
+  "source_hash_scheme": "sha256-text-lf-v1",
+  "source_hashes": {
+    "q1/__init__.py": "194c84380e07091c4d3697abff5dfa40c7e6d9976ce01908980f841667ef181f",
+    "q1/archive.py": "baeb5bffa371c7ce2ba55502672ca474ee5510e47b9742b2372e89ae057cc3a2",
+    "q1/inputs.py": "8b72515fc7ab68622daa2fd91dad0a8c4e9530702bdef8511891a866b16a699e",
+    "q1/fvm.py": "b1c77e6c1d41d69223e7cdaffc705fc64602a968b8afa3832fb544e415e0dd02",
+    "q1/solver.py": "8784aaeb24371bec22137591d91e0f438f15742f41d7dede53df0c7886b1ce55",
+    "q1/validation.py": "72a6c107de81d53c8538009f35a062c87bd0bd41c67d14895f4d98442d89579f",
+    "q1/reference.py": "e3b3455585cc44b9cfa40f0f03eee86e47d50bd81ed21da3ae0c627e3fac635b",
+    "q1/sensitivity.py": "4aff7d513470b88a87640ef6ed039d0d7adb5c0c2bb8e7a5fb9c0cc1b7140a28",
+    "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
+    "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
+    "configs/q1.json": "c4ff31112068a65d62b023d4beaa85199a4912ad699f6a873003087fad8529c8",
+    "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
+    "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
+  },
+  "source_raw_hashes": {
+    "q1/__init__.py": "b7bb7ea87fd2a5ea0c4c7a4d0cab59a350c61353dcececaa814600b595048856",
+    "q1/archive.py": "dd9099ca5ed0b102f55d76a0813644e1e04b8fc6c6ac2e495c95e5d411668644",
+    "q1/inputs.py": "08ac749c16710ba6efe733112311adcf1ab1dcb3c4e69b84e852ae95e2f3aa0d",
+    "q1/fvm.py": "1dd9fb6539d7b190b8ed4a3f53806e637852ac8c9507f2fa595fbdea31ea23e6",
+    "q1/solver.py": "50740ae52bc2da0504090ef1f9f6afd834140e595a7acc183e51e19550d8e0f0",
+    "q1/validation.py": "81c42c578482c6363f6818ebb988170686575d45013615c1b09085af5a35ebb8",
+    "q1/reference.py": "830e01ecc6a0606970db3074563652c6a4b39d35d9873ad38858b051f533a4c8",
+    "q1/sensitivity.py": "4aff7d513470b88a87640ef6ed039d0d7adb5c0c2bb8e7a5fb9c0cc1b7140a28",
+    "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
+    "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
+    "configs/q1.json": "b91a004a6feee1971946182974d12244a88993d44c3b990cb0fbfd773ccb2267",
+    "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
+    "requirements.lock.txt": "b056a1c86a34d1308c246524f270ffd717469c318a2169fa371a0efbae102b7f"
+  },
+  "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+  "code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
+  "dependencies": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.1",
+    "pytest": "9.1.1"
+  },
+  "diagnostics": {
+    "nfev": 6495,
+    "njev": 31,
+    "nlu": 723,
+    "method": "BDF",
+    "settings": {
+      "method": "BDF",
+      "rtol": 1e-11,
+      "atol_T": 1e-12,
+      "atol_C": 1e-14,
+      "max_step": 2.5
+    },
+    "seconds": 13.201009800000975,
+    "trial_failures": [
+      {
+        "segment_start": 0.0,
+        "attempt": 1,
+        "trial_time": 1.7577369109685417,
+        "node": 10240,
+        "value": -1.093665069738487,
+        "phase": "initial_step_estimation",
+        "current_step": null,
+        "trial_offset_from_segment_start": 1.7577369109685417
+      }
+    ],
+    "accepted_steps": 3213,
+    "audited": true
+  },
+  "balance": {
+    "T": {
+      "max_balance": 6.392933838945052e-11,
+      "max_quadrature_difference": 1.954893763050272e-16,
+      "passed": true
+    },
+    "C": {
+      "max_balance": 5.094922894924444e-12,
+      "max_quadrature_difference": 6.939807008539477e-18,
+      "passed": true
+    }
+  },
+  "boundary": {
+    "T": {
+      "early": 6.986276286917445e-09,
+      "late": 7.748728131590618e-09,
+      "passed": true
+    },
+    "C": {
+      "early": 7.280966740497345e-07,
+      "late": 3.469224621161464e-08,
+      "passed": true
+    }
+  },
+  "accepted_and_output_envelopes_passed": true,
+  "passed": true,
+  "artifact_hash_scheme": "sha256-text-lf-v1",
+  "files": {
+    "series.npz": "a64175aeb2797c515405233e97b3b8ed2de4f601b8e8e170b210c428a9a978ed",
+    "balance.csv": "a2712e9fa5d3417f36d408b45c2cfda9ede8073d9cebb49f2b0dfc8f4ae6ac47",
+    "accepted_steps.csv": "067600a165957c3862c95697566ba159f0e4935aaffc1592f4bef318ac0ee751"
+  }
+}

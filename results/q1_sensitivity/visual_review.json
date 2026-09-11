@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "method": "Current PDF rasterizations exactly match previously visually inspected PNGs",
+  "pixel_file_matches": {
+    "parameter": true,
+    "nonlinearity": true,
+    "convergence": true
+  },
+  "pdf_sha256": {
+    "figures/q1_sensitivity/extreme_scenario_convergence.pdf": "20c22ee3683f3eb8609539fb8f783bd60a23471606a1e047ef9280e483d6720b",
+    "figures/q1_sensitivity/finite_perturbation_nonlinearity.pdf": "76aa0c58df2232625ccf9b7b2cbf9202477833fda6342f73ba9192da41858f9e",
+    "figures/q1_sensitivity/parameter_response.pdf": "a45b9ac28c72fc40cc9c07c39402f65374239db5cc1ce326b2bdaa82bd53d90d"
+  }
+}
