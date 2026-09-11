@@ -102,4 +102,6 @@ manifest中的 `code_commit` 表示启动调用时的源码提交；各组run保
 
 所有灵敏度入口均可在GitHub源码ZIP解压目录运行，不要求 `.git` 或Git可执行程序；此时 `code_commit` 为null，完整源码摘要仍必需。目录仅位于其他仓库内部时也不借用父仓库的提交。无Git不允许跳过源码或数值检查。审核根因与整改说明见[PR #5审核回应](reports/Q1_PR5_REVIEW_RESPONSE.md)。
 
+本轮已用实际 `git archive --format=zip <结果提交>` 解压到仓库外验证这些入口，并在其中独立重算一个情景；详见 `results/q1_sensitivity/zip_portability.json`。从ZIP运行主入口时，匹配的33组归档可作为缓存接受审计；这与“33组全部重新积分”明确区分。要执行全部重新积分，仍需使用上文的新输出目录命令。
+
 `reports/Q1_ROBUSTNESS_DESIGN.md`只交付联合/环境扰动设计与CV适用范围，没有暗中执行随机50次、增强潜热模型或第二至第四问。

@@ -1,0 +1,74 @@
+{
+  "passed": true,
+  "archived_commit": "5f4af91154b247ed351344811413165acbf5d25d",
+  "zip_sha256": "853d3aa3642b7c2a52403ce0a040bc6b0c2f0f060abe0fddecf4495b5d0a9ecf",
+  "git_directory_present": false,
+  "main_entry_code_commit": null,
+  "current_source_match": {
+    "matches": true,
+    "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+    "current_code_commit": null,
+    "raw_byte_differences": [
+      "q1/inputs.py",
+      "q1/solver.py",
+      "q1/validation.py",
+      "q1/sensitivity.py",
+      "q1/sensitivity_metrics.py",
+      "q1/provenance.py",
+      "configs/q1_sensitivity.json"
+    ]
+  },
+  "main_entry_used_33_existing_run_records": true,
+  "additional_fresh_integrations": 1,
+  "fresh_reintegration": {
+    "passed": true,
+    "artifact_hash_scheme": "sha256-text-lf-v1",
+    "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+    "code_commit": null,
+    "reintegrated_run": "D_prefactor_minus20_N20480_BDF_base",
+    "cache_used": false,
+    "comparison": {
+      "T": {
+        "max_abs": 0.0,
+        "time_s": 1.0,
+        "radius_cm": 0.0,
+        "early_surface_max": 0.0,
+        "mean_max_abs": 0.0
+      },
+      "C": {
+        "max_abs": 0.0,
+        "time_s": 1.0,
+        "radius_cm": 0.0,
+        "early_surface_max": 0.0,
+        "mean_max_abs": 0.0
+      }
+    },
+    "new_run_record": ".scratch/zip-fresh-run/run.json",
+    "new_run_sha256": "4a376099de385b8ca13d77da8e09e358826c76688d34d53903f41059e69a3146",
+    "original_run_sha256": "c4aaf90c684963b62e25891a857f6e8de23ae3ad5e9ec2400679147ea758385b",
+    "accepted_steps": 3228,
+    "command": [
+      "python",
+      "-m",
+      "q1.sensitivity_reproduce",
+      "--data-root",
+      "<path-to-A题>",
+      "--directory",
+      "results/q1_sensitivity",
+      "--run",
+      "D_prefactor_minus20_N20480_BDF_base",
+      "--output",
+      ".scratch/zip-fresh-run"
+    ]
+  },
+  "changed_source_export_rejected": true,
+  "rejected_export_left_report_and_figures_unchanged": true,
+  "entrypoints_checked": [
+    "q1.sensitivity",
+    "q1.sensitivity_report",
+    "q1.sensitivity_reproduce",
+    "q1.sensitivity_audit"
+  ],
+  "raw_zip_manifest_sha256": "dcdd82e320800ef7255d86552112e13e82949c6b842d44ab629b233cf55b64a3",
+  "note": "Actual git archive ZIP extracted outside any Git repository; LF files verified; no source/data checks bypassed."
+}
