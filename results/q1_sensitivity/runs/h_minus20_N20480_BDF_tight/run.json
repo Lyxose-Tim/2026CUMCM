@@ -1,5 +1,5 @@
 {
-  "fingerprint": "d699e705f4f556de7d83f9e6dee4d2f009a9e753049c2ef639f2d3950f51e79d",
+  "fingerprint": "a6532a439360c87a326c7f3e19d246e3ef843c3b763a7ace4cbaa506144ba0d4",
   "case": {
     "id": "h_minus20",
     "parameter": "h",
@@ -39,17 +39,44 @@
     },
     "template_A1": "时间\\到药材中心的距离"
   },
+  "source_hash_scheme": "sha256-text-lf-v1",
   "source_hashes": {
+    "q1/__init__.py": "194c84380e07091c4d3697abff5dfa40c7e6d9976ce01908980f841667ef181f",
+    "q1/archive.py": "baeb5bffa371c7ce2ba55502672ca474ee5510e47b9742b2372e89ae057cc3a2",
+    "q1/inputs.py": "8b72515fc7ab68622daa2fd91dad0a8c4e9530702bdef8511891a866b16a699e",
+    "q1/fvm.py": "b1c77e6c1d41d69223e7cdaffc705fc64602a968b8afa3832fb544e415e0dd02",
+    "q1/solver.py": "8784aaeb24371bec22137591d91e0f438f15742f41d7dede53df0c7886b1ce55",
+    "q1/validation.py": "72a6c107de81d53c8538009f35a062c87bd0bd41c67d14895f4d98442d89579f",
+    "q1/reference.py": "e3b3455585cc44b9cfa40f0f03eee86e47d50bd81ed21da3ae0c627e3fac635b",
+    "q1/sensitivity.py": "4aff7d513470b88a87640ef6ed039d0d7adb5c0c2bb8e7a5fb9c0cc1b7140a28",
+    "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
+    "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
+    "configs/q1.json": "c4ff31112068a65d62b023d4beaa85199a4912ad699f6a873003087fad8529c8",
+    "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
+    "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
+  },
+  "source_raw_hashes": {
+    "q1/__init__.py": "b7bb7ea87fd2a5ea0c4c7a4d0cab59a350c61353dcececaa814600b595048856",
+    "q1/archive.py": "dd9099ca5ed0b102f55d76a0813644e1e04b8fc6c6ac2e495c95e5d411668644",
     "q1/inputs.py": "08ac749c16710ba6efe733112311adcf1ab1dcb3c4e69b84e852ae95e2f3aa0d",
     "q1/fvm.py": "1dd9fb6539d7b190b8ed4a3f53806e637852ac8c9507f2fa595fbdea31ea23e6",
     "q1/solver.py": "50740ae52bc2da0504090ef1f9f6afd834140e595a7acc183e51e19550d8e0f0",
     "q1/validation.py": "81c42c578482c6363f6818ebb988170686575d45013615c1b09085af5a35ebb8",
     "q1/reference.py": "830e01ecc6a0606970db3074563652c6a4b39d35d9873ad38858b051f533a4c8",
-    "q1/sensitivity.py": "74b6862ec08142ca9eed6bc06f56daef4d20a11c23d8a68af88e1ff5d05505ac",
+    "q1/sensitivity.py": "4aff7d513470b88a87640ef6ed039d0d7adb5c0c2bb8e7a5fb9c0cc1b7140a28",
     "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
+    "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
     "configs/q1.json": "b91a004a6feee1971946182974d12244a88993d44c3b990cb0fbfd773ccb2267",
     "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
     "requirements.lock.txt": "b056a1c86a34d1308c246524f270ffd717469c318a2169fa371a0efbae102b7f"
+  },
+  "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+  "code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
+  "dependencies": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.1",
+    "pytest": "9.1.1"
   },
   "diagnostics": {
     "nfev": 9332,
@@ -63,7 +90,7 @@
       "atol_C": 1e-15,
       "max_step": 1.25
     },
-    "seconds": 45.412780499999826,
+    "seconds": 40.07260139999926,
     "trial_failures": [
       {
         "segment_start": 0.0,
@@ -105,9 +132,10 @@
   },
   "accepted_and_output_envelopes_passed": true,
   "passed": true,
+  "artifact_hash_scheme": "sha256-text-lf-v1",
   "files": {
     "series.npz": "68681db8e10bb7945728940e9140d59e3c5f45c4358804d517475e135d833fe3",
-    "balance.csv": "f2da17843105ddd20b2e118960939169c6fd5d8c0b8d65598c96757d223d6b34",
-    "accepted_steps.csv": "853f97b5551b6a2a5127ad81073997027b16e5191ee740369af1db115304817b"
+    "balance.csv": "1e60389234c1b68c60e29f326146f1032428a23939a449c32fefcb6d9b94e0ab",
+    "accepted_steps.csv": "1d3bc2b346dfd6d029daf7073b1a145624ed969b54c4f469e41a282cd04ec4c9"
   }
 }

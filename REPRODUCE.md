@@ -80,7 +80,7 @@ New-Item -ItemType Directory -Force -Path .scratch | Out-Null
 ./.venv/Scripts/python.exe -m q1.sensitivity --data-root 'E:/Code_from_class/2026A/A题' --directory .scratch/q1-sensitivity-reproduction --workers 2
 ```
 
-比较各 `series.npz` 的每秒21半径场和体积平均，采用原时间预算而非压缩文件逐字节一致性。浮点矩阵不一定跨平台逐位相同；源文件原始字节哈希会记录不同换行格式，缓存拒绝混用属预期行为。31项测试的最新实际运行记录与新增图的视觉检查另存灵敏度目录，不能由求解器success代替。
+比较各 `series.npz` 的每秒21半径场和体积平均，采用原时间预算而非压缩文件逐字节一致性。浮点矩阵不一定跨平台逐位相同。当前使用明确的 `sha256-text-lf-v1` 方案：Python/JSON/CSV/Markdown/锁定依赖等文本只统一CRLF→LF；其他字节变化仍会被拒绝。NPZ、PDF、Excel及原输入维持原始字节SHA256。源码同时保留原始字节哈希，便于诊断换行差异。
 
 另提供单组新进程复现入口，默认重算D前因子−20%的N=20480生产情景；输出目录必须不存在，保证不能被缓存命中。实际比较覆盖每秒21个半径和体积平均，结果记录在 `reproduction.json`：
 
@@ -89,5 +89,17 @@ New-Item -ItemType Directory -Force -Path .scratch | Out-Null
 ```
 
 已归档的33次情景及复核之外，本轮额外执行了这一次新进程积分。此复现不是33组全部重跑的记录；全组重跑使用上文新目录命令。
+
+最后运行入库的审计入口，重跑测试并记录测试源码、当前数值源码与全部产物的一致性。当前完整测试集为37项：
+
+```powershell
+./.venv/Scripts/python.exe -m q1.sensitivity_audit --run-tests --write
+```
+
+仅检查已有证据而不修改文件，运行 `python -m q1.sensitivity_audit`。该命令会检查当前计算源码、报告生成器、测试源码、各组run文件与实际数据、单组重新积分的记录；不能仅由旧的 `numerically_verified` 字段绕过当前源码核验。源文件改变后必须重新计算；报告生成器改变后须重新导出、测试和审计。旧版无便携指纹的归档不会被静默认定为当前代码已验证。
+
+manifest中的 `code_commit` 表示启动调用时的源码提交；各组run保存其实际生成时的提交；审计保存检查时的提交。打包结果的提交发生在计算之后，三者不必相等，当前head的适用性由13个明确计算依赖文件的 `source_digest` 逐文件校验。文件清单包含共享归档模块；新增/遗漏依赖会导致范围检查失败。测试与报告生成代码另有摘要检查。
+
+所有灵敏度入口均可在GitHub源码ZIP解压目录运行，不要求 `.git` 或Git可执行程序；此时 `code_commit` 为null，完整源码摘要仍必需。目录仅位于其他仓库内部时也不借用父仓库的提交。无Git不允许跳过源码或数值检查。审核根因与整改说明见[PR #5审核回应](reports/Q1_PR5_REVIEW_RESPONSE.md)。
 
 `reports/Q1_ROBUSTNESS_DESIGN.md`只交付联合/环境扰动设计与CV适用范围，没有暗中执行随机50次、增强潜热模型或第二至第四问。

@@ -1334,5 +1334,12 @@
     }
   ],
   "protected_baseline_unchanged": true,
-  "source_inputs_unchanged": true
+  "protected_baseline_raw_bytes_unchanged": true,
+  "source_inputs_unchanged": true,
+  "current_source_match": {
+    "matches": true,
+    "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
+    "current_code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
+    "raw_byte_differences": []
+  }
 }
