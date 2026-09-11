@@ -17,3 +17,10 @@ def test_unverified_results_cannot_be_exported(tmp_path):
     (tmp_path/"verification.json").write_text(json.dumps({"numerical_passed":False}))
     with pytest.raises(ValueError,match="validation"):
         verified_source(tmp_path)
+
+
+def test_failed_later_run_blocks_export_of_stale_verified_archive(tmp_path):
+    (tmp_path/"verification.json").write_text(json.dumps({"numerical_passed":True}))
+    (tmp_path/"failure.json").write_text(json.dumps({"message":"invalid newer input"}))
+    with pytest.raises(ValueError,match="failed run"):
+        verified_source(tmp_path)

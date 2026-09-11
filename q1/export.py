@@ -24,6 +24,8 @@ def rounded_array(values):
 
 def verified_source(directory):
     directory = Path(directory)
+    if (directory/"failure.json").exists():
+        raise ValueError("A later failed run blocks formal export; complete a successful run first")
     verification_path = directory/"verification.json"
     verification = json.loads(verification_path.read_text(encoding="utf-8"))
     if not verification["numerical_passed"]:

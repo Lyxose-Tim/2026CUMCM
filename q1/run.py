@@ -98,6 +98,7 @@ def main():
     if not numerical_passed:
         print("Formal Excel/table export blocked by validation. Diagnostics retained.",flush=True)
         return 2
+    (out/"failure.json").unlink(missing_ok=True)
     return 0
 
 

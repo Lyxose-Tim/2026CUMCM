@@ -45,6 +45,14 @@ def check(directory="results/q1",workbook="results/result1.xlsx"):
     wb.close()
     # Plots read these same CSVs. Check every archived plotted value independently.
     figure_dir = directory/"figure_data"
+    plotted_environment = np.loadtxt(figure_dir/"environment.csv",delimiter=",",skiprows=1)
+    source_environment = np.loadtxt(directory/"environment.csv",delimiter=",",skiprows=1)
+    if not np.array_equal(plotted_environment,source_environment):
+        raise ValueError("Environment figure data mismatch")
+    history = json.loads((directory/"convergence.json").read_text(encoding="utf-8"))
+    expected_convergence = np.array([[r["N"],r["difference"]["T"]["max_abs"],r["difference"]["C"]["max_abs"],r["difference"]["T"]["early_surface_max"],r["difference"]["C"]["early_surface_max"]] for r in history if "difference" in r])
+    if not np.array_equal(np.loadtxt(figure_dir/"convergence.csv",delimiter=",",skiprows=1),expected_convergence):
+        raise ValueError("Convergence figure data mismatch")
     response = np.loadtxt(figure_dir/"response.csv",delimiter=",",skiprows=1)
     expected_response = np.c_[data["time_s"],data["temperature_C"][:,0],data["temperature_C"][:,-1],data["temperature_C"]@g["volume_m3"]/g["volume_m3"].sum(),data["moisture"][:,0],data["moisture"][:,-1],data["moisture"]@g["volume_m3"]/g["volume_m3"].sum()]
     if not np.array_equal(response,expected_response):
