@@ -9,6 +9,8 @@ from q1.solver import integrate
 from q1.validation import boundary_check
 from q1.sensitivity import scenarios
 from q1.sensitivity_metrics import elasticity, endpoints, compare
+from q1.sensitivity_report import verified_runs
+from q1.archive import write_json
 
 
 CFG = read_config()
@@ -103,3 +105,13 @@ def test_comparison_covers_early_surface_and_all_seconds():
     assert report["C"]["early_surface_max"]==pytest.approx(.123)
     assert report["T"]["time_s"]==117
     assert report["T"]["radius_cm"]==pytest.approx(.7)
+
+
+def test_sensitivity_report_rejects_incomplete_or_modified_verification(tmp_path):
+    write_json(tmp_path/"manifest.json",{"status":"running"})
+    with pytest.raises(ValueError,match="Unverified"):
+        verified_runs(tmp_path)
+    write_json(tmp_path/"verification.json",{"status":"numerically_verified"})
+    write_json(tmp_path/"manifest.json",{"status":"numerically_verified","verification_sha256":"incorrect"})
+    with pytest.raises(ValueError,match="stale"):
+        verified_runs(tmp_path)
