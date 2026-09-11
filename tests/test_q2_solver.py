@@ -5,6 +5,7 @@ from scipy.integrate import BDF, Radau
 from q1.fvm import Grid
 from q2.model import CoupledRadialModel
 from q2.solver import evaluate_selected, integrate
+from q2.validation import state_checks
 
 
 PARAMETERS = {
@@ -47,3 +48,8 @@ def test_short_equilibrium_integration_preserves_field():
     assert np.max(np.abs(solution.temperature_C - 28.0)) < 1e-12
     assert np.max(np.abs(solution.moisture - 2.55)) < 1e-12
     assert solution.diagnostics["relative_moisture_balance"] < 1e-13
+    checks = state_checks(solution, PARAMETERS, ConstantEnvironment())
+    assert checks["surface_heat_robin_max_residual"] == 0.0
+    assert checks["surface_moisture_robin_max_residual"] == 0.0
+    assert checks["surface_heat_flux_sign_consistent"]
+    assert checks["surface_moisture_flux_sign_consistent"]

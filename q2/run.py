@@ -163,11 +163,13 @@ def main():
     q1_passed = q1_delta["T"]["max_abs"] <= budgets["time_T"] and q1_delta["C"]["max_abs"] <= budgets["time_C"]
     del q1_data, q1_solution
 
-    checks = state_checks(final, parameters)
+    checks = state_checks(final, parameters, environment)
     balance_passed = final.diagnostics["relative_moisture_balance"] <= 1e-8
     flux_passed = (
-        checks["outward_heat_flux_nonpositive_fraction"] == 1.0
-        and checks["outward_moisture_flux_nonnegative_fraction"] == 1.0
+        checks["surface_heat_robin_max_residual"] <= 1e-12
+        and checks["surface_moisture_robin_max_residual"] <= 1e-18
+        and checks["surface_heat_flux_sign_consistent"]
+        and checks["surface_moisture_flux_sign_consistent"]
     )
     state_passed = all(checks[key] for key in (
         "finite", "positive_moisture", "initial_temperature_exact",
@@ -185,6 +187,7 @@ def main():
         "radau_diagnostics": radau_diagnostics,
         "state_checks": checks,
         "moisture_balance_passed": balance_passed,
+        "surface_flux_boundary_passed": flux_passed,
         "q1_compatible_passed": q1_passed,
         "q1_compatible_difference": q1_delta,
         "accepted_envelope_passed": True,

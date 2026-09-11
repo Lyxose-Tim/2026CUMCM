@@ -45,8 +45,8 @@ def q1_comparison(q2_solution, q1_directory="results/q1/archive"):
     return records
 
 
-def state_checks(solution, parameters):
-    return {
+def state_checks(solution, parameters, environment=None):
+    result = {
         "finite": bool(np.isfinite(solution.temperature_C).all() and np.isfinite(solution.moisture).all()),
         "positive_moisture": bool(np.all(solution.moisture > 0)),
         "temperature_min_C": float(solution.temperature_C.min()),
@@ -59,3 +59,14 @@ def state_checks(solution, parameters):
         "outward_heat_flux_nonpositive_fraction": float(np.mean(solution.accepted[:, 10] <= 1e-12)),
         "outward_moisture_flux_nonnegative_fraction": float(np.mean(solution.accepted[:, 11] >= -1e-14)),
     }
+    if environment is not None:
+        exterior_T, exterior_C = environment(solution.accepted[:, 0])
+        expected_T = parameters["h"] * (solution.accepted[:, 6] - exterior_T)
+        expected_C = parameters["hm"] * (solution.accepted[:, 7] - exterior_C)
+        result.update({
+            "surface_heat_robin_max_residual": float(np.max(np.abs(solution.accepted[:, 10] - expected_T))),
+            "surface_moisture_robin_max_residual": float(np.max(np.abs(solution.accepted[:, 11] - expected_C))),
+            "surface_heat_flux_sign_consistent": bool(np.all(solution.accepted[:, 10] * (solution.accepted[:, 6] - exterior_T) >= -1e-13)),
+            "surface_moisture_flux_sign_consistent": bool(np.all(solution.accepted[:, 11] * (solution.accepted[:, 7] - exterior_C) >= -1e-18)),
+        })
+    return result
