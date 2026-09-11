@@ -1,0 +1,184 @@
+{
+  "status": "numerically_verified",
+  "inputs": {
+    "sha256": {
+      "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+      "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+      "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+    },
+    "source_names": {
+      "environment": "附件\\附件1.xlsx",
+      "template": "附件\\附件3\\result1.xlsx",
+      "problem": "A题.pdf"
+    },
+    "template_A1": "时间\\到药材中心的距离"
+  },
+  "configuration": {
+    "parameters": {
+      "L": 0.25,
+      "R": 0.02,
+      "T0": 28.0,
+      "C0": 2.55,
+      "rho": 820.0,
+      "cp": 2600.0,
+      "k": 0.36,
+      "h": 25.0,
+      "hm": 8e-07,
+      "D_prefactor": 7e-09,
+      "D_exponent": 0.89
+    },
+    "input_sha256": {
+      "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+      "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+      "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+    },
+    "solver": {
+      "method": "BDF",
+      "rtol": 1e-11,
+      "atol_T": 1e-12,
+      "atol_C": 1e-14,
+      "max_step": 2.5
+    },
+    "budgets": {
+      "space_T": 0.0008,
+      "space_C": 8e-06,
+      "time_T": 0.0002,
+      "time_C": 2e-06
+    },
+    "grids": [
+      40,
+      80,
+      160,
+      320,
+      640,
+      1280,
+      2560,
+      5120,
+      10240,
+      20480
+    ]
+  },
+  "solver": {
+    "nfev": 9534,
+    "njev": 31,
+    "nlu": 980,
+    "method": "BDF",
+    "settings": {
+      "method": "BDF",
+      "rtol": 1e-12,
+      "atol_T": 1e-13,
+      "atol_C": 1e-15,
+      "max_step": 1.25
+    },
+    "seconds": 62.39562410000008,
+    "trial_failures": [
+      {
+        "segment_start": 0.0,
+        "attempt": 1,
+        "trial_time": 1.2428925196630494,
+        "node": 20480,
+        "value": -2.6027947653936234,
+        "phase": "initial_step_estimation",
+        "current_step": null,
+        "trial_offset_from_segment_start": 1.2428925196630494
+      }
+    ],
+    "accepted_steps": 4731,
+    "audited": true
+  },
+  "python": "3.12.14",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "dependencies": {
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.1",
+    "openpyxl": "3.1.5",
+    "pytest": "9.1.1"
+  },
+  "code_commit": "a27d7c484dce8c56ed7238316098ca5da9e7493b",
+  "source_hashes": {
+    "q1/__init__.py": "194c84380e07091c4d3697abff5dfa40c7e6d9976ce01908980f841667ef181f",
+    "q1/archive.py": "baeb5bffa371c7ce2ba55502672ca474ee5510e47b9742b2372e89ae057cc3a2",
+    "q1/check_export.py": "e95d20cc69f8d4435d76c3d5dcd28fad038bdadc2d26171b97d33f96796b3a78",
+    "q1/export.py": "dfda8f842974beccf90dfb9b55396618d2eab3d085c6e69322e42d60fdc7dbca",
+    "q1/figures.py": "a4c9dea0cba0003c2fff1169b0229f0556214a841e788523aca9accf03c69383",
+    "q1/fvm.py": "b1c77e6c1d41d69223e7cdaffc705fc64602a968b8afa3832fb544e415e0dd02",
+    "q1/inputs.py": "ec36bc2be3bb6c771c7c3b709050c5c936c5509409121163508c043af1c91c34",
+    "q1/reference.py": "e3b3455585cc44b9cfa40f0f03eee86e47d50bd81ed21da3ae0c627e3fac635b",
+    "q1/run.py": "7ad71a1ea231dfa4f86fda000f82acdd987027f3e4203992186ef93ad6611fd7",
+    "q1/solver.py": "81683593cf1d303da1c23ce4c3952bd22005e5664a3842a45bf533b529738a36",
+    "q1/validation.py": "6e3d82d8ead31cb7b50a83c71c162e4c4279296ff6c69fca79e668cfd90ee889",
+    "tests/test_export.py": "6a6abf4869b16e21828f920d60ba9c03ca712318407391220b4a1e9a7ed81399",
+    "tests/test_integration.py": "12b7a4d4e46ca20575526a3240c397a93c42731579a662ee00ab583e3f4a275c",
+    "tests/test_spatial.py": "23e46f7727d1ab435a59ff5c1d743ebcc6fe0566b826d16f912a8f60cf7bf1b5",
+    "configs/q1.json": "c4ff31112068a65d62b023d4beaa85199a4912ad699f6a873003087fad8529c8"
+  },
+  "command": [
+    "python",
+    "-m",
+    "q1.run",
+    "--data-root",
+    "<path-to-A题>",
+    "--config",
+    "configs/q1.json"
+  ],
+  "verification_sha256": "bd3e42763974763943126beac0f87996414406c041d3a993ca6d4d8b1657e4ea",
+  "N": 20480,
+  "axis_order": [
+    "time_s",
+    "radius_m"
+  ],
+  "dtype": "float64",
+  "chunks": [
+    {
+      "file": "field_0000_0299.npz",
+      "sha256": "29eab1545579330c88171c84303d86b1e0a13aceff426947eb9a838c05fdf18e",
+      "first_time_s": 0.0,
+      "last_time_s": 299.0,
+      "bytes": 44062803
+    },
+    {
+      "file": "field_0300_0599.npz",
+      "sha256": "5c19db1b3fa26fd5e2d22cb3efd623d096f488a92a61f2ae034d20930909f0c6",
+      "first_time_s": 300.0,
+      "last_time_s": 599.0,
+      "bytes": 58967235
+    },
+    {
+      "file": "field_0600_0899.npz",
+      "sha256": "f82a49e73a9e05b1e32293fe6da2cf18d04a38638191886e3ee916ab1e00d385",
+      "first_time_s": 600.0,
+      "last_time_s": 899.0,
+      "bytes": 64989925
+    },
+    {
+      "file": "field_0900_1199.npz",
+      "sha256": "f9524dd2f9d876f79d2c3369c5975eba2c0e68338c24b1c169628e0e80de6dbd",
+      "first_time_s": 900.0,
+      "last_time_s": 1199.0,
+      "bytes": 68197680
+    },
+    {
+      "file": "field_1200_1499.npz",
+      "sha256": "7bd36407259ee37e69e83857bdb95f6d4efa9f5d6cf0d9e251bcbc1095574deb",
+      "first_time_s": 1200.0,
+      "last_time_s": 1499.0,
+      "bytes": 69949715
+    },
+    {
+      "file": "field_1500_1799.npz",
+      "sha256": "dbfb2e556cc69d12cb1c180f27ac10e06b5382d9870d92a231033ef00fc4772f",
+      "first_time_s": 1500.0,
+      "last_time_s": 1799.0,
+      "bytes": 70989894
+    },
+    {
+      "file": "field_1800_1800.npz",
+      "sha256": "d6e07e22d19ad591d9b7c163469698d6e8fa7289f8ab562a5e891e6e7097a7e3",
+      "first_time_s": 1800.0,
+      "last_time_s": 1800.0,
+      "bytes": 238469
+    }
+  ],
+  "geometry_sha256": "e93a78505d1dce0708fca4a19ed15cae9656536f79bb4712c697b486d27a2115"
+}

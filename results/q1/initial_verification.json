@@ -1,0 +1,150 @@
+{
+  "numerical_passed": false,
+  "space_passed": false,
+  "consecutive_within_budget": 1,
+  "max_grid": 10240,
+  "N": 10240,
+  "time_passed": true,
+  "tolerance_difference": {
+    "T": {
+      "max_abs": 2.1783688453069772e-07,
+      "time_s": 1025.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 3.3094238460762426e-10
+    },
+    "C": {
+      "max_abs": 4.461701985647437e-08,
+      "time_s": 2.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 4.461701985647437e-08
+    }
+  },
+  "radau_difference": {
+    "T": {
+      "max_abs": 2.2823094525392662e-08,
+      "time_s": 1501.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 3.389999392311438e-11
+    },
+    "C": {
+      "max_abs": 4.036202039259251e-09,
+      "time_s": 1.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 4.036202039259251e-09
+    }
+  },
+  "radau_diagnostics": {
+    "nfev": 9705,
+    "njev": 30,
+    "nlu": 2186,
+    "method": "Radau",
+    "settings": {
+      "method": "Radau",
+      "rtol": 1e-10,
+      "atol_T": 1.0000000000000001e-11,
+      "atol_C": 1e-13,
+      "max_step": 2.5
+    },
+    "seconds": 32.555459699999574,
+    "trial_failures": [
+      {
+        "segment_start": 0.0,
+        "attempt": 1,
+        "trial_time": 1.757736910968549,
+        "node": 10240,
+        "value": -1.0936650697385022,
+        "current_step": null
+      }
+    ],
+    "accepted_steps": 1378,
+    "audited": false
+  },
+  "analytic": {
+    "T": {
+      "modes": 128,
+      "truncation_difference": 2.619093830702468e-11,
+      "first_roots": [
+        1.4184725188270684,
+        4.166469601015177,
+        7.208478464380926
+      ],
+      "first_coefficients": [
+        1.2658221367416633,
+        -0.3779735277731624,
+        0.17496350670097002
+      ],
+      "max_abs": 4.303561382812404e-07,
+      "time_s": 1.0,
+      "radius_cm": 2.0,
+      "budget": 0.0008,
+      "passed": true
+    },
+    "C": {
+      "modes": 1024,
+      "truncation_difference": 0.0,
+      "first_roots": [
+        1.8220830482756618,
+        4.499505031663581,
+        7.43779003106901
+      ],
+      "first_coefficients": [
+        1.4334389171074056,
+        -0.6573601624155095,
+        0.3589983418032076
+      ],
+      "max_abs": 1.5092509042524682e-06,
+      "time_s": 1.0,
+      "radius_cm": 2.0,
+      "budget": 8e-06,
+      "passed": true
+    }
+  },
+  "balance": {
+    "T": {
+      "max_balance": 8.180580396201255e-10,
+      "max_quadrature_difference": 1.9246212203242583e-16,
+      "passed": true
+    },
+    "C": {
+      "max_balance": 4.9012269415904905e-11,
+      "max_quadrature_difference": 6.707342884327978e-18,
+      "passed": true
+    }
+  },
+  "boundary": {
+    "T": {
+      "early": 6.987801116991766e-09,
+      "late": 7.765592702785384e-09,
+      "passed": true
+    },
+    "C": {
+      "early": 1.073074076376632e-06,
+      "late": 5.432584278943998e-08,
+      "passed": true
+    }
+  },
+  "manufactured_operator": [
+    {
+      "N": 40,
+      "internal": 0.0006819600550352735,
+      "surface": 0.0036837907588812427,
+      "weighted": 0.00022910854650622062
+    },
+    {
+      "N": 80,
+      "internal": 0.00017111241585186806,
+      "surface": 0.0018118520886333605,
+      "weighted": 5.728878318059617e-05
+    },
+    {
+      "N": 160,
+      "internal": 4.281710516642467e-05,
+      "surface": 0.00089850602891608,
+      "weighted": 1.4322019324259711e-05
+    }
+  ],
+  "accepted_envelope_passed": true,
+  "output_envelope_passed": true,
+  "export_passed": false,
+  "cross_review": "pending"
+}
