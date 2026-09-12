@@ -5,12 +5,28 @@ from pathlib import Path
 from q2.archive import write_json
 from q2.inputs import sha256
 from q2.provenance import portable_artifact_sha256
+from q4.export import delivery_sources
 from q4.validation import verified
+
+
+def require_export(directory="results/q4", workbook="results/result4.xlsx"):
+    directory = Path(directory)
+    evidence = json.loads((directory / "export_verification.json").read_text(encoding="utf-8"))
+    if evidence.get("passed") is not True:
+        raise ValueError("Q4 Excel verification failed or absent")
+    if evidence["workbook_sha256"] != sha256(workbook):
+        raise ValueError("Q4 Excel verification belongs to a different workbook")
+    if (evidence["delivery_sources"] != delivery_sources()
+            or evidence["verification_sha256"] != portable_artifact_sha256(directory / "verification.json")
+            or evidence["table6_sha256"] != portable_artifact_sha256(directory / "table6.csv")):
+        raise ValueError("Q4 Excel delivery evidence is stale")
+    return evidence
 
 
 def write_reports(directory="results/q4"):
     directory = Path(directory)
     verification, record, _ = verified(directory)
+    export_evidence = require_export(directory)
     root = record["root"]
     summary = verification["table6_summary"]
     lines = []
@@ -66,7 +82,9 @@ D4 = 4.2e-4 exp(-0.30/C) exp[-3850/(theta+273.15)]
 - Q3固定域退化回归：C最大差 `{verification['q3_regression']['C']:.3e}`，T最大差 `{verification['q3_regression']['T']:.3e}`。
 - 主方案空间加密差：`{verification['spatial'][-1]['time_difference_s']:.6g}` s，C最大差 `{verification['spatial'][-1]['C']:.3e}`。
 - 估计数值时间改变量：`{verification['estimated_numerical_time_change_s']:.6g}` s。
+- 空间加密预算门禁：`passed = {verification['spatial_budget']['passed']}`。
 - 水分总体平衡、温度历史包络、半径单调、域外空白掩码、严格越阈均已通过程序检查。
+- Excel交付回读：{export_evidence['rows']} 行、{export_evidence['columns']} 列，工作簿 SHA-256 `{export_evidence['workbook_sha256']}`。
 - 单元测试证据：`results/q4/unit_tests.txt`。
 
 该估计不是严格 PDE 误差界；它只绑定当前离散、事件括号和同源求解器对照。
@@ -90,6 +108,7 @@ D4 = 4.2e-4 exp(-0.30/C) exp[-3850/(theta+273.15)]
             index,
         ]},
         "verification_sha256": portable_artifact_sha256(directory / "verification.json"),
+        "export_verification_sha256": portable_artifact_sha256(directory / "export_verification.json"),
     })
 
 

@@ -27,7 +27,7 @@ rho4(U) cp4(U) Theta_t = R(t)^(-2) * 1/xi * d/dxi [xi k4(U) Theta_xi]
 - 第四问临界时间：`51.0920106837 h`
 - 临界表面半径：`1.2000 cm`
 - 10240 到 20480 网格临界时间差：`0.0755348963 s`
-- Excel：`results/result4.xlsx`
+- Excel：`results/result4.xlsx`，SHA-256 `803512aecd6af1b5425c0f4c1aec0ce7bb350f9ae774ee95159be175f0863b90`
 - 表6：`results/q4/table6.csv` 与 `results/q4/table6.md`
 
 对照结果：
@@ -41,10 +41,16 @@ rho4(U) cp4(U) Theta_t = R(t)^(-2) * 1/xi * d/dxi [xi k4(U) Theta_xi]
 
 ## 验证
 
-- `python -m pytest -q --basetemp <ascii-temp> -p no:cacheprovider`：`94 passed in 6.78s`
-- `q4.validation`：通过全域严格越阈、正含水率、温度历史包络、半径单调、域外空白掩码、水分平衡和事件斜率检查。
+- `python -m pytest -q --basetemp <ascii-temp> -p no:cacheprovider`：`106 passed`
+- `q4.validation`：通过全域严格越阈、正含水率、温度历史包络、半径单调、域外空白掩码、水分平衡、事件斜率和空间加密预算门禁。
 - Q3固定域退化回归：C最大差 `3.284445493e-09`，T最大差 `6.188763280e-09`。
-- `q4.check_export`：`result4.xlsx` 回读通过，3066 行、23 列、44287 个数值单元、23165 个域外空白，最大数值差 `0.0`。
+- `q4.check_export`：`result4.xlsx` 回读通过，3066 行、23 列、44287 个数值单元、23165 个域外空白，最大数值差 `0.0`；已核对 B1:V1 为 0–2 cm、间隔 0.1 cm，W1 为“药材表面”。
+
+## Review 修复
+
+- 修复 result4 工作簿固定半径列头单位，导出改为厘米值，并在回读时核验全部半径列头和动态表面列。
+- 将 `budgets.space_time_s` 与 `budgets.space_C` 纳入 Q4 数值验证硬门禁；默认预算通过，超预算或非有限值会拒绝验收。
+- 报告生成前新增 Excel 交付证据门禁，核对当前工作簿、数值验证、导出源码和表6哈希；失败、缺失、过期证据均有反例测试。
 
 ## 复现命令
 

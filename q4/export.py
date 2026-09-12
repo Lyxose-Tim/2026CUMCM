@@ -31,6 +31,19 @@ def delivery_sources():
     return {p: portable_artifact_sha256(p) for p in paths}
 
 
+def fixed_radius_headers_cm(record):
+    values = np.asarray(record["identity"]["fixed_radius_m"], dtype=float) * 100.0
+    return [float(Decimal(str(float(value))).quantize(Decimal("0.0001"), rounding=ROUND_HALF_UP)) for value in values]
+
+
+def workbook_headers(record):
+    return (
+        [record["identity"]["inputs"]["q4_template"]["A1"]]
+        + fixed_radius_headers_cm(record)
+        + [record["identity"]["inputs"]["q4_template"]["surface_header"]]
+    )
+
+
 def json_rows(rows):
     result = []
     for row in rows:
@@ -62,9 +75,7 @@ def prepare(data_root, directory="results/q4", payload=".scratch/q4/workbook_pay
     rows = np.c_[fields["time_s"][1:], rounded(fields["moisture"][1:])]
     content = {
         "rows": json_rows(rows.tolist()),
-        "headers": [record["identity"]["inputs"]["q4_template"]["A1"]]
-                   + record["identity"]["fixed_radius_m"]
-                   + [record["identity"]["inputs"]["q4_template"]["surface_header"]],
+        "headers": workbook_headers(record),
         "template": str(template.resolve()),
         "template_sha256": sha256(template),
         "output": "results/result4.xlsx",
@@ -85,4 +96,3 @@ if __name__ == "__main__":
     parser.add_argument("--payload", default=".scratch/q4/workbook_payload.json")
     args = parser.parse_args()
     print(f"Prepared {prepare(args.data_root, args.directory, args.payload)} rows")
-

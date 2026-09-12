@@ -96,6 +96,43 @@
       "T": 5.707595818194022e-08
     }
   ],
+  "spatial_budget": {
+    "passed": true,
+    "comparisons": [
+      {
+        "a": "D_appendix4_shrink_N5120",
+        "b": "main_appendix4_shrink_N10240",
+        "checks": {
+          "time_difference_s": {
+            "value": 0.3208301457343623,
+            "budget": 0.4,
+            "passed": true
+          },
+          "C": {
+            "value": 6.657529434447862e-06,
+            "budget": 2e-05,
+            "passed": true
+          }
+        }
+      },
+      {
+        "a": "main_appendix4_shrink_N10240",
+        "b": "main_appendix4_shrink_N20480",
+        "checks": {
+          "time_difference_s": {
+            "value": 0.0755348963139113,
+            "budget": 0.4,
+            "passed": true
+          },
+          "C": {
+            "value": 1.78438128087266e-06,
+            "budget": 2e-05,
+            "passed": true
+          }
+        }
+      }
+    ]
+  },
   "table6_summary": [
     {
       "case": "A_appendix3_fixed_N5120",
@@ -204,14 +241,15 @@
     "slope_C_per_s": -5.134854644539555e-07
   },
   "validation_sources": {
-    "q4/validation.py": "0e4c9629f7be348042b673e9ceb17570032346639136aff4c53d556faa1243a2",
-    "q4/export.py": "6e86267dcf8b12748a4bff36afc770585aafbdd3d747208a07098a5da4d8e181",
-    "q4/check_export.py": "3737f0d13ac1b5d263a90c9c9ffdd4a92a52fb69dbb306c17fa08ae5cd4d39c5",
+    "q4/validation.py": "16ef70e1419c3117ed5bd631ce452b28d42d475f1e2e5ef5a36973ef53e4acde",
+    "q4/export.py": "36d82c2058cbad734bda218509778fff7fb8ea98be25d114710879dedd379303",
+    "q4/check_export.py": "f18300d2a4b94de640bf25bcc64eb484085ae7710b9def0bfa3c41c943bda376",
+    "tests/test_q4_delivery.py": "e38724d97b6573ef2aacbe57e0a41dc65063dcb24ad5393c5e5d6afcf55c2657",
     "tests/test_q4_inputs.py": "2136a585eebcaa60689d84a61237f14b32f9e3dfd5887f0c4ed41ba0b8893251",
     "tests/test_q4_model.py": "52accc480d0651940bb6022bf92a29e5bf696673ca684507885cf98f6b751497",
     "tests/test_q4_run.py": "a91488162afba24c7fe68d3f96411d8a28afa5e812f19cd071b37d1e0fc64b54"
   },
-  "unit_tests_sha256": "0a1863d108eef360f844e343f85877fd83476bbf126727f227f872e12e875b0f",
+  "unit_tests_sha256": "2bb1997027ea55aa5553ec5fe382499364c56a1b20546f988773bb7d0340cc6a",
   "run_record_hashes": {
     "A_appendix3_fixed_N5120": "4fff5c46f4d9ace3233bbf8e4a94488ea467cad5467785830ae73d7824dde150",
     "B_appendix3_shrink_N5120": "9b2a21307daea52e64af3fef31bf5062138701adf65a6ba2b5b6489356122b3b",

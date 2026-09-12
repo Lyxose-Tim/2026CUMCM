@@ -1,10 +1,10 @@
 """Q4 numerical verification and Q3 fixed-domain regression."""
 import argparse
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
-import tempfile
 
 import numpy as np
 
@@ -77,15 +77,45 @@ def load_case(directory, name):
         return record, None
 
 
+def check_spatial_budget(spatial, budgets):
+    required = {"time_difference_s": budgets["space_time_s"], "C": budgets["space_C"]}
+    failures = []
+    checked = []
+    for item in spatial:
+        item_checks = {}
+        for key, budget in required.items():
+            value = float(item[key])
+            ok = bool(np.isfinite(value) and value <= budget)
+            item_checks[key] = {"value": value, "budget": float(budget), "passed": ok}
+            if not ok:
+                failures.append(f"{item['a']}->{item['b']} {key}={value} exceeds {budget}")
+        checked.append({"a": item["a"], "b": item["b"], "checks": item_checks})
+    if failures:
+        raise ValueError("Q4 spatial refinement exceeds configured budget: " + "; ".join(failures))
+    return {"passed": True, "comparisons": checked}
+
+
+def normalize_test_output(output):
+    if not output:
+        return ""
+    lines = output.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+    while lines and lines[-1] == "":
+        lines.pop()
+    return "\n".join(line.rstrip() for line in lines) + "\n"
+
+
 def validate(directory="results/q4"):
     directory = Path(directory)
     config = read_config("configs/q4.json")
     write_json(directory / "verification.json", {"passed": False, "status": "running"})
-    basetemp = str(Path(tempfile.gettempdir()) / "pytest-q4")
+    basetemp = Path(".scratch") / "pytest-q4-validation" / f"run-{os.getpid()}"
+    basetemp.parent.mkdir(parents=True, exist_ok=True)
     test = subprocess.run([sys.executable, "-m", "pytest", "-q", "--basetemp", basetemp,
                            "-p", "no:cacheprovider"],
                           capture_output=True)
-    output = test.stdout.decode("utf-8", errors="replace") + test.stderr.decode("utf-8", errors="replace")
+    output = normalize_test_output(
+        test.stdout.decode("utf-8", errors="replace") + test.stderr.decode("utf-8", errors="replace")
+    )
     (directory / "unit_tests.txt").write_text(output, encoding="utf-8")
     if test.returncode:
         raise RuntimeError("Unit/regression tests failed")
@@ -103,6 +133,7 @@ def validate(directory="results/q4"):
         rb, fb = runs[b]
         spatial.append({"a": a, "b": b, "time_difference_s": abs(ra["root"]["time_s"] - rb["root"]["time_s"]),
                         **compare(fa, fb)})
+    spatial_budget = check_spatial_budget(spatial, config["budgets"])
     formal_case = config["formal_case"]
     formal, fields = runs[formal_case]
     table = []
@@ -125,7 +156,8 @@ def validate(directory="results/q4"):
             })
     result = {
         "passed": True, "formal_case": formal_case, "checks": checks,
-        "q3_regression": regression, "spatial": spatial, "table6_summary": table,
+        "q3_regression": regression, "spatial": spatial, "spatial_budget": spatial_budget,
+        "table6_summary": table,
         "estimated_numerical_time_change_s": spatial[-1]["time_difference_s"] + config["bracket_width_s"],
         "root": formal["root"],
         "validation_sources": validation_sources(),
