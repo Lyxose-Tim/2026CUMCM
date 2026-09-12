@@ -1,0 +1,33 @@
+{
+  "passed": true,
+  "workbook_sha256": "c1a00b710d2a13ebf8884887cc3075d945fcb37aa46f266328c6618be174f177",
+  "workbook_bytes": 33984006,
+  "numeric_result_cells_checked": 10886400,
+  "max_absolute_readback_difference": 0.0,
+  "sheets": [
+    "温度",
+    "水分浓度"
+  ],
+  "rows_per_sheet": 259201,
+  "columns_per_sheet": 22,
+  "delivery_source": {
+    "source_hash_scheme": "sha256-text-lf-v1",
+    "source_hashes": {
+      "q2/provenance.py": "09cc22113f670b2fefd178a4c376f17394313c01de1b9f225582fe75068b8fe5",
+      "q2/export.py": "e945b0ce0c33b280b91d42861994e92d848654e7d602f7e6b425e57cb27abc9d",
+      "q2/check_export.py": "2d20ffc1bc5db50757da683e5d2d51be082c9eb463b3b4bc3cc9875796148f8d",
+      "scripts/build_result2.mjs": "2d5570927b33e83ce155e19c78cf1b3addc90b50d549979c07856578ff80ed78",
+      "scripts/build_result2_stream.py": "5d8f06c5d0436bab212c8dd802a0d40e3ea5a25be3905aa2005188348c1e8a6e"
+    },
+    "source_raw_hashes": {
+      "q2/provenance.py": "09cc22113f670b2fefd178a4c376f17394313c01de1b9f225582fe75068b8fe5",
+      "q2/export.py": "e945b0ce0c33b280b91d42861994e92d848654e7d602f7e6b425e57cb27abc9d",
+      "q2/check_export.py": "2d20ffc1bc5db50757da683e5d2d51be082c9eb463b3b4bc3cc9875796148f8d",
+      "scripts/build_result2.mjs": "2d5570927b33e83ce155e19c78cf1b3addc90b50d549979c07856578ff80ed78",
+      "scripts/build_result2_stream.py": "5d8f06c5d0436bab212c8dd802a0d40e3ea5a25be3905aa2005188348c1e8a6e"
+    },
+    "source_digest": "54e572702b22d7dc77bea23710751090085dabe430f91b40b1702de6b29a8032",
+    "code_commit": "7254ad0232fa5909433c762e1fafb56b28200e45"
+  },
+  "writer": "openpyxl write-only streaming; Artifact Tool format blueprint rendered separately"
+}
