@@ -147,18 +147,20 @@ def main():
     scenario_time = scenarios["time_s"] / 3600
     scenario_rows = []
     fig, axes = plt.subplots(1, 2, figsize=(10.0, 3.8))
-    axes[0].plot(time_h[::3600], data["temperature_C"][::3600, 0], label="末小时均值")
-    axes[1].plot(time_h[::3600], data["moisture"][::3600, 0], label="末小时均值")
+    base_T = data["temperature_C"][::3600, 0]
+    base_C = data["moisture"][::3600, 0]
+    axes[0].plot(time_h[::3600], np.zeros_like(base_T), label="末小时均值（基准）")
+    axes[1].plot(time_h[::3600], np.zeros_like(base_C), label="末小时均值（基准）")
     for mode, label in (("terminal_hold", "末值保持"), ("nominal", "50°C, 0.05")):
         t_values = scenarios[f"{mode}_temperature_C"]
         c_values = scenarios[f"{mode}_moisture"]
-        axes[0].plot(scenario_time, t_values[:, 0], label=label)
-        axes[1].plot(scenario_time, c_values[:, 0], label=label)
+        axes[0].plot(scenario_time, t_values[:, 0] - base_T, label=label)
+        axes[1].plot(scenario_time, c_values[:, 0] - base_C, label=label)
         scenario_rows.extend(zip(scenarios["time_s"], [mode] * len(scenario_time), t_values[:, 0], t_values[:, -1], c_values[:, 0], c_values[:, -1]))
     scenario_rows.extend(zip(data["time_s"][::3600], [modes[0]] * len(data["time_s"][::3600]), data["temperature_C"][::3600, 0], data["temperature_C"][::3600, -1], data["moisture"][::3600, 0], data["moisture"][::3600, -1]))
     save_rows(source_dir / "q2_environment_scenarios.csv", ["time_s", "mode", "center_T", "surface_T", "center_C", "surface_C"], scenario_rows)
-    axes[0].set(xlabel="时间 / h", ylabel="中心温度 / °C", title="长期环境假设对温度的影响")
-    axes[1].set(xlabel="时间 / h", ylabel=r"中心水分 / kg kg$^{-1}$", title="长期环境假设对水分的影响")
+    axes[0].set(xlabel="时间 / h", ylabel="中心温度相对偏差 / °C", title="长期环境假设对温度的影响")
+    axes[1].set(xlabel="时间 / h", ylabel=r"中心水分相对偏差 / kg kg$^{-1}$", title="长期环境假设对水分的影响")
     axes[1].legend(frameon=False)
     fig.tight_layout()
     save(fig, figure_dir / "q2_environment_scenarios.pdf")
@@ -170,11 +172,12 @@ def main():
         for item in records
     ])
     fig, ax = plt.subplots(figsize=(6.8, 4.0))
-    ax.loglog([item["N"] for item in records], [item["difference"]["T"]["max_abs"] for item in records], "o-", label="温度")
+    line_T = ax.loglog([item["N"] for item in records], [item["difference"]["T"]["max_abs"] for item in records], "o-", label="温度")[0]
     twin = ax.twinx()
-    twin.loglog([item["N"] for item in records], [item["difference"]["C"]["max_abs"] for item in records], "s-", color="#C44E52", label="水分")
+    line_C = twin.loglog([item["N"] for item in records], [item["difference"]["C"]["max_abs"] for item in records], "s-", color="#C44E52", label="水分")[0]
     ax.set(xlabel="径向区间数 N", ylabel="温度最大差 / °C", title="空间网格收敛")
     twin.set_ylabel(r"水分最大差 / kg kg$^{-1}$")
+    ax.legend([line_T, line_C], ["温度", "水分"], frameon=False, loc="upper right")
     fig.tight_layout()
     save(fig, figure_dir / "q2_grid_convergence.pdf")
 

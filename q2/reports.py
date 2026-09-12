@@ -22,10 +22,17 @@ def main():
     directory, reports = Path(args.directory), Path(args.reports)
     reports.mkdir(parents=True, exist_ok=True)
     data, _, manifest, verification = verified_source(directory)
+    export_verification = json.loads((directory / "export_verification.json").read_text(encoding="utf-8"))
+    scenarios = json.loads((directory / "environment_scenarios.json").read_text(encoding="utf-8"))
     table_T = data["temperature_C"][TABLE_TIMES][:, TABLE_RADIUS_INDICES]
     table_C = data["moisture"][TABLE_TIMES][:, TABLE_RADIUS_INDICES]
     extension = manifest["inputs"]["environment_extension"]
     endpoint_T, endpoint_C = data["temperature_C"][-1], data["moisture"][-1]
+    scenario_lines = "\n".join(
+        f"- `{item['mode']}`：中心温度 {item['endpoint']['center_temperature_C']:.6f} °C，"
+        f"中心水分 {item['endpoint']['center_moisture']:.6f} kg/kg。"
+        for item in scenarios
+    )
     result_text = f"""# 第二问结果报告
 
 ## 计算口径
@@ -50,7 +57,11 @@ def main():
 
 ## 结果解释边界
 
-温度方程采用题面给定的有效热容形式，未加入潜热项，因此不能解释为完整焓守恒。4 h 后结果依赖环境延拓；长期环境对照见 `figures/q2/q2_environment_scenarios.pdf` 及绑定 CSV。
+温度方程采用题面给定的有效热容形式，未加入潜热项，因此不能解释为完整焓守恒。4 h 后结果依赖环境延拓；两个72 h对照端点为：
+
+{scenario_lines}
+
+三种情景的相对偏差见 `../figures/q2/q2_environment_scenarios.pdf` 及绑定 CSV。当前附件没有内部场实测，数值收敛不能替代实验精度验证。
 """
     (reports / "Q2_RESULTS_REPORT.md").write_text(result_text, encoding="utf-8")
 
@@ -61,7 +72,7 @@ def main():
 
 ## 结论
 
-全部正式门禁通过：`numerical_passed = true`。正式结果可用于表 3、表 4、`result2.xlsx` 和论文图表。
+数值门禁与Excel独立回读均通过。正式结果可用于表 3、表 4、`result2.xlsx` 和论文图表。
 
 ## 空间与时间误差
 
@@ -82,6 +93,14 @@ def main():
 - 源码提交：`{manifest['code_commit']}`。
 - 源码摘要：`{manifest['source_digest']}`。
 - 输入、配置、依赖、运行命令及每个归档分块的 SHA-256 均记录在 `results/q2/archive/manifest.json`。
+
+## Excel 与图表验收
+
+- `result2.xlsx` 为 {export_verification['workbook_bytes'] / 1024**2:.2f} MiB，包含两张259201行、22列工作表。
+- 已独立流式回读 {export_verification['numeric_result_cells_checked']} 个数值单元格，最大绝对差为 {export_verification['max_absolute_readback_difference']:.1f}，工作簿 SHA-256 为 `{export_verification['workbook_sha256']}`。
+- Artifact Tool 已写入、检查并渲染12行格式蓝图；完整工作簿在16 GB V8堆上限仍内存不足，最终改用 openpyxl write-only 流式生成。该降级不改变已哈希的数值载荷。
+- 六张PDF图均从绑定CSV生成并经PNG渲染检查，无缺字、裁切或重叠。
+- Excel交付源码摘要：`{export_verification['delivery_source']['source_digest']}`；对应提交：`{export_verification['delivery_source']['code_commit']}`。
 """
     (reports / "Q2_VERIFY_REPORT.md").write_text(verify_text, encoding="utf-8")
 
