@@ -52,6 +52,8 @@ def test_threshold_not_reached_preserves_terminal_evidence():
     assert result["outcome"] == "threshold_not_reached"
     assert result["terminal"]["time_s"] == pytest.approx(1.0)
     assert result["terminal"]["g"] > 0
+    assert np.isfinite(list(result["terminal"].values())).all()
+    assert result["terminal"]["relative_balance"] == pytest.approx(result["trace"][-1, -1])
     assert result["terminal_state"].shape == (10,)
     assert result["trace"].shape[0] > 0
 

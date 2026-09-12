@@ -102,6 +102,7 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
     near_states = None
     counts = dict(nfev=0, njev=0, nlu=0)
     terminal_time = 0.0
+    terminal_balance = 0.0
 
     def summarize(t, y, balance=np.nan):
         cmax, index = full_max(y, n)
@@ -176,6 +177,7 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
             quad_error += abs(flux_estimates[1] - flux_estimates[0])
             balance = (np.dot(grid.volume, state[n:]) - initial_content +
                        grid.area[-1] * integrated_flux) / initial_content
+            terminal_balance = float(balance)
             max_balance = max(max_balance, abs(float(balance)))
             traces.append(summarize(right, state, balance))
 
@@ -219,7 +221,7 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
     if not output_times or output_times[-1] != (root if done else terminal_time):
         append_output(root if done else terminal_time, near_states[1] if done else state)
 
-    terminal_row = summarize(terminal_time, state)
+    terminal_row = summarize(terminal_time, state, terminal_balance)
     result = {
         "time_s": np.array(output_times), "surface_radius_m": np.array(output_radius),
         "temperature_C": np.array(output_T), "moisture": np.array(output_C),
