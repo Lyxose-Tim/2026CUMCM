@@ -1,0 +1,225 @@
+{
+  "status": "computed",
+  "identity": {
+    "case": {
+      "name": "terminal_hold",
+      "N": 5120,
+      "mode": "terminal_hold"
+    },
+    "inputs": {
+      "sha256": {
+        "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+        "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+        "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+      },
+      "source_names": {
+        "environment": "附件/附件1.xlsx",
+        "template": "附件/附件3/result2.xlsx",
+        "problem": "A题.pdf"
+      },
+      "template_A1": "时间\\到药材中心的距离",
+      "environment_extension": {
+        "mode": "terminal_hold",
+        "temperature_C": 50.165,
+        "moisture": 0.04986,
+        "observed_end_s": 14400
+      },
+      "q3_template": {
+        "sha256": "07e4793d620a7f899804c0298d49a16a197960440fd47f8bb780c57ec27e2859",
+        "A1": "时间\\到药材中心的距离"
+      }
+    },
+    "parameters": {
+      "L": 0.25,
+      "R": 0.02,
+      "T0": 28.0,
+      "C0": 2.55,
+      "h": 25.0,
+      "hm": 8e-07,
+      "rho_intercept": 650.0,
+      "rho_slope": 128.0,
+      "cp_intercept": 1450.0,
+      "cp_scale": 2736.0,
+      "k_intercept": 0.21,
+      "k_scale": 0.38,
+      "D_prefactor": 0.0024,
+      "D_moisture_exponent": 0.45,
+      "D_temperature_exponent_K": 3850.0
+    },
+    "settings": {
+      "method": "BDF",
+      "rtol": 1e-10,
+      "atol_T": 1e-11,
+      "atol_C": 1e-13,
+      "max_step_observed": 30.0,
+      "max_step_extended": 300.0
+    },
+    "event": {
+      "upstream_commit": "aa1d1b65ec7349c112fc2da0eef8110858a8a00a",
+      "q2_config": "configs/q2.json",
+      "threshold": 0.15,
+      "root_xtol_s": 1e-06,
+      "bracket_width_s": 1e-05,
+      "strict_offset_s": 1.0,
+      "formal_case": "tight_N40960",
+      "initial_formal_case": "tight_N20480",
+      "grids": [
+        5120,
+        10240,
+        20480,
+        40960
+      ],
+      "temporal_cases": [
+        {
+          "name": "tight_N20480",
+          "N": 20480,
+          "tight": true,
+          "half_step": true
+        },
+        {
+          "name": "halfstep_N10240",
+          "N": 10240,
+          "half_step": true
+        }
+      ],
+      "refinement_cases": [
+        {
+          "name": "base_N40960",
+          "N": 40960
+        },
+        {
+          "name": "tight_N40960",
+          "N": 40960,
+          "tight": true,
+          "half_step": true
+        }
+      ],
+      "temporal_comparisons": [
+        [
+          "base_N20480",
+          "tight_N20480"
+        ],
+        [
+          "base_N10240",
+          "halfstep_N10240"
+        ],
+        [
+          "base_N40960",
+          "tight_N40960"
+        ]
+      ],
+      "sensitivity_grid": 5120,
+      "budgets": {
+        "space_time_s": 0.1,
+        "temporal_time_s": 0.02,
+        "space_C": 8e-06,
+        "temporal_C": 2e-06,
+        "relative_balance": 1e-07,
+        "q2_T": 2e-07,
+        "q2_C": 2e-08
+      }
+    }
+  },
+  "source": {
+    "hash_scheme": "sha256-text-lf-v1",
+    "source_hashes": {
+      "q1/fvm.py": "b1c77e6c1d41d69223e7cdaffc705fc64602a968b8afa3832fb544e415e0dd02",
+      "q2/model.py": "88568971aba093a489a5b164919b0398b7caed2857a83aeb7884cbc6ea866cfa",
+      "q2/inputs.py": "80d214c176014e285c7495ac25e4e3d9ba353c490b3732cd39302dfb843d2cc0",
+      "q2/solver.py": "717e393c89a4f4ad6c53e92f303cc6ab97a9d188235832fef1165f8fb1221a5d",
+      "q2/archive.py": "59eba774573e659c2e10a7a05f5e863d2923151b82699a3a23e7c80d676eda75",
+      "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
+      "q2/provenance.py": "961a2972ce6723169896ddda91693ae7b212bcc70803449f101528972b55e6c4",
+      "q3/__init__.py": "710603612101c2e78c5e8ffe86117fda9ce090c32f95561eaf9a085d03c4893a",
+      "q3/solver.py": "741951af295276cde4f447c9b26ed66e5191c9fb0c5d91d4b154898f4ead9278",
+      "q3/run.py": "107007c40e2995f3edd5c214a37c10737b7f07eb4a4066d4e3803c9837cecafa",
+      "q3/provenance.py": "fc65e11d6856eb1ff99da90933faa89536bdfa46bf9b9e6f9dbc70a9b8fc49f3",
+      "configs/q2.json": "03b76801552c8ce2b9bdf5730a5409caabc9ecf6ae9c1d042e2b583d306aff13",
+      "configs/q3.json": "eab005b6faaa57764d71480423f57bb3d40e07286a160e6001d137583c9dc5b8",
+      "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
+    },
+    "source_digest": "6bc9bd9b771d11e3f74338a9b4449a70c40a9d4501f0b4702913315d5568bb21",
+    "code_commit": "e1779d7f8bfeb3b2ce7febf5197aee6634eb2d5d",
+    "python": "3.12.8",
+    "packages": {
+      "numpy": "2.5.3",
+      "scipy": "1.18.1",
+      "openpyxl": "3.1.5"
+    }
+  },
+  "root": {
+    "time_s": 205812.69116509342,
+    "time_h": 57.17019199030373,
+    "accepted_bracket_s": [
+      205530.3575015071,
+      205830.3575015071
+    ],
+    "bracket_s": [
+      205812.6911586526,
+      205812.6911675933
+    ],
+    "bracket_g": [
+      1.888211809131235e-12,
+      -7.319422845597501e-13
+    ],
+    "root_g": 6.661338147750939e-16,
+    "near_summary": [
+      [
+        205811.69116509342,
+        0.15000029306066803,
+        0.0,
+        0.15000029306066803,
+        0.12430860294745887,
+        0.05253587906025092,
+        0.05253587906025092,
+        50.164999999999985,
+        50.16500000000001,
+        -1.3887400396317418e-09
+      ],
+      [
+        205812.69116509342,
+        0.15000000000000066,
+        0.0,
+        0.15000000000000066,
+        0.12430838887809444,
+        0.052535855050557786,
+        0.052535855050557786,
+        50.164999999999985,
+        50.16500000000001,
+        -1.3887352934283115e-09
+      ],
+      [
+        205813.69116509342,
+        0.14999970694205447,
+        0.0,
+        0.14999970694205447,
+        0.12430817481065079,
+        0.052535831041223384,
+        0.052535831041223384,
+        50.164999999999985,
+        50.16500000000001,
+        -1.3887305194693056e-09
+      ]
+    ],
+    "slope_C_per_s": -2.9305930678014125e-07
+  },
+  "diagnostics": {
+    "nfev": 32821,
+    "njev": 267,
+    "nlu": 4151,
+    "wall_seconds": 78.10851120000007,
+    "initial_step_s": 0.0001,
+    "accepted_steps": 15952,
+    "max_relative_balance": 2.3100746190759227e-10,
+    "flux_quadrature_difference": 2.2047931187164676e-18,
+    "minimum_moisture": 0.052535430946383285,
+    "temperature_envelope_violation": 7.105427357601002e-15,
+    "max_Cmax_increase": 1.7763568394002505e-15,
+    "max_surface_gradient_relative_residual": 0.046443438870174714,
+    "max_local_water_balance_absolute": 2.5849394142282115e-26
+  },
+  "files": {
+    "fields.npz": "5b727b68f3a03b8b08c9ae4667d5cf2f50b8f0dffaa27559672a0acc602118d1",
+    "accepted_steps.csv": "985b2bb16a74515eb0bb5a6ea9b94ae23af935ac179f00c922c75da7d2704fcb"
+  }
+}

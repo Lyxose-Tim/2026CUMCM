@@ -36,7 +36,8 @@ def git_commit(directory="."):
     try:
         result = subprocess.run(
             ["git", "-C", str(root), "rev-parse", "HEAD"],
-            capture_output=True, text=True, encoding="ascii", timeout=5, check=False,
+            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+            text=True, encoding="ascii", timeout=5, check=False,
         )
         return result.stdout.strip() if result.returncode == 0 else None
     except (OSError, subprocess.SubprocessError):

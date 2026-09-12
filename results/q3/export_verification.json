@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "cells_checked": 72429,
+  "rows": 3449,
+  "columns": 22,
+  "moisture_max_abs_difference": 0.0,
+  "terminal_time_difference_s": 0.0,
+  "workbook_sha256": "d41b9fe39ab5ed9d47e3a1e9bd695f86d0ed30ab72b16e45725e456e5899fba9",
+  "verification_sha256": "db85f63c9c8b3ee6d388e8f2e97ea114463d3643a29e8198a00237ebd2121708",
+  "delivery_sources": {
+    "q3/export.py": "777283a8a2ece44f84d6edd2f0467ee60d70c29d29e426109771a2f1fe5d3281",
+    "q3/check_export.py": "2814f5bc7d603e3f0130214ebabba5ef16ca7b548f3b4a7ad59c3cf15e38c6a8",
+    "scripts/build_result3.mjs": "6775f32712e7ac56bf018c3353fb8842de89d02e2906d793b7b28bcd5cc61c1f"
+  },
+  "table5_sha256": "f9b7b0eca568f096d4d380f51d4f5eff5464fa2c15c157c8dbedef2745bfc82c"
+}

@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-09-12T15:14:00+08:00",
+  "main": "4895ab42db75297db595aeb356c7d48178bbb9d1",
+  "q2_pr": {
+    "number": 6,
+    "state": "MERGED",
+    "head": "aa1d1b65ec7349c112fc2da0eef8110858a8a00a",
+    "merge_commit": "4895ab42db75297db595aeb356c7d48178bbb9d1",
+    "merged_at": "2026-09-12T06:45:25Z"
+  },
+  "q3_pr": {
+    "number": 7,
+    "state": "OPEN",
+    "is_draft": true,
+    "review_decision": "CHANGES_REQUESTED",
+    "reviewed_head": "9210870f095f4e8a87e46b7cf2a83efdc9d20aff",
+    "base_after_review_update": "main"
+  }
+}

@@ -30,4 +30,4 @@
 - 已独立流式回读 10886400 个数值单元格，最大绝对差为 0.0，工作簿 SHA-256 为 `c1a00b710d2a13ebf8884887cc3075d945fcb37aa46f266328c6618be174f177`。
 - Artifact Tool 已写入、检查并渲染12行格式蓝图；完整工作簿在16 GB V8堆上限仍内存不足，最终改用 openpyxl write-only 流式生成。该降级不改变已哈希的数值载荷。
 - 六张PDF图均从绑定CSV生成并经PNG渲染检查，无缺字、裁切或重叠。
-- Excel交付源码摘要：`a5d3941194d4c854bdd1f451c611c96c0bd39d95362fb8033556c5bdc16fec85`；对应提交：`5ad8d1b6080fd08ea77d2e1e53f81aa372f9f9df`。
+- Excel交付源码摘要：`2da8c3e3138d280d44d3c72d7e83aedcec124133230eeb82d7a83b650c68a752`；对应提交：`e1779d7f8bfeb3b2ce7febf5197aee6634eb2d5d`。
