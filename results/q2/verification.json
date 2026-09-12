@@ -1,0 +1,105 @@
+{
+  "numerical_passed": true,
+  "space_passed": true,
+  "consecutive_within_budget": 2,
+  "N": 20480,
+  "time_passed": true,
+  "tolerance_difference": {
+    "T": {
+      "max_abs": 4.896551786259806e-08,
+      "time_s": 6782.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 1.5925039065223245e-10,
+      "at_72h_max": 1.4210854715202004e-14
+    },
+    "C": {
+      "max_abs": 3.2685179007785337e-09,
+      "time_s": 61.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 2.918576935684314e-09,
+      "at_72h_max": 5.938138869510112e-12
+    }
+  },
+  "radau_difference": {
+    "T": {
+      "max_abs": 4.43800729499344e-09,
+      "time_s": 6061.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 2.8975932764296886e-11,
+      "at_72h_max": 1.4210854715202004e-14
+    },
+    "C": {
+      "max_abs": 6.292175669386779e-10,
+      "time_s": 1.0,
+      "radius_cm": 2.0,
+      "early_surface_max": 6.292175669386779e-10,
+      "at_72h_max": 9.348077867343818e-14
+    }
+  },
+  "radau_diagnostics": {
+    "nfev": 98274,
+    "njev": 464,
+    "nlu": 12578,
+    "method": "Radau",
+    "settings": {
+      "method": "Radau",
+      "rtol": 1.0000000000000001e-11,
+      "atol_T": 1e-12,
+      "atol_C": 1e-14,
+      "max_step_observed": 15.0,
+      "max_step_extended": 150.0
+    },
+    "seconds": 551.7085140999989,
+    "accepted_steps": 13757,
+    "trial_failures": [
+      {
+        "segment_start": 0.0,
+        "attempt": 1,
+        "trial_time": 1.2428925196630496,
+        "node": 20480,
+        "value": -2.6027947653936243
+      }
+    ],
+    "moisture_balance": 2.3852447794681098e-18,
+    "relative_moisture_balance": 2.977439193227353e-15,
+    "surface_flux_quadrature_difference": 1.6097388087353173e-18
+  },
+  "state_checks": {
+    "finite": true,
+    "positive_moisture": true,
+    "temperature_min_C": 28.0,
+    "temperature_max_C": 50.03986654158952,
+    "moisture_min": 0.05175987188800555,
+    "moisture_max": 2.550000000000001,
+    "initial_temperature_exact": true,
+    "initial_moisture_exact": true,
+    "time_axis_exact": true,
+    "outward_heat_flux_nonpositive_fraction": 0.8863480936912292,
+    "outward_moisture_flux_nonnegative_fraction": 1.0,
+    "surface_heat_robin_max_residual": 0.0,
+    "surface_moisture_robin_max_residual": 0.0,
+    "surface_heat_flux_sign_consistent": true,
+    "surface_moisture_flux_sign_consistent": true
+  },
+  "moisture_balance_passed": true,
+  "surface_flux_boundary_passed": true,
+  "q1_compatible_passed": true,
+  "q1_compatible_difference": {
+    "T": {
+      "max_abs": 2.4749908789090114e-09,
+      "time_s": 1569,
+      "radius_cm": 2.0,
+      "q1": 35.500716316807484,
+      "q2": 35.500716319282475
+    },
+    "C": {
+      "max_abs": 5.205498254667873e-10,
+      "time_s": 1,
+      "radius_cm": 2.0,
+      "q1": 2.5177261488308487,
+      "q2": 2.5177261493513985
+    }
+  },
+  "accepted_envelope_passed": true,
+  "export_passed": false
+}

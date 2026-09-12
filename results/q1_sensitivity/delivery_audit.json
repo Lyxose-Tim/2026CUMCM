@@ -5,14 +5,22 @@
   "numerical_runs": 33,
   "additional_fresh_reintegration": 1,
   "formal_field_values_checked": 2496186,
-  "unit_tests_passed": 37,
-  "code_commit": "5f4af91154b247ed351344811413165acbf5d25d",
+  "unit_tests_passed": 53,
+  "code_commit": null,
   "calculation_code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
   "current_source_match": {
     "matches": true,
     "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
-    "current_code_commit": "5f4af91154b247ed351344811413165acbf5d25d",
-    "raw_byte_differences": []
+    "current_code_commit": null,
+    "raw_byte_differences": [
+      "q1/inputs.py",
+      "q1/solver.py",
+      "q1/validation.py",
+      "q1/sensitivity.py",
+      "q1/sensitivity_metrics.py",
+      "q1/provenance.py",
+      "configs/q1_sensitivity.json"
+    ]
   },
   "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
   "reporting_source_sha256": {

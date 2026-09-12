@@ -1,4 +1,4 @@
-# 第一问复现
+# 第一、二问复现
 
 范围为0–1800 s的有效径向基准。先读[模型契约](reports/Q1_MODEL_SPEC.md)。原始题面/附件由成员自行放在本地，不入库、不覆盖。所有参数在 `configs/q1.json`；入口遇到题面、环境或模板哈希变化会报错，需先核查来源，不可直接改哈希绕过。
 
@@ -46,7 +46,7 @@ Excel作者端使用Codex捆绑Node与 `@oai/artifact-tool`，不依赖数值虚
 - `bessel_T.csv` / `bessel_C.csv`：常系数解与完整级数逐点对照。
 - `verification.json`：数值门槛；`export_verification.json`：独立Excel/正文表/图源回读门槛；`reproduction.json`：复现复核。三者与人工交叉审核分开。
 
-若只检查已有归档，运行导出和回读命令即可核对表图。数值复现需重新运行求解；不同平台浮点值不必逐位相同，按时间/空间预算比较全输出，不能仅比较Excel四位值。未进行第二至第四问求解，亦未进行实验验证。
+若只检查已有归档，运行导出和回读命令即可核对表图。数值复现需重新运行求解；不同平台浮点值不必逐位相同，按时间/空间预算比较全输出，不能仅比较Excel四位值。第二问已完成；第三、四问及实物实验验证仍未进行。
 
 ## 第一问评测后续：灵敏度与鲁棒性设计
 
@@ -104,4 +104,23 @@ manifest中的 `code_commit` 表示启动调用时的源码提交；各组run保
 
 本轮已用实际 `git archive --format=zip <结果提交>` 解压到仓库外验证这些入口，并在其中独立重算一个情景；详见 `results/q1_sensitivity/zip_portability.json`。从ZIP运行主入口时，匹配的33组归档可作为缓存接受审计；这与“33组全部重新积分”明确区分。要执行全部重新积分，仍需使用上文的新输出目录命令。
 
-`reports/Q1_ROBUSTNESS_DESIGN.md`只交付联合/环境扰动设计与CV适用范围，没有暗中执行随机50次、增强潜热模型或第二至第四问。
+`reports/Q1_ROBUSTNESS_DESIGN.md`只交付第一问联合/环境扰动设计与CV适用范围，没有暗中执行随机50次或增强潜热模型；第二问的长期环境对照由独立Q2结果记录，不应倒填为第一问实验。
+
+## 第二问：72 h 变物性热湿耦合
+
+第二问配置位于 `configs/q2.json`，模型契约见 `Q2_MODEL_SPEC.md`。原始输入目录必须同时包含 `A题.pdf`、`附件/附件1.xlsx` 和 `附件/附件3/result2.xlsx`；三者哈希与配置不符时入口会拒绝运行。统一复现命令为：
+
+```powershell
+./.venv/Scripts/python.exe -m q2.run --data-root 'E:/Code_from_class/2026A/A题'
+./.venv/Scripts/python.exe -m q2.export --node '<bundled-node-path>'
+./.venv/Scripts/python.exe -m q2.figures
+./.venv/Scripts/python.exe -m q2.reports
+```
+
+也可用 `python -m q2.reproduce --data-root <A题目录> --node <bundled-node-path>` 顺序执行全部步骤。正式数值先按 N=40 至 20480 倍增加密，连续两级满足空间预算后，计算收紧 BDF、Radau、Q1 常物性退化对照以及两个长期环境情景。完整计算在当前机器耗时较长；只核验已有归档和 Excel 时可直接运行后三个入口。
+
+`results/q2/archive/` 保存 0–259200 s、21 个正式半径的 float64 分块及 N=20480 的最终全网格状态。`result2.xlsx` 保存 1–259200 s；`q2.check_export` 流式回读两张 259201×22 工作表的全部 10886400 个结果单元格。
+
+Artifact Tool 已用于写入、检查和渲染 12 行格式蓝图。完整 10886400 格工作簿在 16 GB V8 堆上限仍内存不足，因此最终文件由 `scripts/build_result2_stream.py` 以 openpyxl write-only 模式生成；该降级、工作簿 SHA-256、尺寸和逐格零差结果记录在 `results/q2/export_verification.json`。数值源码与导出源码分别保留摘要，改动数值核心必须重算，改动导出器必须重新导出和回读。
+
+Q2 的 `sha256-text-lf-v1` 交付指纹将 `.js`、`.mjs`、`.cjs` 视作文本并规范化 CRLF→LF；因此 Windows `core.autocrlf=true` 的干净检出不会仅因换行误拒绝。清单同时保留原始字节哈希用于诊断，脚本实际字符变化仍会改变规范化摘要并阻止陈旧报告。

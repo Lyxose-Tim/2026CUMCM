@@ -1,0 +1,88 @@
+[
+  {
+    "mode": "terminal_hold",
+    "extension": {
+      "mode": "terminal_hold",
+      "temperature_C": 50.165,
+      "moisture": 0.04986,
+      "observed_end_s": 14400
+    },
+    "solver": {
+      "nfev": 47662,
+      "njev": 256,
+      "nlu": 5398,
+      "method": "BDF",
+      "settings": {
+        "method": "BDF",
+        "rtol": 1.0000000000000001e-11,
+        "atol_T": 1e-12,
+        "atol_C": 1e-14,
+        "max_step_observed": 15.0,
+        "max_step_extended": 150.0
+      },
+      "seconds": 325.60608939999656,
+      "accepted_steps": 23301,
+      "trial_failures": [
+        {
+          "segment_start": 0.0,
+          "attempt": 1,
+          "trial_time": 1.2428925196630496,
+          "node": 20480,
+          "value": -2.6027947653936243
+        }
+      ],
+      "moisture_balance": 1.3262177814277187e-14,
+      "relative_moisture_balance": 1.6554832590634375e-11,
+      "surface_flux_quadrature_difference": 1.7619176622311216e-18
+    },
+    "endpoint": {
+      "center_temperature_C": 50.165000000000006,
+      "surface_temperature_C": 50.165,
+      "center_moisture": 0.13740628665559695,
+      "surface_moisture": 0.051626177599653565
+    }
+  },
+  {
+    "mode": "nominal",
+    "extension": {
+      "mode": "nominal",
+      "temperature_C": 50.0,
+      "moisture": 0.05,
+      "observed_end_s": 14400
+    },
+    "solver": {
+      "nfev": 47786,
+      "njev": 257,
+      "nlu": 5421,
+      "method": "BDF",
+      "settings": {
+        "method": "BDF",
+        "rtol": 1.0000000000000001e-11,
+        "atol_T": 1e-12,
+        "atol_C": 1e-14,
+        "max_step_observed": 15.0,
+        "max_step_extended": 150.0
+      },
+      "seconds": 320.4988932999986,
+      "accepted_steps": 23397,
+      "trial_failures": [
+        {
+          "segment_start": 0.0,
+          "attempt": 1,
+          "trial_time": 1.2428925196630496,
+          "node": 20480,
+          "value": -2.6027947653936243
+        }
+      ],
+      "moisture_balance": 1.1224202990656185e-14,
+      "relative_moisture_balance": 1.4010881476311897e-11,
+      "surface_flux_quadrature_difference": 1.7662133026599744e-18
+    },
+    "endpoint": {
+      "center_temperature_C": 50.0,
+      "surface_temperature_C": 50.0,
+      "center_moisture": 0.13767628896855846,
+      "surface_moisture": 0.05177229610924647
+    }
+  }
+]
