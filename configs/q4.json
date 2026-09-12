@@ -1,15 +1,39 @@
 {
-  "upstream_commit": "dc581a37a6a91119412d2ad9abf44f794de846e8",
+  "schema_version": 2,
+  "upstream_commit": "99ea167180b5ed00f8a2aaf3b6a009bba7707d66",
+  "independent_review_sha256": "f27f5385653081419a4a7c3ad7c831ca5e41cf122b9820f39ffd55da138e88a7",
   "q2_config": "configs/q2.json",
-  "threshold": 0.15,
-  "root_xtol_s": 0.000001,
-  "bracket_width_s": 0.00001,
-  "strict_offset_s": 1.0,
+  "default_horizon_s": 259200,
+  "environment_mode": "last_hour_mean",
+  "event": {
+    "threshold": 0.15,
+    "root_xtol_s": 0.000001,
+    "bracket_width_s": 0.00001,
+    "strict_offset_s": 1.0
+  },
   "formal_case": "main_appendix4_shrink_N20480",
-  "grids": [5120, 10240, 20480],
+  "validation": {
+    "common_endpoint_s": 86400,
+    "regular_spacing_s": 60,
+    "spatial_group": [
+      "D_appendix4_shrink_N5120",
+      "main_appendix4_shrink_N10240",
+      "space_appendix4_shrink_N20480"
+    ],
+    "temporal_group": [
+      "space_appendix4_shrink_N20480",
+      "main_appendix4_shrink_N20480"
+    ],
+    "method_group": [
+      "D_appendix4_shrink_N5120",
+      "method_appendix4_shrink_N5120_Radau"
+    ]
+  },
   "radius": {
     "interpolation": "linear",
     "unit": "cm",
+    "record_display_increment_cm": 0.001,
+    "record_half_increment_cm": 0.0005,
     "fixed_output_radius_cm": [
       0.0, 0.1, 0.2, 0.3, 0.4,
       0.5, 0.6, 0.7, 0.8, 0.9,
@@ -34,20 +58,68 @@
     "D_temperature_exponent_K": 3850.0
   },
   "cases": [
-    {"name": "A_appendix3_fixed_N5120", "N": 5120, "properties": "appendix3", "radius": "fixed"},
-    {"name": "B_appendix3_shrink_N5120", "N": 5120, "properties": "appendix3", "radius": "shrink"},
-    {"name": "C_appendix4_fixed_N5120", "N": 5120, "properties": "appendix4", "radius": "fixed", "allow_no_event": true},
-    {"name": "D_appendix4_shrink_N5120", "N": 5120, "properties": "appendix4", "radius": "shrink"}
+    {
+      "name": "A_appendix3_fixed_N5120", "N": 5120,
+      "properties": "appendix3", "radius": "fixed", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 259200,
+      "method": "BDF", "tolerance_scale": 1.0, "max_step_scale": 1.0
+    },
+    {
+      "name": "B_appendix3_shrink_N5120", "N": 5120,
+      "properties": "appendix3", "radius": "shrink", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 259200,
+      "method": "BDF", "tolerance_scale": 1.0, "max_step_scale": 1.0
+    },
+    {
+      "name": "C_appendix4_fixed_N5120", "N": 5120,
+      "properties": "appendix4", "radius": "fixed", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 540000,
+      "method": "BDF", "tolerance_scale": 1.0, "max_step_scale": 1.0
+    },
+    {
+      "name": "D_appendix4_shrink_N5120", "N": 5120,
+      "properties": "appendix4", "radius": "shrink", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 259200,
+      "method": "BDF", "tolerance_scale": 1.0, "max_step_scale": 1.0
+    }
   ],
-  "refinement_cases": [
-    {"name": "main_appendix4_shrink_N10240", "N": 10240, "properties": "appendix4", "radius": "shrink"},
-    {"name": "main_appendix4_shrink_N20480", "N": 20480, "properties": "appendix4", "radius": "shrink", "tight": true, "half_step": true}
+  "validation_cases": [
+    {
+      "name": "main_appendix4_shrink_N10240", "N": 10240,
+      "properties": "appendix4", "radius": "shrink", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 259200,
+      "method": "BDF", "tolerance_scale": 1.0, "max_step_scale": 1.0
+    },
+    {
+      "name": "space_appendix4_shrink_N20480", "N": 20480,
+      "properties": "appendix4", "radius": "shrink", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 259200,
+      "method": "BDF", "tolerance_scale": 1.0, "max_step_scale": 1.0
+    },
+    {
+      "name": "main_appendix4_shrink_N20480", "N": 20480,
+      "properties": "appendix4", "radius": "shrink", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 259200,
+      "method": "BDF", "tolerance_scale": 0.1, "max_step_scale": 0.5
+    },
+    {
+      "name": "method_appendix4_shrink_N5120_Radau", "N": 5120,
+      "properties": "appendix4", "radius": "shrink", "interpolation": "linear",
+      "environment_mode": "last_hour_mean", "horizon_s": 259200,
+      "method": "Radau", "tolerance_scale": 1.0, "max_step_scale": 1.0,
+      "diagnostic_only": true
+    }
   ],
   "budgets": {
     "relative_balance": 0.0000002,
     "space_time_s": 0.4,
     "space_C": 0.00002,
+    "space_T_C": 0.005,
+    "time_time_s": 0.2,
+    "time_C": 0.000005,
+    "time_T_C": 0.001,
     "regression_time_s": 0.08,
-    "regression_C": 0.00000003
+    "regression_C": 0.00000003,
+    "regression_T_C": 0.000001
   }
 }

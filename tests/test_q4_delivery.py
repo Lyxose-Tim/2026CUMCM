@@ -5,7 +5,7 @@ import pytest
 
 from q4.check_export import assert_headers
 from q4.export import workbook_headers
-from q4.validation import check_spatial_budget, normalize_test_output
+from q4.validation import check_spatial_budget, compare, normalize_test_output
 
 
 def record():
@@ -37,8 +37,13 @@ def test_q4_wrong_surface_header_is_rejected():
 
 
 def test_q4_default_spatial_budget_passes():
-    spatial = [{"a": "N10240", "b": "N20480", "time_difference_s": 0.0755, "C": 1.8e-6}]
-    result = check_spatial_budget(spatial, {"space_time_s": 0.4, "space_C": 2e-5})
+    spatial = [{
+        "a": "N10240", "b": "N20480", "root_time_difference_s": 0.0755,
+        "field_difference": {"C": {"max_abs": 1.8e-6}, "T": {"max_abs": 2e-4}},
+    }]
+    result = check_spatial_budget(spatial, {
+        "space_time_s": 0.4, "space_C": 2e-5, "space_T_C": 5e-3,
+    })
     assert result["passed"] is True
 
 
@@ -46,12 +51,43 @@ def test_q4_test_output_normalization_strips_trailing_whitespace():
     assert normalize_test_output("ok   \r\nnext\t\r\n\r\n") == "ok\nnext\n"
 
 
-@pytest.mark.parametrize("key,value", [("time_difference_s", 0.5), ("C", 3e-5), ("C", np.inf)])
+@pytest.mark.parametrize("key,value", [("root_time_difference_s", 0.5), ("C", 3e-5), ("C", np.inf)])
 def test_q4_spatial_budget_overrun_fails(key, value):
-    spatial = [{"a": "N10240", "b": "N20480", "time_difference_s": 0.0755, "C": 1.8e-6}]
-    spatial[0][key] = value
-    with pytest.raises(ValueError, match="spatial refinement"):
-        check_spatial_budget(spatial, {"space_time_s": 0.4, "space_C": 2e-5})
+    spatial = [{
+        "a": "N10240", "b": "N20480", "root_time_difference_s": 0.0755,
+        "field_difference": {"C": {"max_abs": 1.8e-6}, "T": {"max_abs": 2e-4}},
+    }]
+    if key in {"C", "T"}:
+        spatial[0]["field_difference"][key]["max_abs"] = value
+    else:
+        spatial[0][key] = value
+    with pytest.raises(ValueError, match="space comparison"):
+        check_spatial_budget(spatial, {
+            "space_time_s": 0.4, "space_C": 2e-5, "space_T_C": 5e-3,
+        })
+
+
+def test_q4_compare_includes_dynamic_surface_and_unified_endpoint():
+    times = np.array([0.0, 60.0, 120.0])
+    fixed = np.arange(21) * 0.001
+    base = np.tile(np.linspace(2.0, 1.0, 22), (3, 1))
+    summary = np.zeros((3, 12))
+    summary[:, 0] = times
+    summary[:, 2] = [2.0, 1.9, 1.8]
+    summary[:, 4] = 0.01
+    summary[:, 6] = [1.5, 1.4, 1.3]
+    a = {
+        "time_s": times, "temperature_C": base + 30, "moisture": base,
+        "summary": summary, "fixed_radius_m": fixed,
+        "surface_radius_m": np.array([0.02, 0.019, 0.018]),
+    }
+    b = {key: np.array(value, copy=True) for key, value in a.items()}
+    b["moisture"][1, -1] += 0.25
+    result = compare(a, b, spacing_s=60, endpoint_s=60)
+    assert result["dynamic_surface_included"] is True
+    assert result["C"]["dynamic_surface"] is True
+    assert result["C"]["time_s"] == 60
+    assert result["unified_endpoint_s"] == 60
 
 
 def test_q4_failed_export_blocks_reports(tmp_path):

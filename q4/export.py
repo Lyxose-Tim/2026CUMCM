@@ -6,6 +6,8 @@ from pathlib import Path
 
 import numpy as np
 
+from common.hashing import file_record
+from common.workbooks import write_dense_workbook
 from q2.archive import write_json
 from q2.inputs import sha256
 from q2.provenance import portable_artifact_sha256
@@ -27,8 +29,11 @@ def rounded(values):
 
 
 def delivery_sources():
-    paths = ["q4/export.py", "q4/check_export.py", "scripts/build_result4.mjs"]
-    return {p: portable_artifact_sha256(p) for p in paths}
+    paths = [
+        "q4/export.py", "q4/check_export.py", "common/workbooks.py",
+        "scripts/hash_record.mjs", "scripts/build_result4.mjs",
+    ]
+    return {p: file_record(p) for p in paths}
 
 
 def fixed_radius_headers_cm(record):
@@ -61,12 +66,12 @@ def prepare(data_root, directory="results/q4", payload=".scratch/q4/workbook_pay
     t6 = output_axis(end, 21600)
     indices = np.array([np.argmin(abs(fields["time_s"] - t)) for t in t6])
     np.testing.assert_allclose(fields["time_s"][indices], t6, rtol=0, atol=1e-9)
-    selected = [0, 5, 10, 15, 20, 21]
+    selected = [0, 5, 10, 21]
     table = np.c_[fields["time_s"][indices] / 3600, fields["moisture"][indices][:, selected]]
     np.savetxt(directory / "table6.csv", table, delimiter=",",
-               header="time_h,r0_cm,r0.5_cm,r1_cm,r1.5_cm,r2_cm,surface",
+               header="time_h,r0_cm,r0.5_cm,r1_cm,surface",
                comments="", fmt="%.17g")
-    header = "| 时间 / h | 0 cm | 0.5 cm | 1 cm | 1.5 cm | 2 cm | 表面 |\n|---:|---:|---:|---:|---:|---:|---:|\n"
+    header = "| 时间 / h | 0 cm | 0.5 cm | 1 cm | 表面 |\n|---:|---:|---:|---:|---:|\n"
     lines = []
     for row in rounded(table):
         cells = ["" if np.isnan(value) else f"{value:.4f}" for value in row]
@@ -77,16 +82,37 @@ def prepare(data_root, directory="results/q4", payload=".scratch/q4/workbook_pay
         "rows": json_rows(rows.tolist()),
         "headers": workbook_headers(record),
         "template": str(template.resolve()),
-        "template_sha256": sha256(template),
+        "template_hash": file_record(template),
         "output": "results/result4.xlsx",
         "verification_file": str((directory / "verification.json").resolve()),
-        "verification_sha256": sha256(directory / "verification.json"),
+        "verification_hash": file_record(directory / "verification.json"),
         "run_file": str((directory / "runs" / verification["formal_case"] / "run.json").resolve()),
-        "run_sha256": sha256(directory / "runs" / verification["formal_case"] / "run.json"),
+        "run_hash": file_record(directory / "runs" / verification["formal_case"] / "run.json"),
         "sources": delivery_sources(),
     }
     write_json(payload, content)
     return len(rows)
+
+
+def export_workbook(
+    data_root,
+    directory="results/q4",
+    workbook="results/result4.xlsx",
+    payload=".scratch/q4/workbook_payload.json",
+):
+    prepare(data_root, directory, payload)
+    _, record, fields = verified(directory)
+    write_dense_workbook(
+        workbook,
+        [{
+            "name": "Sheet1",
+            "header": workbook_headers(record),
+            "times": fields["time_s"][1:],
+            "values": fields["moisture"][1:],
+        }],
+    )
+    from q4.check_export import check
+    return check(directory, workbook)
 
 
 if __name__ == "__main__":
@@ -94,5 +120,12 @@ if __name__ == "__main__":
     parser.add_argument("--data-root", required=True)
     parser.add_argument("--directory", default="results/q4")
     parser.add_argument("--payload", default=".scratch/q4/workbook_payload.json")
+    parser.add_argument("--workbook", default="results/result4.xlsx")
+    parser.add_argument("--prepare-only", action="store_true")
     args = parser.parse_args()
-    print(f"Prepared {prepare(args.data_root, args.directory, args.payload)} rows")
+    if args.prepare_only:
+        print(f"Prepared {prepare(args.data_root, args.directory, args.payload)} rows")
+    else:
+        print(json.dumps(export_workbook(
+            args.data_root, args.directory, args.workbook, args.payload
+        ), ensure_ascii=False))

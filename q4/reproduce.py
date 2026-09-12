@@ -4,8 +4,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from common.hashing import file_record
 from q2.archive import write_json
-from q2.inputs import sha256
 
 
 def run(cmd):
@@ -23,12 +23,13 @@ def main():
     commands = [
         [sys.executable, "-m", "q4.run", "--data-root", args.data_root, "--workers", str(args.workers)],
         [sys.executable, "-m", "q4.run", "--data-root", args.data_root,
-         "--cases", "main_appendix4_shrink_N10240", "main_appendix4_shrink_N20480",
+         "--cases", "main_appendix4_shrink_N10240", "space_appendix4_shrink_N20480",
+         "main_appendix4_shrink_N20480", "method_appendix4_shrink_N5120_Radau",
+         "--workers", str(args.workers)],
+        [sys.executable, "-m", "q4.sensitivity", "--data-root", args.data_root,
          "--workers", str(args.workers)],
         [sys.executable, "-m", "q4.validation"],
         [sys.executable, "-m", "q4.export", "--data-root", args.data_root],
-        ["node", "scripts/build_result4.mjs"],
-        [sys.executable, "-m", "q4.check_export"],
         [sys.executable, "-m", "q4.figures"],
         [sys.executable, "-m", "q4.reports"],
     ]
@@ -36,7 +37,7 @@ def main():
     for command in commands:
         log.append({"command": command, "output": run(command)})
     path = Path("results/q4/reproduction.json")
-    write_json(path, {"commands": log, "result4_sha256": sha256("results/result4.xlsx")})
+    write_json(path, {"commands": log, "result4_hash": file_record("results/result4.xlsx")})
     print(f"Wrote {path}")
 
 
