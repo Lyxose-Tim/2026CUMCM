@@ -10,6 +10,6 @@
 | D_appendix4_shrink_N5120 | 51.0921207851 | 1.2000 | 0.150000 | 0.052608 |
 | main_appendix4_shrink_N20480 | 51.0920106837 | 1.2000 | 0.150000 | 0.052608 |
 
-表6见 `results/q4/table6.csv` 与 `results/q4/table6.md`。`result4.xlsx` 的写入 payload 已准备到 `.scratch/q4/workbook_payload.json`；在本环境获得明确授权运行 Artifact Tool 后，再生成 `results/result4.xlsx` 并执行独立回读。固定物理半径超过当前药材表面的单元格留空，末列始终为动态药材表面。
+表6见 `results/q4/table6.csv` 与 `results/q4/table6.md`，Excel交付表为 `results/result4.xlsx`，独立回读证据见 `results/q4/export_verification.json`。固定物理半径超过当前药材表面的单元格留空，末列始终为动态药材表面。
 
 图源与论文图位于 `results/q4/figure_data/` 和 `figures/q4/`。A/B/C/D 对照用于分离物性与几何影响；正式高精度行使用 `main_appendix4_shrink_N20480`，不把 5120 网格对照当作最终答案。

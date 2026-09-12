@@ -2,7 +2,7 @@
 
 ## A题：药材的烘干问题
 
-小组建模与论文工作入口。第一问的有效径向数值基准及灵敏度已完成并合入main；第二问的变物性热湿耦合模型、表3–4、72 h `result2.xlsx`、论文图和验证归档已在 `feat/q2-coupled-drying` 完成。第三问固定尺寸全域干燥事件、表5、`result3.xlsx`、论文图和验证归档已在`feat/q3-fixed-drying`完成。第四问收缩域模型已在本地分支`feat/q4-shrinkage-drying`得到经验证的数值结论，`result4.xlsx`生成和PR推送待明确授权；整篇论文仍需按清单推进。
+小组建模与论文工作入口。第一问的有效径向数值基准及灵敏度已完成并合入main；第二问的变物性热湿耦合模型、表3–4、72 h `result2.xlsx`、论文图和验证归档已在 `feat/q2-coupled-drying` 完成。第三问固定尺寸全域干燥事件、表5、`result3.xlsx`、论文图和验证归档已在`feat/q3-fixed-drying`完成。第四问收缩域模型已在本地分支`feat/q4-shrinkage-drying`得到经验证的数值结论，`result4.xlsx`已生成并回读通过；PR推送待执行。整篇论文仍需按清单推进。
 
 第一问基准由[PR #2](https://github.com/Lyxose-Tim/2026CUMCM/pull/2)交付，main合并提交为 `2924983`；依据为[正式模型契约](reports/Q1_MODEL_SPEC.md)，交付见[结果报告](reports/Q1_RESULTS_REPORT.md)、[验证报告](reports/Q1_VERIFY_REPORT.md)、[result1.xlsx](results/result1.xlsx)和[复现说明](REPRODUCE.md)。参考文档仍由[PR #1](https://github.com/Lyxose-Tim/2026CUMCM/pull/1)独立管理，按固定提交只读引用。历史计算报告保留生成时的版本与状态，当前协作进度以本入口、todo和PR记录为准。
 
@@ -12,7 +12,7 @@
 
 第三问沿用同一固定半径模型，以全部计算节点的最大含水率定位0.15 kg/kg的首次向下穿越。正式N=40960收紧BDF结果为57.4740097759 h；根后1 s完整状态严格达标，估计数值时间误差量级0.0453 s。见[模型规范](reports/Q3_MODEL_SPEC.md)、[结果报告](reports/Q3_RESULTS_REPORT.md)、[验证报告](reports/Q3_VERIFY_REPORT.md)、[result3.xlsx](results/result3.xlsx)、[复现说明](Q3_REPRODUCE.md)和[依赖记录](reports/Q3_DEPENDENCY_RECORD.md)。该数值预测依赖4 h后的环境延拓，不代表实验准确率。
 
-第四问使用附件2实测半径分段线性插值、附录4物性和材料坐标`xi=r/R(t)`，以全部计算节点最大含水率首次低于0.15 kg/kg定位事件。正式N=20480收紧BDF结果为51.0920106837 h；10240到20480的临界时间差约0.0755 s，附录3固定半径退化回归到第三问同网格结果。见[模型规范](reports/Q4_MODEL_SPEC.md)、[结果报告](reports/Q4_RESULTS_REPORT.md)、[验证报告](reports/Q4_VERIFY_REPORT.md)、[表6](results/q4/table6.md)和[图表清单](results/q4/figure_manifest.json)。`result4.xlsx`的payload已准备，待授权运行Artifact Tool并回读核验。
+第四问使用附件2实测半径分段线性插值、附录4物性和材料坐标`xi=r/R(t)`，以全部计算节点最大含水率首次低于0.15 kg/kg定位事件。正式N=20480收紧BDF结果为51.0920106837 h；10240到20480的临界时间差约0.0755 s，附录3固定半径退化回归到第三问同网格结果。见[模型规范](reports/Q4_MODEL_SPEC.md)、[结果报告](reports/Q4_RESULTS_REPORT.md)、[验证报告](reports/Q4_VERIFY_REPORT.md)、[表6](results/q4/table6.md)、[result4.xlsx](results/result4.xlsx)和[图表清单](results/q4/figure_manifest.json)。Excel回读核对3066行、23列、44287个数值单元和23165个域外空白。
 
 ### 阅读顺序
 
@@ -41,7 +41,7 @@
 1. 全组通读指导计划，确认长期环境、传质边界、潜热和材料收缩的基准假设。
 2. 认领A（机理与推导）、B（数值与数据）、C（论文与核查）三个角色，并在待办任务后标注负责人。
 3. 按下列结构准备小组已有的题面和附件。数据文件名、单位与字段约定见建模设计报告；仓库同时包含指导文档和已验证的第一问实现。
-4. 问题一至四的“输入—求解—验证—报告”链路已建立；第四问Excel和PR外部交付待授权完成。
+4. 问题一至四的“输入—求解—验证—导出—报告”链路已建立；第四问PR外部交付待完成。
 
 ```text
 A题/

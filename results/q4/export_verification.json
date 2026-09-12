@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "cells_checked": 44287,
+  "blank_cells_checked": 23165,
+  "rows": 3066,
+  "columns": 23,
+  "moisture_max_abs_difference": 0.0,
+  "terminal_time_difference_s": 0.0,
+  "workbook_sha256": "f006d9816e2f101841e9119bf19b2d7e1f1128df9162929b082ec4bb8a1bfb9f",
+  "verification_sha256": "5d8b296af64095aff7f3b291961c6c2b1353ea5ff064059fd6d55300f8dda198",
+  "delivery_sources": {
+    "q4/export.py": "6e86267dcf8b12748a4bff36afc770585aafbdd3d747208a07098a5da4d8e181",
+    "q4/check_export.py": "3737f0d13ac1b5d263a90c9c9ffdd4a92a52fb69dbb306c17fa08ae5cd4d39c5",
+    "scripts/build_result4.mjs": "9b9d462e7cdd4731adc3c16273c834ebc07b0fd8d4422541a4245e9233a1127e"
+  },
+  "table6_sha256": "aac2353b0ba51ea68c5d80baf78006dd4c8387f1324226f521ecb230a4accd78"
+}
