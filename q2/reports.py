@@ -1,9 +1,12 @@
 """Build Q2 result and verification reports from verified machine outputs."""
 import argparse
 import json
+import math
 from pathlib import Path
 
 from .export import TABLE_TIMES, TABLE_RADIUS_INDICES, rounded_array, verified_source
+from .inputs import sha256
+from .provenance import delivery_snapshot
 
 
 def markdown_table(times, values):
@@ -14,16 +17,56 @@ def markdown_table(times, values):
     return header + "\n".join(rows)
 
 
+def validated_export(directory, workbook=None):
+    directory = Path(directory)
+    workbook = Path(workbook) if workbook is not None else directory.parent / "result2.xlsx"
+    record = json.loads((directory / "export_verification.json").read_text(encoding="utf-8"))
+    if record.get("passed") is not True:
+        raise ValueError("Q2 Excel verification did not pass")
+    if record.get("numeric_result_cells_checked") != 10886400:
+        raise ValueError("Q2 Excel verification has an incomplete cell count")
+    difference = record.get("max_absolute_readback_difference")
+    if not isinstance(difference, (int, float)) or not math.isfinite(difference) or difference != 0.0:
+        raise ValueError("Q2 Excel verification has a nonzero or invalid difference")
+    if not workbook.is_file():
+        raise ValueError("Current result2.xlsx is missing")
+    if record.get("workbook_sha256") != sha256(workbook):
+        raise ValueError("Q2 Excel verification is stale for the current workbook")
+    if record.get("workbook_bytes") != workbook.stat().st_size:
+        raise ValueError("Q2 Excel size does not match its verification")
+    bindings = {
+        "numerical_verification_sha256": directory / "verification.json",
+        "archive_manifest_sha256": directory / "archive" / "manifest.json",
+    }
+    for key, path in bindings.items():
+        if not path.is_file() or record.get(key) != sha256(path):
+            raise ValueError(f"Q2 Excel verification is stale for {path.name}")
+    current_delivery = delivery_snapshot()
+    recorded_delivery = record.get("delivery_source", {})
+    if (
+        recorded_delivery.get("source_digest") != current_delivery["source_digest"]
+        or recorded_delivery.get("source_hashes") != current_delivery["source_hashes"]
+    ):
+        raise ValueError("Q2 Excel verification is stale for the current export sources")
+    return record
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--directory", default="results/q2")
     parser.add_argument("--reports", default="reports")
     args = parser.parse_args()
     directory, reports = Path(args.directory), Path(args.reports)
+    report_paths = [reports / "Q2_RESULTS_REPORT.md", reports / "Q2_VERIFY_REPORT.md"]
+    try:
+        export_verification = validated_export(directory)
+        data, _, manifest, verification = verified_source(directory)
+        scenarios = json.loads((directory / "environment_scenarios.json").read_text(encoding="utf-8"))
+    except Exception:
+        for path in report_paths:
+            path.unlink(missing_ok=True)
+        raise
     reports.mkdir(parents=True, exist_ok=True)
-    data, _, manifest, verification = verified_source(directory)
-    export_verification = json.loads((directory / "export_verification.json").read_text(encoding="utf-8"))
-    scenarios = json.loads((directory / "environment_scenarios.json").read_text(encoding="utf-8"))
     table_T = data["temperature_C"][TABLE_TIMES][:, TABLE_RADIUS_INDICES]
     table_C = data["moisture"][TABLE_TIMES][:, TABLE_RADIUS_INDICES]
     extension = manifest["inputs"]["environment_extension"]
@@ -63,8 +106,6 @@ def main():
 
 三种情景的相对偏差见 `../figures/q2/q2_environment_scenarios.pdf` 及绑定 CSV。当前附件没有内部场实测，数值收敛不能替代实验精度验证。
 """
-    (reports / "Q2_RESULTS_REPORT.md").write_text(result_text, encoding="utf-8")
-
     tol = verification["tolerance_difference"]
     rad = verification["radau_difference"]
     q1 = verification["q1_compatible_difference"]
@@ -102,7 +143,8 @@ def main():
 - 六张PDF图均从绑定CSV生成并经PNG渲染检查，无缺字、裁切或重叠。
 - Excel交付源码摘要：`{export_verification['delivery_source']['source_digest']}`；对应提交：`{export_verification['delivery_source']['code_commit']}`。
 """
-    (reports / "Q2_VERIFY_REPORT.md").write_text(verify_text, encoding="utf-8")
+    report_paths[0].write_text(result_text, encoding="utf-8")
+    report_paths[1].write_text(verify_text, encoding="utf-8")
 
 
 if __name__ == "__main__":
