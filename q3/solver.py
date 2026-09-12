@@ -91,7 +91,7 @@ def integrate_event(model, settings, event_cfg):
 
     output_T.append(state[:n][grid.output_indices])
     output_C.append(state[n:][grid.output_indices])
-    output_summary.append(summarize(0, state, 0))
+    output_summary.append(summarize(0, state, 0)[:-1])
     next_output = 60.0
 
     def evaluate_history(t):
@@ -162,7 +162,7 @@ def integrate_event(model, settings, event_cfg):
                 output_times.append(next_output)
                 output_T.append(y[:n][grid.output_indices])
                 output_C.append(y[n:][grid.output_indices])
-                output_summary.append(summarize(next_output, y))
+                output_summary.append(summarize(next_output, y)[:-1])
                 # Boundary derivative is independently reconstructed by 2nd order
                 # backward differences; this is not the algebraic Robin flux itself.
                 qT, qC = model.fluxes(next_output, y)
@@ -188,8 +188,8 @@ def integrate_event(model, settings, event_cfg):
                     output_times.append(root)
                     output_T.append(near_states[1,:n][grid.output_indices])
                     output_C.append(near_states[1,n:][grid.output_indices])
-                    output_summary.append(near_summary[1])
-                root_record["near_summary"] = near_summary.tolist()
+                    output_summary.append(near_summary[1, :-1])
+                root_record["near_summary"] = near_summary[:, :-1].tolist()
                 root_record["slope_C_per_s"] = float((near_summary[2,1]-near_summary[0,1])/(2*delta))
                 done = True
                 break
@@ -206,6 +206,7 @@ def integrate_event(model, settings, event_cfg):
         "initial_state": initial, "bracket_states": root_states, "near_states": near_states,
         "root": root_record,
         "diagnostics": {**counts, "wall_seconds": time.perf_counter()-started,
+            "initial_step_s": 1e-4,
             "accepted_steps": len(traces), "max_relative_balance": max_balance,
             "flux_quadrature_difference": quad_error, "minimum_moisture": minimum_moisture,
             "temperature_envelope_violation": temperature_envelope_violation,

@@ -34,6 +34,7 @@ def compute(data_root, directory, case):
     config = read_config("configs/q3.json")
     inherited = read_config(config["q2_config"])
     env, inputs = read_inputs(data_root, inherited, mode=case.get("mode"))
+    inputs["source_names"] = {k: v.replace("\\", "/") for k, v in inputs["source_names"].items()}
     template = Path(data_root)/"附件"/"附件3"/"result3.xlsx"
     wb = load_workbook(template, read_only=True)
     try:

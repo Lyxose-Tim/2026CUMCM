@@ -41,3 +41,22 @@ def test_output_endpoints_exact_and_deduplicated():
 def test_upward_crossing_is_rejected():
     with pytest.raises(ValueError, match="downward"):
         locate(lambda t: np.array([50., 0.1+0.01*t]), 0, 10, 1, 0.15, 1e-6, 1e-5)
+
+
+def test_short_physical_event_can_be_archived():
+    import json
+    from q1.fvm import Grid
+    from q2.inputs import LongEnvironment, read_config
+    from q2.model import CoupledRadialModel
+    from q3.solver import integrate_event
+    config = read_config()
+    values = np.column_stack((np.arange(0,14401,60), np.full(241,50), np.full(241,0.05)))
+    env = LongEnvironment(values, 259200)
+    event = dict(read_config("configs/q3.json"), threshold=2.54)
+    solution = integrate_event(CoupledRadialModel(Grid(20), config["parameters"], env),
+                               config["solver"], event)
+    json.dumps(solution["root"], allow_nan=False)
+    assert np.isfinite(solution["summary"]).all()
+    assert solution["root"]["near_summary"][0][1] > 2.54
+    assert solution["root"]["near_summary"][2][1] < 2.54
+    assert solution["diagnostics"]["max_relative_balance"] < 1e-7
