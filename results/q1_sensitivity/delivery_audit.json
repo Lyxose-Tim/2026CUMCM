@@ -5,7 +5,7 @@
   "numerical_runs": 33,
   "additional_fresh_reintegration": 1,
   "formal_field_values_checked": 2496186,
-  "unit_tests_passed": 52,
+  "unit_tests_passed": 53,
   "code_commit": null,
   "calculation_code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
   "current_source_match": {
