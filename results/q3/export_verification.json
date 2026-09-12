@@ -5,8 +5,8 @@
   "columns": 22,
   "moisture_max_abs_difference": 0.0,
   "terminal_time_difference_s": 0.0,
-  "workbook_sha256": "4468dc3c8e640115f00c8e0d53cab881d87b102527b843c9ba636d65b2903ec1",
-  "verification_sha256": "a4f29e283d8db664f0103b3400bca33001e7bb4b29c606289d470d64076f8b51",
+  "workbook_sha256": "d41b9fe39ab5ed9d47e3a1e9bd695f86d0ed30ab72b16e45725e456e5899fba9",
+  "verification_sha256": "db85f63c9c8b3ee6d388e8f2e97ea114463d3643a29e8198a00237ebd2121708",
   "delivery_sources": {
     "q3/export.py": "777283a8a2ece44f84d6edd2f0467ee60d70c29d29e426109771a2f1fe5d3281",
     "q3/check_export.py": "2814f5bc7d603e3f0130214ebabba5ef16ca7b548f3b4a7ad59c3cf15e38c6a8",

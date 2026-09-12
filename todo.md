@@ -54,7 +54,7 @@
 
 ## 3. 问题二与问题三
 
-问题三由Codex执行，分支`feat/q3-fixed-drying`，依赖PR #6固定提交`aa1d1b6`（OPEN，待复审，尚未批准）。实施契约见`reports/Q3_MODEL_SPEC.md`。数值、表5、Excel、图、复现和交付验证已完成；草稿PR [#7](https://github.com/Lyxose-Tim/2026CUMCM/pull/7) 等待小组交叉审核。
+问题三由Codex执行，分支`feat/q3-fixed-drying`，依赖PR #6固定提交`aa1d1b6`（已由上游合并）。实施契约见`reports/Q3_MODEL_SPEC.md`。数值、表5、Excel、图、复现和交付验证已完成；草稿PR [#7](https://github.com/Lyxose-Tim/2026CUMCM/pull/7) 正修复正式配置、Git诊断和最终审计绑定，修复后等待复审。
 
 - [x] 实现附录3四个经验公式，逐节点更新。
 - [x] 用开尔文计算D，保留变系数散度。

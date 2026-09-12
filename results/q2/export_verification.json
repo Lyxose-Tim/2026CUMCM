@@ -15,21 +15,21 @@
   "delivery_source": {
     "source_hash_scheme": "sha256-text-lf-v1",
     "source_hashes": {
-      "q2/provenance.py": "d1aa35184a45834db9dc1bd6ebbae88b3dadc530d0213a72a18168d39f5b3a5f",
+      "q2/provenance.py": "961a2972ce6723169896ddda91693ae7b212bcc70803449f101528972b55e6c4",
       "q2/export.py": "e945b0ce0c33b280b91d42861994e92d848654e7d602f7e6b425e57cb27abc9d",
       "q2/check_export.py": "f3af50d7de3c1cc0ecb0e421824f381a67eb0722198003c226739c4ce7cbed0c",
       "scripts/build_result2.mjs": "2d5570927b33e83ce155e19c78cf1b3addc90b50d549979c07856578ff80ed78",
       "scripts/build_result2_stream.py": "5d8f06c5d0436bab212c8dd802a0d40e3ea5a25be3905aa2005188348c1e8a6e"
     },
     "source_raw_hashes": {
-      "q2/provenance.py": "d1aa35184a45834db9dc1bd6ebbae88b3dadc530d0213a72a18168d39f5b3a5f",
-      "q2/export.py": "e945b0ce0c33b280b91d42861994e92d848654e7d602f7e6b425e57cb27abc9d",
-      "q2/check_export.py": "f3af50d7de3c1cc0ecb0e421824f381a67eb0722198003c226739c4ce7cbed0c",
-      "scripts/build_result2.mjs": "2d5570927b33e83ce155e19c78cf1b3addc90b50d549979c07856578ff80ed78",
-      "scripts/build_result2_stream.py": "5d8f06c5d0436bab212c8dd802a0d40e3ea5a25be3905aa2005188348c1e8a6e"
+      "q2/provenance.py": "88c556d5f50ecbb20b841ff34949b616a71292a69a34ec62e2c35e2c29e4da22",
+      "q2/export.py": "c3417454af615226730b4fe8f1674c5394e291ea74bea6e4b14c00aac55da25c",
+      "q2/check_export.py": "8cd8e24d9747a151bea1617a927fdce3b076de731a5e410b80f78df961ac58e9",
+      "scripts/build_result2.mjs": "8d066f774a72ef1f5530061a2984448f9fbe059ab23af6c9d5fa59ce7a144003",
+      "scripts/build_result2_stream.py": "5b852392c0b237f98cdc997f24c0f5eb7d139fa10cd59aa78d0c31aca2c6acc1"
     },
-    "source_digest": "a5d3941194d4c854bdd1f451c611c96c0bd39d95362fb8033556c5bdc16fec85",
-    "code_commit": "5ad8d1b6080fd08ea77d2e1e53f81aa372f9f9df"
+    "source_digest": "2da8c3e3138d280d44d3c72d7e83aedcec124133230eeb82d7a83b650c68a752",
+    "code_commit": "e1779d7f8bfeb3b2ce7febf5197aee6634eb2d5d"
   },
   "writer": "openpyxl write-only streaming; Artifact Tool format blueprint rendered separately"
 }

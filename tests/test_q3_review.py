@@ -1,5 +1,6 @@
 """Regression cases for the PR #7 provenance and configuration review."""
 import copy
+import json
 import subprocess
 import sys
 
@@ -33,6 +34,16 @@ def test_unknown_formal_case_is_rejected():
     config["formal_case"] = "missing"
     with pytest.raises(ValueError, match="formal_case"):
         cases(config)
+
+
+def test_verified_rejects_formal_case_different_from_config(tmp_path, monkeypatch):
+    from q3 import validation
+    monkeypatch.setattr(validation, "validation_sources", lambda: {})
+    (tmp_path / "verification.json").write_text(json.dumps({
+        "passed": True, "validation_sources": {}, "formal_case": "tight_N20480",
+    }), encoding="utf-8")
+    with pytest.raises(ValueError, match="formal_case differs"):
+        validation.verified(tmp_path)
 
 
 def test_git_failure_with_non_ascii_stderr_is_quiet(tmp_path, monkeypatch, capfd):

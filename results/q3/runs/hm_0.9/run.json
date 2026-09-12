@@ -62,11 +62,52 @@
       "root_xtol_s": 1e-06,
       "bracket_width_s": 1e-05,
       "strict_offset_s": 1.0,
-      "formal_case": "tight_N20480",
+      "formal_case": "tight_N40960",
+      "initial_formal_case": "tight_N20480",
       "grids": [
         5120,
         10240,
-        20480
+        20480,
+        40960
+      ],
+      "temporal_cases": [
+        {
+          "name": "tight_N20480",
+          "N": 20480,
+          "tight": true,
+          "half_step": true
+        },
+        {
+          "name": "halfstep_N10240",
+          "N": 10240,
+          "half_step": true
+        }
+      ],
+      "refinement_cases": [
+        {
+          "name": "base_N40960",
+          "N": 40960
+        },
+        {
+          "name": "tight_N40960",
+          "N": 40960,
+          "tight": true,
+          "half_step": true
+        }
+      ],
+      "temporal_comparisons": [
+        [
+          "base_N20480",
+          "tight_N20480"
+        ],
+        [
+          "base_N10240",
+          "halfstep_N10240"
+        ],
+        [
+          "base_N40960",
+          "tight_N40960"
+        ]
       ],
       "sensitivity_grid": 5120,
       "budgets": {
@@ -89,17 +130,17 @@
       "q2/solver.py": "717e393c89a4f4ad6c53e92f303cc6ab97a9d188235832fef1165f8fb1221a5d",
       "q2/archive.py": "59eba774573e659c2e10a7a05f5e863d2923151b82699a3a23e7c80d676eda75",
       "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
-      "q2/provenance.py": "d1aa35184a45834db9dc1bd6ebbae88b3dadc530d0213a72a18168d39f5b3a5f",
+      "q2/provenance.py": "961a2972ce6723169896ddda91693ae7b212bcc70803449f101528972b55e6c4",
       "q3/__init__.py": "710603612101c2e78c5e8ffe86117fda9ce090c32f95561eaf9a085d03c4893a",
       "q3/solver.py": "741951af295276cde4f447c9b26ed66e5191c9fb0c5d91d4b154898f4ead9278",
-      "q3/run.py": "93e0cdd11b609e714b6e31eade085022ff19a84b0dc4292f82dc41cd39d77003",
+      "q3/run.py": "107007c40e2995f3edd5c214a37c10737b7f07eb4a4066d4e3803c9837cecafa",
       "q3/provenance.py": "fc65e11d6856eb1ff99da90933faa89536bdfa46bf9b9e6f9dbc70a9b8fc49f3",
       "configs/q2.json": "03b76801552c8ce2b9bdf5730a5409caabc9ecf6ae9c1d042e2b583d306aff13",
-      "configs/q3.json": "852219c9acd2d3bb2b4e027b60f4011d767729cfcf4a25bb4744ce07caaf8b60",
+      "configs/q3.json": "eab005b6faaa57764d71480423f57bb3d40e07286a160e6001d137583c9dc5b8",
       "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
     },
-    "source_digest": "c2897ae537a42fe8e0e375629336121b4d5d54b932263383b1fc21e89fe7a094",
-    "code_commit": "f37a2f043f283c34d2f130add8313ec9c00f824c",
+    "source_digest": "6bc9bd9b771d11e3f74338a9b4449a70c40a9d4501f0b4702913315d5568bb21",
+    "code_commit": "e1779d7f8bfeb3b2ce7febf5197aee6634eb2d5d",
     "python": "3.12.8",
     "packages": {
       "numpy": "2.5.3",
@@ -167,7 +208,7 @@
     "nfev": 32923,
     "njev": 267,
     "nlu": 4156,
-    "wall_seconds": 97.60313390000374,
+    "wall_seconds": 53.36861730000237,
     "initial_step_s": 0.0001,
     "accepted_steps": 15968,
     "max_relative_balance": 1.8066654408624594e-10,

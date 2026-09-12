@@ -3,7 +3,7 @@
 ## 固定起点
 
 - 仓库：Lyxose-Tim/2026CUMCM。
-- 最新核对main：`8fdcb81a5ac5c695531aa3e2e86839912e55962a`。
+- 启动时main：`8fdcb81a5ac5c695531aa3e2e86839912e55962a`；审查修复时重新核对main为`4895ab4`（PR #6合并提交）。
 - 上游PR：[问题二 #6](https://github.com/Lyxose-Tim/2026CUMCM/pull/6)，分支`feat/q2-coupled-drying`。
 - 固定依赖提交：`aa1d1b65ec7349c112fc2da0eef8110858a8a00a`。
 - 2026-09-12启动及实施中再次核对：PR为OPEN、reviewDecision为CHANGES_REQUESTED；当前head作者声明修复已上传，最新独立审查尚未批准。完整快照在`results/q3/dependency_snapshot.json`。
@@ -20,9 +20,9 @@ Q2此前审核未发现变物性与耦合核心的阻塞错误，但曾发现空
 
 ## 文件保护与提交
 
-q1/、q2/、两问配置、既有结果工作簿与归档、原图均不修改。代码新增在q3/，输出在results/q3/、results/result3.xlsx及figures/q3/。共享文档只更新问题三进度和指向，不重写他人参考分支。提交分为模型/计划、求解代码、验证与导出、实际结果及协作入口。
+q1/、q2物理模型、两问配置、既有结果工作簿与数值归档、原图均保持原值。本轮按PR #7审查建议，仅修复q2/provenance.py中Git诊断的stderr解码；为保持其交付门禁有效，重新全量回读result2.xlsx并刷新Q2导出验收记录及验证报告。其10,886,400个结果单元格逐格差为0，工作簿摘要不变。Q3代码在q3/，输出在results/q3/、results/result3.xlsx及figures/q3/。未修改其他任务检出。
 
-问题三草稿PR为[#7](https://github.com/Lyxose-Tim/2026CUMCM/pull/7)，以`feat/q2-coupled-drying`为base，仅展示Q3差异，明确叠加依赖。创建时状态为Draft，head=`3c063107e7dbf033d98ebe618e0ed01d4f25a59f`；本记录更新提交会由已建立的远端跟踪分支继续推送。上游尚未合并，不直接推main，不合并任何PR。后续上游若更新/合并，应先检查变化再同步依赖和PR base，不能仅依据“文件已上传”推断批准。
+问题三草稿PR为[#7](https://github.com/Lyxose-Tim/2026CUMCM/pull/7)，创建时以`feat/q2-coupled-drying`为base，head=`3c063107e7dbf033d98ebe618e0ed01d4f25a59f`。本轮审查针对`9210870`提出提交绑定、正式配置及Git诊断三项修正。重新查询确认PR #6已由上游合并，main中的q1/q2内容与固定依赖`aa1d1b6`一致，因此将PR #7 base更新为main，保留Draft并等待复审。本任务未批准或合并任何PR，也未直接推送main。历史OPEN快照不覆盖当前MERGED状态；最新快照见`results/q3/review_dependency_snapshot.json`。
 
 ## 原始输入与环境
 

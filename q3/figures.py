@@ -43,7 +43,8 @@ def make(directory="results/q3",figure_dir="figures/q3"):
                delimiter=",",fmt="%.17g",comments="",header="radius_cm,C")
     conv=[]
     import json
-    for N in [5120,10240,20480,40960]:
+    grids=[v["spatial"][0]["coarse_N"]]+[entry["fine_N"] for entry in v["spatial"]]
+    for N in grids:
         run=json.loads((directory/"runs"/f"base_N{N}"/"run.json").read_text(encoding="utf-8"))
         conv.append([N,run["root"]["time_s"],run["diagnostics"]["max_surface_gradient_relative_residual"]])
     np.savetxt(source/"convergence.csv",conv,delimiter=",",fmt="%.17g",comments="",header="N,time_s,max_surface_gradient_relative_residual")

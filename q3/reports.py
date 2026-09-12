@@ -52,7 +52,7 @@ def make(directory="results/q3"):
 
 **t* = {root['time_h']:.10f} h = {root['time_s']:.12f} s**，按题目四位小数显示为 **{root['time_h']:.4f} h**（约{root['time_h']/24:.4f}天）。
 
-正式结果采用N=40960、收紧BDF积分。当前估计数值时间误差量级为{v['estimated_numerical_time_change_s']:.6f} s；这不是严格误差界，也不包含环境、闭合及实物误差。初始72 h覆盖内已发生事件，没有为满足2–3天量级而调参。
+正式算例由configs/q3.json的formal_case指定为`{v['formal_case']}`，采用N={r['identity']['case']['N']}。当前估计数值时间误差量级为{v['estimated_numerical_time_change_s']:.6f} s；这不是严格误差界，也不包含环境、闭合及实物误差。初始72 h覆盖内已发生事件，没有为满足2–3天量级而调参。
 
 数学上t*是严格达标集合的下确界；连续临界点通常为等号。根处全域最大值为{near[1,1]:.16f} kg/kg，最大值位置r={near[1,2]*100:.8f} cm。另保存的t*+1 s完整场已严格低于阈值，属于后验核查时刻，不替代最短时间定义。Excel及表5末行均列临界时间t*，四舍五入显示的0.1500不用于判断严格不等号。
 
@@ -70,7 +70,7 @@ def make(directory="results/q3"):
     for label,row in zip(["根前1 s，未达标","临界根，等号","根后1 s，严格达标"],near):
         text+=f"| {label} | {row[0]:.12f} | {row[1]:.16f} | {row[2]*100:.8f} | {row[4]:.12f} | {row[5]:.12f} |\n"
     text+=f"""
-最终二分包围区间为[{root['bracket_s'][0]:.12f}, {root['bracket_s'][1]:.12f}] s，g值分别为{root['bracket_g'][0]:.6e}、{root['bracket_g'][1]:.6e} kg/kg；原接受步包围区间为[{root['accepted_bracket_s'][0]:.9f}, {root['accepted_bracket_s'][1]:.9f}] s。每次根评价均读取全部40961个含水率节点，中心和表面为已有端点；无超调的空间重建最大值等于全部节点最大值。
+最终二分包围区间为[{root['bracket_s'][0]:.12f}, {root['bracket_s'][1]:.12f}] s，g值分别为{root['bracket_g'][0]:.6e}、{root['bracket_g'][1]:.6e} kg/kg；原接受步包围区间为[{root['accepted_bracket_s'][0]:.9f}, {root['accepted_bracket_s'][1]:.9f}] s。每次根评价均读取全部{r['identity']['case']['N']+1}个含水率节点，中心和表面为已有端点；无超调的空间重建最大值等于全部节点最大值。
 
 阈值附近dCmax/dt≈{v['slope_C_per_s']:.12e} kg/(kg·s)。含水率误差1e−6 kg/kg对应约{v['C_error_1e_6_time_s']:.4f} s；四位小数舍入半宽5e−5对应约{v['rounding_5e_5_time_s']:.2f} s。因此不能由Excel中0.1500倒推严格停止时间。
 
@@ -97,7 +97,7 @@ def make(directory="results/q3"):
 
 忽略端面、采用有效Ce同尺度Robin闭合、h及hm沿用附录2且不显式计入潜热，均继承Q2并公开记录。恒定半径是问题三条件；未调用附件2或附录4。现有附件没有内部含水率实测标签，本结果是所选模型下的数值预测，不能声称实验准确率。长期环境观测只有4 h，后续约{root['time_h']-4:.2f} h属于明示延拓。
 
-依赖与复现见`reports/Q3_DEPENDENCY_RECORD.md`及`Q3_REPRODUCE.md`。问题二PR尚待其独立审核；本任务不自行批准或合并上游。
+依赖与复现见`reports/Q3_DEPENDENCY_RECORD.md`及`Q3_REPRODUCE.md`。问题二PR #6已由上游合并；问题三PR #7仍待本轮修复复审。
 """
     Path("reports/Q3_RESULTS_REPORT.md").write_text(text,encoding="utf-8")
     spatial="| 粗N → 细N | 临界时间绝对差 / s | 共同60 s场最大含水率差 |\n|---|---:|---:|\n"
@@ -108,7 +108,7 @@ def make(directory="results/q3"):
 
 ## 当前结论
 
-当前源码绑定的数值门禁与Excel全量回读通过。正式网格N=40960；原始初值、正值、有限数、温度历史包络、全域根及前后状态、局部/全局水分平衡均通过。该结论属于数值与交付验证；小组独立交叉审核及实物验证不在此处宣称完成。
+当前源码绑定的数值门禁与Excel全量回读通过。正式算例`{v['formal_case']}`与configs/q3.json一致，网格N={r['identity']['case']['N']}；原始初值、正值、有限数、温度历史包络、全域根及前后状态、局部/全局水分平衡均通过。该结论属于数值与交付验证；小组独立交叉审核及实物验证不在此处宣称完成。
 
 ## 空间与时间误差
 
@@ -135,7 +135,7 @@ def make(directory="results/q3"):
 
 Q3的N=20480收紧设置与Q2的N=20480收紧归档，在{v['q2_regression']['common_times']}个共同时间、21个输出半径比较：温度最大差{v['q2_regression']['T']:.9e} °C，含水率最大差{v['q2_regression']['C']:.9e} kg/kg，符合预设预算。Q2归档仅用于共同输出对照；全域事件由完整计算状态重算。
 
-q1/q2物理源码没有改动。上游53项既有测试和本次新增事件/交付反例均由当前完整测试集执行，实际数量及输出见`results/q3/unit_tests.txt`。GitHub无CI结论时不把本地测试称作CI通过。
+q1/q2物理源码没有改动；q2.provenance.git_commit按PR审查建议将Git stderr定向到DEVNULL，避免中文诊断解码异常，并重新完成Q2原工作簿全量回读及报告绑定。上游53项既有测试和本次新增事件/交付/配置/Git审计反例均由当前完整测试集执行，实际数量及输出见`results/q3/unit_tests.txt`。GitHub无CI结论时不把本地测试称作CI通过。
 
 ## Excel、图源与追溯
 
@@ -144,6 +144,7 @@ q1/q2物理源码没有改动。上游53项既有测试和本次新增事件/交
 - 数值源码提交`{r['source']['code_commit']}`，规范化源摘要`{r['source']['source_digest']}`；文件及输入绑定见每个run.json，运行环境Python {r['source']['python']}、SciPy {r['source']['packages']['scipy']}、NumPy {r['source']['packages']['numpy']}。
 - 规范化文本哈希允许Windows CRLF/LF差异；实际代码、输入、数值归档、工作簿变化会使当前验证失效。每个新输出目录从原始初值积分，已有缓存必须核验源码、输入、配置和文件摘要。
 - 四张矢量PDF由保存的CSV重新读入生成，字体{fig['font']}；渲染核对证据见`results/q3/visual_qa.json`（仅在实际视觉检查后写入）。
+- 最终audit.json使用Git已提交内容摘要（仅排除审计文件自身）持久绑定，当前HEAD由审计命令实时核对和输出。源码ZIP明确跳过Git核查并保留全部便携文件摘要核查；Git存在但无法读取时拒绝通过。提交顺序和原理见`Q3_REPRODUCE.md`。
 """
     Path("reports/Q3_VERIFY_REPORT.md").write_text(verify,encoding="utf-8")
 
