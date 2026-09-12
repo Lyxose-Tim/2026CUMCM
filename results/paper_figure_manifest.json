@@ -1,0 +1,98 @@
+{
+  "schema_version": 2,
+  "font": "Microsoft YaHei",
+  "generator": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "67435e4e98d8dcb3d9f61ff0ba07beef962ed05c1d13a18b1b385536c132bdb4"
+  },
+  "drawio_source": {
+    "hash_scheme": "sha256-raw-v1",
+    "sha256": "42e74c409a87e9793e60551d28bf01472b1d87572fc1686980ef8b108bad10b2"
+  },
+  "evidence": {
+    "q2_figure_manifest": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "2a3080763d9b3a380c1cf9f8e52205bb745efabcfd666ea9e59275faeb9d04cc"
+    },
+    "q3_verification": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "71d9b58e3e40250c5027885b413990ce23b34004b56fe43d4fba9821a614d07d"
+    },
+    "q4_verification": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "de1b8fff881b5e2e6e900a4f427d04982e5159019ad4246deecfb69e17678fae"
+    },
+    "q4_sensitivity": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "07af6923a05ca955bfca6558bf94b13a8ce813f493192ee6f50a07eb5554dac2"
+    }
+  },
+  "csv": {
+    "fig01_model_roadmap_edges.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "0547453a1ea47408dfe841f3a5e7fcb3fcf760e9265d6f1017aef0d2756d70f2"
+    },
+    "fig01_model_roadmap_nodes.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "28972499f7feb47311b4bd3b4be989970560edcf4d263731f88b6d7c30d9e3a9"
+    },
+    "fig02_environment_radius.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f8a9d963f9440a8554c32a1593387ba01d904da81b844c7f030331cf0b225b68"
+    },
+    "fig03_q1_q2_early.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "3fed0f3a44fed16164cc449d405504b9015883dc49bbf6e867208c2fd42e0ae8"
+    },
+    "fig04_physical_profiles.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "95af1e59ef3103620f339c167e29212aa59f4d56b9fa4f0e933338782c65cc44"
+    },
+    "fig04_surface_radius.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "68fb52f0edb8f97afce8b72f893236d8738f64a2a348c09c45f8ea6ea77153da"
+    },
+    "fig05_criteria.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "70928007aed404d9e26462c8c12f29e41961ce5bf9cc187193efa3d40561d3e6"
+    },
+    "fig05_numerical_layers.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "7ae30b2552155fecfbfa94518f29aedaf4c1475d65fb07345b8bd97e2063085a"
+    },
+    "fig06_cases.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f881c0b8388040a5583f06c04cd8c1c932905467befbf1bc785802f868ddd58a"
+    },
+    "fig06_structural_scenarios.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "3179bf7a1ee8d70e8b2ac2fdb85a5a19f95b5ef9b0705f032d7577e51e424c29"
+    }
+  },
+  "pdf": {
+    "fig01_model_roadmap.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "05e6cce8a8f1c8846158923acd2dbd474ef0bd4e809513daca3862551ab6f8c2"
+    },
+    "fig02_environment_radius.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "4d76579a4441f46908c7bbf80c9957cd987b3ba71ebc1052fe93ef16e310e410"
+    },
+    "fig03_q1_q2_early.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "7a67abbf1eb66108130f156f77be903e05cede152c5cf1730f9231c2dfc1062f"
+    },
+    "fig04_physical_radius_drying.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "2b496c9f4fbd13d44bd0c98981e05698c4d3b27221e4a5fdb2dbf076bce88f00"
+    },
+    "fig05_criteria_numerical_layers.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "1ae8785c62d6cd54e11855065d9ebb9d48a26162b763fb1d9683ba2bb369669e"
+    },
+    "fig06_mechanism_structural_sensitivity.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "65fcbbf045c7a755eb39fece3fbd92e953cd3f8e046547da9ff4a35b3ee9caa0"
+    }
+  }
+}

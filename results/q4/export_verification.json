@@ -6,7 +6,10 @@
   "columns": 23,
   "moisture_max_abs_difference": 0.0,
   "terminal_time_difference_s": 0.0,
-  "workbook_sha256": "803512aecd6af1b5425c0f4c1aec0ce7bb350f9ae774ee95159be175f0863b90",
+  "workbook_hash": {
+    "hash_scheme": "sha256-raw-v1",
+    "sha256": "332244a5bbc27e2beb2f98851c6dd9463ec2516b2a1122a53bfb56e3a89938b0"
+  },
   "headers": [
     "时间\\到药材中心的距离",
     0.0,
@@ -32,11 +35,35 @@
     2.0,
     "药材表面"
   ],
-  "verification_sha256": "6bf9f1f1b3038b53620be2fd25f74be6194860b1230dea50dcc6bcf2653f594d",
-  "delivery_sources": {
-    "q4/export.py": "36d82c2058cbad734bda218509778fff7fb8ea98be25d114710879dedd379303",
-    "q4/check_export.py": "f18300d2a4b94de640bf25bcc64eb484085ae7710b9def0bfa3c41c943bda376",
-    "scripts/build_result4.mjs": "9b9d462e7cdd4731adc3c16273c834ebc07b0fd8d4422541a4245e9233a1127e"
+  "verification_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "de1b8fff881b5e2e6e900a4f427d04982e5159019ad4246deecfb69e17678fae"
   },
-  "table6_sha256": "aac2353b0ba51ea68c5d80baf78006dd4c8387f1324226f521ecb230a4accd78"
+  "delivery_sources": {
+    "q4/export.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "ceaf7af6249d8e7d90c50b580368d13a874ac618fe4f9c7cdc01966b5aedac98"
+    },
+    "q4/check_export.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "132cb70b5f40929da511b73f3ca71ace6ffbc9a40c05df060ec7299c85927343"
+    },
+    "common/workbooks.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "0d29a0cd2307d9a3e4cc1130ee8efbee3725f3630d87d1242475f2a810b343c0"
+    },
+    "scripts/hash_record.mjs": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "6b24dcc6bc29fe6c0813224573bd9796765c669518dd1b8c900648e98b016cea"
+    },
+    "scripts/build_result4.mjs": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "7220e81e030a43f9dc25270525ba7cab2b7ded2d6649cbb5b418f2ce63e6e9d2"
+    }
+  },
+  "table6_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "8b0a567dd9cc50f72ce24de99370938a9ab88fe689d64652f3323f0f2e84fca2"
+  },
+  "writer": "openpyxl normal mode"
 }

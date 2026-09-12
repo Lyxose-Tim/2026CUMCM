@@ -20,14 +20,14 @@
 
 ## 可追溯性
 
-- 源码提交：`491ca9e8eecacb41b773116c54f5953ef608a8f3`。
-- 源码摘要：`dc7cbbbb12100dd66729c6984af8e9e8606ed45385834339d830a5767af93b65`。
+- 源码提交：`5010d51043561f4b4de6466b121b4cdf44d7027f`。
+- 源码摘要：`df7ed18abb7796a65adb795491c2958fd9ca1920d2113a6249ba07886f6c41a9`。
 - 输入、配置、依赖、运行命令及每个归档分块的 SHA-256 均记录在 `results/q2/archive/manifest.json`。
 
 ## Excel 与图表验收
 
 - `result2.xlsx` 为 32.41 MiB，包含两张259201行、22列工作表。
-- 已独立流式回读 10886400 个数值单元格，最大绝对差为 0.0，工作簿 SHA-256 为 `c1a00b710d2a13ebf8884887cc3075d945fcb37aa46f266328c6618be174f177`。
-- Artifact Tool 已写入、检查并渲染12行格式蓝图；完整工作簿在16 GB V8堆上限仍内存不足，最终改用 openpyxl write-only 流式生成。该降级不改变已哈希的数值载荷。
+- 已独立流式回读 10886400 个数值单元格，最大绝对差为 0.0，工作簿 SHA-256 为 `fc226e50942ac70fcadc423f25ec0167d32c6db39e8b0701694ab6e7d1cf9714`。
+- 正式工作簿由普通 Python 环境中的 openpyxl write-only 流式生成，不依赖私有作者端工具。
 - 六张PDF图均从绑定CSV生成并经PNG渲染检查，无缺字、裁切或重叠。
-- Excel交付源码摘要：`2da8c3e3138d280d44d3c72d7e83aedcec124133230eeb82d7a83b650c68a752`；对应提交：`e1779d7f8bfeb3b2ce7febf5197aee6634eb2d5d`。
+- Excel交付源码摘要：`7de7431b939bb416701e9d44d99f6fee3006efccca7acb6f012ae57f1ee03c90`；对应提交：`61935d42fe8a160e6d107597e4bf3aed7107f64d`。

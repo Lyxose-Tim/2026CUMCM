@@ -26,7 +26,7 @@
 - 基准交付提交：0c15e70e89dfc9ce64fc9bd31f135aee20aec0db；[PR #2](https://github.com/Lyxose-Tim/2026CUMCM/pull/2)已获批准并合入main，合并提交为29249836e47235d2375b0fcf4c04711b673abed9。
 - 灵敏度及完整写作底稿的获批版本：8be65357afe36dd65728c70a35c096d8b970a736，[PR #5](https://github.com/Lyxose-Tim/2026CUMCM/pull/5)。更早的3a0a837仅作为整改说明与ZIP证据的历史版本，第15节保留各阶段真实身份。
 - 前期参考方案按[固定提交68f44ba](https://github.com/Lyxose-Tim/2026CUMCM/blob/68f44bace3cfe8787a98160f94ca8509edd6e580/reports/Q1_REFERENCE_PLAN.md)引用，不把其“待执行”状态当作当前结果状态。
-- 审核状态更新：2026-09-11，Lyxose-Tim对PR #5的8be6535提交正式APPROVED，独立审计及37项测试通过，认可数值、追溯、无Git路径和Issue #4范围；本轮按其要求修正文档状态。PR #5已改为面向main，合并进度以PR记录为准。上述代码与文档审核不等于真实药材实验验证。
+- 历史审核记录：2026-09-11，Lyxose-Tim 对 PR #5 的 8be6535 提交正式 APPROVED，独立审计及 37 项测试通过，认可数值、追溯、无 Git 路径和 Issue #4 范围。该记录只说明当时的审核对象，不代表当前分支状态；当前交付以仓库根 README、各问验证清单和版本化文件摘要为准。上述代码与文档审核不等于真实药材实验验证。
 
 **写作时保留物理条件与数值证据；本地路径、Git审核往来和工作备注移至内部底稿或支撑材料，不直接放入论文正文。**
 

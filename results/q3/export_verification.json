@@ -5,12 +5,39 @@
   "columns": 22,
   "moisture_max_abs_difference": 0.0,
   "terminal_time_difference_s": 0.0,
-  "workbook_sha256": "d41b9fe39ab5ed9d47e3a1e9bd695f86d0ed30ab72b16e45725e456e5899fba9",
-  "verification_sha256": "db85f63c9c8b3ee6d388e8f2e97ea114463d3643a29e8198a00237ebd2121708",
-  "delivery_sources": {
-    "q3/export.py": "777283a8a2ece44f84d6edd2f0467ee60d70c29d29e426109771a2f1fe5d3281",
-    "q3/check_export.py": "2814f5bc7d603e3f0130214ebabba5ef16ca7b548f3b4a7ad59c3cf15e38c6a8",
-    "scripts/build_result3.mjs": "6775f32712e7ac56bf018c3353fb8842de89d02e2906d793b7b28bcd5cc61c1f"
+  "workbook_hash": {
+    "hash_scheme": "sha256-raw-v1",
+    "sha256": "18283187451c5530ea6988f3d24dfb09d87a1817fed146bd1d08c17a57d6e997"
   },
-  "table5_sha256": "f9b7b0eca568f096d4d380f51d4f5eff5464fa2c15c157c8dbedef2745bfc82c"
+  "verification_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "71d9b58e3e40250c5027885b413990ce23b34004b56fe43d4fba9821a614d07d"
+  },
+  "delivery_sources": {
+    "q3/export.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "afb122ea5a24a221d5ad0070611dbd264a1d0f81fdb1891082632ba3188dd3de"
+    },
+    "q3/check_export.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "9662bea83bed05f7c58b34360b61506508c04fc939a74eeaebf4a34e6a4cbcae"
+    },
+    "common/workbooks.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "0d29a0cd2307d9a3e4cc1130ee8efbee3725f3630d87d1242475f2a810b343c0"
+    },
+    "scripts/hash_record.mjs": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "6b24dcc6bc29fe6c0813224573bd9796765c669518dd1b8c900648e98b016cea"
+    },
+    "scripts/build_result3.mjs": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "2fae2f2a19e6efc252233171cf1be11f2161c4de167b3dc70e1d2b69b18d6a3e"
+    }
+  },
+  "table5_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "f9b7b0eca568f096d4d380f51d4f5eff5464fa2c15c157c8dbedef2745bfc82c"
+  },
+  "writer": "openpyxl normal mode"
 }

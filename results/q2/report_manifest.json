@@ -1,0 +1,34 @@
+{
+  "schema_version": 2,
+  "generator": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "acd2e931f4f100aa75810722d7c8b2b84751dcef480f1272889bd99677925f2f"
+  },
+  "reports": {
+    "Q2_MODEL_SPEC.md": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "4c29fa69bb6502396a832d13ed220f3cc1b0baaaabe84bdfb6febda690e1c2ec"
+    },
+    "Q2_RESULTS_REPORT.md": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "4f4b46d5ae2ada588d3ad281e390ad63e054ccaace13ddf93e7f411723734d14"
+    },
+    "Q2_VERIFY_REPORT.md": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "1831a9dff567e701f20bba1f44006a683a97db1d070e8e2c5f9a0826b8dea138"
+    }
+  },
+  "verification": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "d987384618c4f391232c17fc1731bdc45bd820411799c0850c58b77f3499d1ba"
+  },
+  "export_verification": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "400fd5e66678653e00b992da111757a9f23bed802b6e989c1b051608c6e73e01"
+  },
+  "figure_manifest": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "2a3080763d9b3a380c1cf9f8e52205bb745efabcfd666ea9e59275faeb9d04cc"
+  },
+  "figure_count": 6
+}

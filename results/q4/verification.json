@@ -566,7 +566,7 @@
   },
   "unit_tests_hash": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "f2b5be6264ebe793d27f1b27737d79ac966d960f20b37c861c62871481b15466"
+    "sha256": "df8096b7b57b760c05d6cd836f654829a60f3cd9d8a980c472a043d49068b77d"
   },
   "run_record_hashes": {
     "A_appendix3_fixed_N5120": {

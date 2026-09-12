@@ -1,0 +1,76 @@
+{
+  "schema_version": 2,
+  "font": "Microsoft YaHei",
+  "generator": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "8e4a0e87e30f11942a6c2b186aa1751d7dbccc26fb9766ea34a27d639a97407a"
+  },
+  "verification": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "d987384618c4f391232c17fc1731bdc45bd820411799c0850c58b77f3499d1ba"
+  },
+  "archive_manifest": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "5ca0c9be81a92ec37c4c1c176bdc0a377826bcd83c6783a036cc0a5c573417d6"
+  },
+  "convergence": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "1fe72ce23aa8c8c58d37a51503648422101f50d544bd8168670df0235031ce23"
+  },
+  "csv": {
+    "q1_q2_first_1800s.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "2c46a3d6cacf3e8545292846152f57438fbe94819d7918455c2f5750f4b2dec5"
+    },
+    "q2_center_surface_72h.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "b9a76dea945d1983843f3f9b4ff90c2d18b1bdc4c9925cd0eb418a87f5b9e69e"
+    },
+    "q2_environment_scenarios.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "e3e73fb940903e35a88a1b9f0f45a18fdfe534335a82ad1e0c2bf580881e5206"
+    },
+    "q2_grid_convergence.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "41a2d6df9f7f84ab78a3630d97e2f861b045389f3b7249339c6d1092237aaa5d"
+    },
+    "q2_property_evolution.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "17ab10b44dfeb5b3713ae95368557e3058b586299087f2ad5b8aec7a788e32ae"
+    },
+    "q2_radial_profiles.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "ea7ee487cd3d23a6b536f3c09e83fe5c74e28d8380f8e6e146d9010a9e68fce7"
+    }
+  },
+  "pdf": {
+    "q2_radial_profiles.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "9716ac6f87f59f42ffccd59442d75a5ed81884d8f147e858afac18a4d9b34bae"
+    },
+    "q2_center_surface_72h.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "7ecf084251f4d3182ed33e1c7f803d7627242bc61db90614f83269b699401ab0"
+    },
+    "q2_property_evolution.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "bfbe39488f3d9c400969fa66d873841572d0d3643a75b795c4a968df4bdd79be"
+    },
+    "q1_q2_first_1800s.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "ac5fd8cfee774268e90daa675969471a19ad6c86b72978ab96d0a6594a751c20"
+    },
+    "q2_environment_scenarios.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "b989e7b5385c2150e1f0ac62c2892341855a3a2739b5221a91058f59a644d410"
+    },
+    "q2_grid_convergence.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "3fa4d9db79519cbb4c7faac9a8bfbc0f02b1242f566b47f48c9b99f58783cf83"
+    }
+  },
+  "numerical_status": {
+    "numerical_passed": true,
+    "archive_status": "numerically_verified"
+  }
+}
