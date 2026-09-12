@@ -1,0 +1,53 @@
+{
+  "upstream_commit": "dc581a37a6a91119412d2ad9abf44f794de846e8",
+  "q2_config": "configs/q2.json",
+  "threshold": 0.15,
+  "root_xtol_s": 0.000001,
+  "bracket_width_s": 0.00001,
+  "strict_offset_s": 1.0,
+  "formal_case": "main_appendix4_shrink_N20480",
+  "grids": [5120, 10240, 20480],
+  "radius": {
+    "interpolation": "linear",
+    "unit": "cm",
+    "fixed_output_radius_cm": [
+      0.0, 0.1, 0.2, 0.3, 0.4,
+      0.5, 0.6, 0.7, 0.8, 0.9,
+      1.0, 1.1, 1.2, 1.3, 1.4,
+      1.5, 1.6, 1.7, 1.8, 1.9,
+      2.0
+    ]
+  },
+  "input_sha256": {
+    "radius": "5563acbfa4b4afb10cc6c03e2207e5369bf39da27576672aff14cc5c32e704af",
+    "template": "86e9300ffa3d30c43de895ea6723da943e85b8740b137bcae5af7107f076eeac"
+  },
+  "appendix4_parameters": {
+    "rho_intercept": 760.0,
+    "rho_slope": 90.0,
+    "cp_intercept": 1850.0,
+    "cp_scale": 2150.0,
+    "k_intercept": 0.12,
+    "k_scale": 0.20,
+    "D_prefactor": 0.00042,
+    "D_moisture_exponent": 0.30,
+    "D_temperature_exponent_K": 3850.0
+  },
+  "cases": [
+    {"name": "A_appendix3_fixed_N5120", "N": 5120, "properties": "appendix3", "radius": "fixed"},
+    {"name": "B_appendix3_shrink_N5120", "N": 5120, "properties": "appendix3", "radius": "shrink"},
+    {"name": "C_appendix4_fixed_N5120", "N": 5120, "properties": "appendix4", "radius": "fixed", "allow_no_event": true},
+    {"name": "D_appendix4_shrink_N5120", "N": 5120, "properties": "appendix4", "radius": "shrink"}
+  ],
+  "refinement_cases": [
+    {"name": "main_appendix4_shrink_N10240", "N": 10240, "properties": "appendix4", "radius": "shrink"},
+    {"name": "main_appendix4_shrink_N20480", "N": 20480, "properties": "appendix4", "radius": "shrink", "tight": true, "half_step": true}
+  ],
+  "budgets": {
+    "relative_balance": 0.0000002,
+    "space_time_s": 0.4,
+    "space_C": 0.00002,
+    "regression_time_s": 0.08,
+    "regression_C": 0.00000003
+  }
+}

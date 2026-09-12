@@ -1,0 +1,16 @@
+{
+  "font": "Microsoft YaHei",
+  "source_code_sha256": "710429674637ebebca29dd51c9772bce85730af5e8d78972fccdd22e4d5a6f60",
+  "verification_sha256": "5d8b296af64095aff7f3b291961c6c2b1353ea5ff064059fd6d55300f8dda198",
+  "csv": {
+    "case_summary.csv": "6182a0911e393ddcd560218d5c91ff889c6a7d39ef8568b09507e54ba68f886f",
+    "fixed_radius_profiles.csv": "433e949b72940c0758a899ec3e56add781abcd56de7f0ec39f78a072651eed1c",
+    "radius.csv": "dc72c296e800f8cca364a119ff48bc8cabcc173566ba5c86c78fb84cd583b358",
+    "response.csv": "a96b8ed07a2dc3d2a371c8873ad87161903ed3c99fbdcab7b6f70658803bae8e"
+  },
+  "pdf": {
+    "q4_moisture_radius.pdf": "58bb8996bffa3b4f1f876d3fdc5f3d9a6536251478471620e8cb017ac83cba13",
+    "q4_fixed_radius_profiles.pdf": "130c391a5dc1cd5265cf7aafce58af2193b86e985fc285af3e2be5dcaa459a5b",
+    "q4_case_comparison.pdf": "6f50cb6d5189ea9a60b37066bc5385414538d22e988b14a4efc33ae8469e7447"
+  }
+}
