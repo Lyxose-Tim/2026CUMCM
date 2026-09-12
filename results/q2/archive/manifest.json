@@ -144,7 +144,7 @@
     "requirements.lock.txt": "b056a1c86a34d1308c246524f270ffd717469c318a2169fa371a0efbae102b7f"
   },
   "source_digest": "df7ed18abb7796a65adb795491c2958fd9ca1920d2113a6249ba07886f6c41a9",
-  "code_commit": null,
+  "code_commit": "5010d51043561f4b4de6466b121b4cdf44d7027f",
   "command": [
     "python",
     "-m",
@@ -323,26 +323,72 @@
     "hash_scheme": "sha256-raw-v1",
     "sha256": "83d6386a7c875ed207e3108e82638f4e5dfa91ae10cc8038da117d2a82e1c392"
   },
-  "metadata_migration": {
-    "schema_version": 1,
-    "kind": "metadata-only-hash-contract-migration",
-    "from_hash_scheme": "sha256-text-lf-v1",
-    "to_hash_scheme": "sha256-text-lf-v2",
-    "old_record_raw_sha256": "54e4a55218d63b01cc62d995bca385f5ace353ce295a54a9b2c1d4d4f48a1250",
-    "verified_unchanged_numerical_files": [
-      "q2/__init__.py",
-      "q2/inputs.py",
-      "q2/model.py",
-      "q2/solver.py",
-      "q2/validation.py",
-      "q1/fvm.py",
-      "configs/q2.json",
-      "requirements.lock.txt"
-    ],
-    "migration_source": {
-      "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "e5536458929e206fe76e72284097c7739d1fd29da3f64e8773b337840b6bfcfa"
+  "metadata_migration_history": [
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v1",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "54e4a55218d63b01cc62d995bca385f5ace353ce295a54a9b2c1d4d4f48a1250",
+      "verified_unchanged_numerical_files": [
+        "q2/__init__.py",
+        "q2/inputs.py",
+        "q2/model.py",
+        "q2/solver.py",
+        "q2/validation.py",
+        "q1/fvm.py",
+        "configs/q2.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "e5536458929e206fe76e72284097c7739d1fd29da3f64e8773b337840b6bfcfa"
+      },
+      "record": "results/q2/archive/manifest.json"
     },
-    "record": "results/q2/archive/manifest.json"
-  }
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "879bb67fdca18dc7d4c0891dd3c0879fe120ed1dd25fe1a51f02a419a34ae5e6",
+      "verified_unchanged_numerical_files": [
+        "q2/__init__.py",
+        "q2/inputs.py",
+        "q2/model.py",
+        "q2/solver.py",
+        "q2/validation.py",
+        "q1/fvm.py",
+        "configs/q2.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "423166b921d59628a9b8f15b23639b64a5a206abf3207601335532fcdd428a6a"
+      },
+      "record": "results/q2/archive/manifest.json"
+    },
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "5893ea0b6ec7f17d755ff9856b03a6321a407e08e2d286135335e78e4fe07d94",
+      "verified_unchanged_numerical_files": [
+        "q2/__init__.py",
+        "q2/inputs.py",
+        "q2/model.py",
+        "q2/solver.py",
+        "q2/validation.py",
+        "q1/fvm.py",
+        "configs/q2.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "423166b921d59628a9b8f15b23639b64a5a206abf3207601335532fcdd428a6a"
+      },
+      "record": "results/q2/archive/manifest.json"
+    }
+  ]
 }

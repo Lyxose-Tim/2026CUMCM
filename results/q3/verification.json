@@ -261,7 +261,10 @@
   ],
   "estimated_space_time_error_s": 0.04522019824556386,
   "initial_adjacent_difference_goal_passed": false,
-  "q2_archive_manifest_sha256": "b8bd4109bc00b95caf2d4c1a1a00fe3f1d7d6b04ea22f5b594f3b07728b39f80",
+  "q2_archive_manifest_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "5ca0c9be81a92ec37c4c1c176bdc0a377826bcd83c6783a036cc0a5c573417d6"
+  },
   "estimated_numerical_time_change_s": 0.0452627197097273,
   "error_interpretation": "Richardson estimate using measured order + measured time change + root bracket; not a rigorous PDE bound",
   "slope_C_per_s": -2.912767474855249e-07,
@@ -389,37 +392,151 @@
     }
   ],
   "run_record_hashes": {
-    "base_N5120": "8f6bb3f20626316848ffe289c597a774df7d06a3edcf5981eea7e8b9ae406be2",
-    "base_N10240": "ca5d69dd5390e7e26ebde07d0fe09fe19e0e293304dd591f23132aae83e07f0b",
-    "base_N20480": "cf5517afd76ce6eeb8fc218bb5105d053633e5ab6662dd71e85e5dec549e6e76",
-    "tight_N20480": "7d5f884ccb8ed047dd9e4662fd1bcc7ecc39ce1abdd974a6fb05b7d2cc94260f",
-    "halfstep_N10240": "abfdb1fe6e88bc1a23abd3a858ad9f20d14c10b2fc8292d1113313c81d3dcbcf",
-    "terminal_hold": "9e66e8765c491ceceebecb996b12926a77a0e7e4a5645eebee4d5e11e6a9ec94",
-    "nominal": "6d77c39f8b7db99d258fbe95978bf7b5468442faca0b1553fa6c3b14ed433c5d",
-    "hm_0.9": "67c436b7d5ef8b29fe0fac2514528bcaad9c3d4884c1f7c145578899ad1a0a75",
-    "hm_1.1": "e6390293644ceff9645c6e9e5b6a38e117bcc5f227984d66e5158f65288c2fcd",
-    "D_prefactor_0.9": "27b5c34e53aa85892d7042fb5ed3730249bfd52dc16651064ae9b61b7d3fe1fd",
-    "D_prefactor_1.1": "1061665cc517a0ec1e23ef72a59c7fc695b86548f2f3aa60ca7f0c1b140f09e0",
-    "base_N40960": "296102ceb0c21e72f31f9178a63ca68ffe24f8b653a70905fc0d39505116d6b9",
-    "tight_N40960": "a25f0ad637f3f2a7effcf7d9849f745cf88851c213c45b2b2ac666b3d0fa1da9"
+    "base_N5120": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "7c4a5e2fb4cb12bfd1e17ec66fc522546cceca2048e1b5081a991d70d156ef6a"
+    },
+    "base_N10240": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f9681c631321963dc6520e1376853f5578a2678c12d5c53ac86d83b4e75a2f1d"
+    },
+    "base_N20480": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "4f164164187666e3e385d419275d12031284481db6e382a70a3337ae360436b7"
+    },
+    "tight_N20480": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "001cd5dac01e8c18f28ba12bf42f1e75530a19f0a79b0edb9513b25912cf1116"
+    },
+    "halfstep_N10240": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "b27d31acddab8ef14cc577eb9f89eb65ed223db5af9509e58492a8ca82c79def"
+    },
+    "terminal_hold": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "93c0c9ef21f9c706d26f37541f6194e95a90be692b4195ab12cf735bc296c188"
+    },
+    "nominal": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "d424c66e8c06380ddab47a7b45981dfa67e6ba4d3d8c767cd59a3e5a0164fc0c"
+    },
+    "hm_0.9": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "2af395b41df09f5edf198f91ec6b5f8edcdc86ed1c4118a1e1f97ecf24b30d97"
+    },
+    "hm_1.1": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "4b86b715279973f7ee9f7001476ccb816d551498ad4637ad58cecb0f4b621650"
+    },
+    "D_prefactor_0.9": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "a87c16540198107f61b4e61e93d2b71f2f97a29faeafaa566414befc7cce7e05"
+    },
+    "D_prefactor_1.1": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "c43b616d44abae060046128be6aeb016bc58dff55ca0ff06bc23e82389ad53f0"
+    },
+    "base_N40960": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f34ec2c569a64ec19b82c6c15d138df41acfb41d6cdee73dccbdcb4a61ab969e"
+    },
+    "tight_N40960": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "070e397d83b8ac60a4b48739ef48a1b17f8145f0e61a0d48edc1c7fcad472e4c"
+    }
   },
   "validation_sources": {
-    "q3/validation.py": "a0ef8ce625e0f080ae339af8416fee0a6a13b99d5231310e037defab6d7f5ccc",
-    "q3/refine.py": "c493020e05fe4ff85e5c5c3b25ffbc4a2e4fc2ebe479b92bfb8ef06432fef9d8",
-    "tests/test_export.py": "ae51fe418e57dec439d8cb7ca621476a52aa36d2813e7aee32eb27dae5129b47",
-    "tests/test_integration.py": "12b7a4d4e46ca20575526a3240c397a93c42731579a662ee00ab583e3f4a275c",
-    "tests/test_provenance.py": "68fc81518024e2eae5236fcb3c45c8cda9ab5619554de8833cf6d92962027d67",
-    "tests/test_q2_archive.py": "ae857944aa62b3b5c54619a78d84aa13b3f3c89d715336349d9ccc2b91b70700",
-    "tests/test_q2_delivery_gates.py": "aca7a5fe8f5ed113443c6f1d3fa4620bf4a32c59e16a32ca7b0822c84934afd8",
-    "tests/test_q2_inputs.py": "9f6ca78d61ffb674a03c8950fc8041f941a4419f7298d174b16a586e1e3bd4ff",
-    "tests/test_q2_model.py": "c674012403db73d39896969cea20c216261340337416412b416a757f31333a9b",
-    "tests/test_q2_solver.py": "9137880c6e38017115212780407755ae934d630dc35300847ddaebf8bddc7edf",
-    "tests/test_q3_delivery.py": "1288437344f2d0f6efb012e0c550ffddb86e1f4bed7be63e26487404ebd1d0dd",
-    "tests/test_q3_event.py": "c641306ebaa81d0a352c9967a2558513e4172fb7d492de73d329bc5ccc1e05a4",
-    "tests/test_q3_git_audit.py": "9501e3809f21eb2315469b5e7d1340b908e4c4b68ad68621a335e89663acfb1a",
-    "tests/test_q3_review.py": "a14c849a8782c4a576d532ce34b78421f4934ddf634cb827a27070b25afa968b",
-    "tests/test_sensitivity.py": "9b62d4a9395982b0ea7a20d3ee05e04016f52054e063eb513e02d7bdba758e75",
-    "tests/test_spatial.py": "23e46f7727d1ab435a59ff5c1d743ebcc6fe0566b826d16f912a8f60cf7bf1b5"
+    "q3/validation.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "0e0b3aaf94c0528593a21d11a067732ecb8130529032da05285f7684305c14cc"
+    },
+    "q3/refine.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "c493020e05fe4ff85e5c5c3b25ffbc4a2e4fc2ebe479b92bfb8ef06432fef9d8"
+    },
+    "tests/test_export.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "ae51fe418e57dec439d8cb7ca621476a52aa36d2813e7aee32eb27dae5129b47"
+    },
+    "tests/test_integration.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "12b7a4d4e46ca20575526a3240c397a93c42731579a662ee00ab583e3f4a275c"
+    },
+    "tests/test_provenance.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "9921d6be22a25ca7131135c484f5e7487e0f22c9a78398f040a03a7ca2132247"
+    },
+    "tests/test_q2_archive.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "ae857944aa62b3b5c54619a78d84aa13b3f3c89d715336349d9ccc2b91b70700"
+    },
+    "tests/test_q2_delivery_gates.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "600618a7e3b4534c00fce102e8bad38d408e86acc114e8b6f30208d150ca7890"
+    },
+    "tests/test_q2_inputs.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "9f6ca78d61ffb674a03c8950fc8041f941a4419f7298d174b16a586e1e3bd4ff"
+    },
+    "tests/test_q2_model.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "c674012403db73d39896969cea20c216261340337416412b416a757f31333a9b"
+    },
+    "tests/test_q2_solver.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "9137880c6e38017115212780407755ae934d630dc35300847ddaebf8bddc7edf"
+    },
+    "tests/test_q3_delivery.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "7f2fb36ff0a5291414dd91c4ca440b351b9113e0e081776b3ea87e15f296d1da"
+    },
+    "tests/test_q3_event.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "c641306ebaa81d0a352c9967a2558513e4172fb7d492de73d329bc5ccc1e05a4"
+    },
+    "tests/test_q3_git_audit.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "9501e3809f21eb2315469b5e7d1340b908e4c4b68ad68621a335e89663acfb1a"
+    },
+    "tests/test_q3_review.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "a14c849a8782c4a576d532ce34b78421f4934ddf634cb827a27070b25afa968b"
+    },
+    "tests/test_q4_delivery.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "1150a232517541f84e195cb7fbfcd875663f5e4fab73b4cbfcdc9ee010444e7c"
+    },
+    "tests/test_q4_inputs.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f942ed050e80ebb618a292e18a7a26a80b3b1e3d629fc8c9856a8540b2a4f1cf"
+    },
+    "tests/test_q4_model.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "52accc480d0651940bb6022bf92a29e5bf696673ca684507885cf98f6b751497"
+    },
+    "tests/test_q4_outcomes.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "d85e77954cb5942d9e2acb41fb8d5442c675c0717892f20bc330826c324b2ffd"
+    },
+    "tests/test_q4_run.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "1b4fc382c97dcedbcff919f623dc298407e7747715609ae48937d75fd85c3378"
+    },
+    "tests/test_sensitivity.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "9b62d4a9395982b0ea7a20d3ee05e04016f52054e063eb513e02d7bdba758e75"
+    },
+    "tests/test_spatial.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "23e46f7727d1ab435a59ff5c1d743ebcc6fe0566b826d16f912a8f60cf7bf1b5"
+    },
+    "tests/test_workbooks.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "327172deeaaeaf5f5ba784f7dcd23fa1c06a78d18cd2189f59599aa4fdbdcaa4"
+    }
   },
-  "unit_tests_sha256": "2233a3217b1714fb751d7ec0ba35af7c65851cc7012526a0d4d6e481f844226d"
+  "unit_tests_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "80dca15793b37f133d540238acf16875cc82bd4f83037e8e9a4ce20c4701800b"
+  }
 }

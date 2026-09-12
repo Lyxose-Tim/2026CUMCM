@@ -1,0 +1,336 @@
+{
+  "passed": true,
+  "uncertainty_type": "deterministic structural scenario range; not a confidence interval",
+  "base_case": "D_appendix4_shrink_N5120",
+  "baseline_event_time_s": 183931.63482636795,
+  "pchip_minus_linear_s": -12.605922227812698,
+  "terminal_hold_minus_last_hour_mean_s": -964.082026862452,
+  "radius_record_scenario_range_s": [
+    183796.57371925208,
+    184066.75509621043
+  ],
+  "radius_record_scenario_width_s": 270.1813769583532,
+  "scenarios": [
+    {
+      "scenario": "linear",
+      "event_time_s": 183931.63482636795,
+      "event_time_h": 51.09212078510221,
+      "event_delta_vs_linear_s": 0.0,
+      "max_temperature_difference_C": 0.0,
+      "max_moisture_difference": 0.0,
+      "environment_mode": "last_hour_mean",
+      "radius_interpolation": "linear",
+      "radius_offset_cm": 0.0
+    },
+    {
+      "scenario": "pchip",
+      "event_time_s": 183919.02890414014,
+      "event_time_h": 51.08861914003893,
+      "event_delta_vs_linear_s": -12.605922227812698,
+      "max_temperature_difference_C": 0.03468972276191806,
+      "max_moisture_difference": 0.05485678654926618,
+      "environment_mode": "last_hour_mean",
+      "radius_interpolation": "pchip",
+      "radius_offset_cm": 0.0
+    },
+    {
+      "scenario": "radius_lower",
+      "event_time_s": 183796.57371925208,
+      "event_time_h": 51.05460381090335,
+      "event_delta_vs_linear_s": -135.06110711587826,
+      "max_temperature_difference_C": 0.0035827833966237677,
+      "max_moisture_difference": 0.003008186455887074,
+      "environment_mode": "last_hour_mean",
+      "radius_interpolation": "linear",
+      "radius_offset_cm": -0.0005
+    },
+    {
+      "scenario": "radius_upper",
+      "event_time_s": 184066.75509621043,
+      "event_time_h": 51.12965419339179,
+      "event_delta_vs_linear_s": 135.12026984247495,
+      "max_temperature_difference_C": 0.003581487163664576,
+      "max_moisture_difference": 0.003004620342600628,
+      "environment_mode": "last_hour_mean",
+      "radius_interpolation": "linear",
+      "radius_offset_cm": 0.0005
+    },
+    {
+      "scenario": "environment_terminal_hold",
+      "event_time_s": 182967.5527995055,
+      "event_time_h": 50.824320222084864,
+      "event_delta_vs_linear_s": -964.082026862452,
+      "max_temperature_difference_C": 0.1660655737705028,
+      "max_moisture_difference": 0.0036975122566453855,
+      "environment_mode": "terminal_hold",
+      "radius_interpolation": "linear",
+      "radius_offset_cm": 0.0
+    }
+  ],
+  "field_comparisons": {
+    "linear": {
+      "regular_spacing_s": 60.0,
+      "common_regular_times": 3066,
+      "comparison_times": 3066,
+      "common_start_s": 0.0,
+      "common_end_s": 183900.0,
+      "unified_endpoint_s": 86400.0,
+      "dynamic_surface_included": true,
+      "T": {
+        "max_abs": 0.0,
+        "time_s": 0.0,
+        "column_index": 0,
+        "column": "fixed_0.0_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.0,
+        "radius_m_b": 0.0,
+        "valid_values_compared": 44295
+      },
+      "C": {
+        "max_abs": 0.0,
+        "time_s": 0.0,
+        "column_index": 0,
+        "column": "fixed_0.0_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.0,
+        "radius_m_b": 0.0,
+        "valid_values_compared": 44295
+      },
+      "Cmax": {
+        "max_abs": 0.0,
+        "time_s": 0.0
+      },
+      "argmax_radius_m": {
+        "max_abs": 0.0,
+        "time_s": 0.0
+      },
+      "mean_C": {
+        "max_abs": 0.0,
+        "time_s": 0.0
+      },
+      "endpoint": {
+        "time_s": 86400.0,
+        "Cmax_abs": 0.0,
+        "mean_C_abs": 0.0
+      }
+    },
+    "pchip": {
+      "regular_spacing_s": 60.0,
+      "common_regular_times": 3066,
+      "comparison_times": 3066,
+      "common_start_s": 0.0,
+      "common_end_s": 183900.0,
+      "unified_endpoint_s": 86400.0,
+      "dynamic_surface_included": true,
+      "T": {
+        "max_abs": 0.03468972276191806,
+        "time_s": 1200.0,
+        "column_index": 19,
+        "column": "fixed_1.9_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.019,
+        "radius_m_b": 0.019,
+        "valid_values_compared": 44293
+      },
+      "C": {
+        "max_abs": 0.05485678654926618,
+        "time_s": 960.0,
+        "column_index": 19,
+        "column": "fixed_1.9_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.019,
+        "radius_m_b": 0.019,
+        "valid_values_compared": 44293
+      },
+      "Cmax": {
+        "max_abs": 0.0008587754218480903,
+        "time_s": 17100.0
+      },
+      "argmax_radius_m": {
+        "max_abs": 0.01500060924385619,
+        "time_s": 180.0
+      },
+      "mean_C": {
+        "max_abs": 0.000761537910270782,
+        "time_s": 8580.0
+      },
+      "endpoint": {
+        "time_s": 86400.0,
+        "Cmax_abs": 4.728638526385609e-05,
+        "mean_C_abs": 2.9220625901327235e-05
+      }
+    },
+    "radius_lower": {
+      "regular_spacing_s": 60.0,
+      "common_regular_times": 3064,
+      "comparison_times": 3064,
+      "common_start_s": 0.0,
+      "common_end_s": 183780.0,
+      "unified_endpoint_s": 86400.0,
+      "dynamic_surface_included": true,
+      "T": {
+        "max_abs": 0.0035827833966237677,
+        "time_s": 3120.0,
+        "column_index": 18,
+        "column": "fixed_1.8_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.018000000000000002,
+        "radius_m_b": 0.018000000000000002,
+        "valid_values_compared": 43286
+      },
+      "C": {
+        "max_abs": 0.003008186455887074,
+        "time_s": 1380.0,
+        "column_index": 19,
+        "column": "fixed_1.9_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.019,
+        "radius_m_b": 0.019,
+        "valid_values_compared": 43286
+      },
+      "Cmax": {
+        "max_abs": 0.0007136663643458885,
+        "time_s": 27000.0
+      },
+      "argmax_radius_m": {
+        "max_abs": 0.014133223177083334,
+        "time_s": 240.0
+      },
+      "mean_C": {
+        "max_abs": 0.00039450351492664737,
+        "time_s": 27660.0
+      },
+      "endpoint": {
+        "time_s": 86400.0,
+        "Cmax_abs": 0.00020315279041549505,
+        "mean_C_abs": 0.0001250948885748171
+      }
+    },
+    "radius_upper": {
+      "regular_spacing_s": 60.0,
+      "common_regular_times": 3066,
+      "comparison_times": 3066,
+      "common_start_s": 0.0,
+      "common_end_s": 183900.0,
+      "unified_endpoint_s": 86400.0,
+      "dynamic_surface_included": true,
+      "T": {
+        "max_abs": 0.003581487163664576,
+        "time_s": 3120.0,
+        "column_index": 18,
+        "column": "fixed_1.8_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.018000000000000002,
+        "radius_m_b": 0.018000000000000002,
+        "valid_values_compared": 44295
+      },
+      "C": {
+        "max_abs": 0.003004620342600628,
+        "time_s": 1380.0,
+        "column_index": 19,
+        "column": "fixed_1.9_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.019,
+        "radius_m_b": 0.019,
+        "valid_values_compared": 44295
+      },
+      "Cmax": {
+        "max_abs": 0.0007134937742956371,
+        "time_s": 27000.0
+      },
+      "argmax_radius_m": {
+        "max_abs": 0.0016864675781249993,
+        "time_s": 1260.0
+      },
+      "mean_C": {
+        "max_abs": 0.0003943956261864834,
+        "time_s": 27660.0
+      },
+      "endpoint": {
+        "time_s": 86400.0,
+        "Cmax_abs": 0.00020328788438778167,
+        "mean_C_abs": 0.0001251649391002252
+      }
+    },
+    "environment_terminal_hold": {
+      "regular_spacing_s": 60.0,
+      "common_regular_times": 3050,
+      "comparison_times": 3050,
+      "common_start_s": 0.0,
+      "common_end_s": 182940.0,
+      "unified_endpoint_s": 86400.0,
+      "dynamic_surface_included": true,
+      "T": {
+        "max_abs": 0.1660655737705028,
+        "time_s": 44220.0,
+        "column_index": 10,
+        "column": "fixed_1.0_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.01,
+        "radius_m_b": 0.01,
+        "valid_values_compared": 44071
+      },
+      "C": {
+        "max_abs": 0.0036975122566453855,
+        "time_s": 33060.0,
+        "column_index": 0,
+        "column": "fixed_0.0_cm",
+        "dynamic_surface": false,
+        "radius_m_a": 0.0,
+        "radius_m_b": 0.0,
+        "valid_values_compared": 44071
+      },
+      "Cmax": {
+        "max_abs": 0.0036975122566453855,
+        "time_s": 33060.0
+      },
+      "argmax_radius_m": {
+        "max_abs": 0.0,
+        "time_s": 0.0
+      },
+      "mean_C": {
+        "max_abs": 0.0018663759190941098,
+        "time_s": 37800.0
+      },
+      "endpoint": {
+        "time_s": 86400.0,
+        "Cmax_abs": 0.0013784551158386171,
+        "mean_C_abs": 0.0008521669722766911
+      }
+    }
+  },
+  "configuration_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "e6bd44ed3f5a9780643d063ace7314f77d3ed458bbd86e7e095f031b45f267fd"
+  },
+  "generator_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "ad86d571612bd4f83eedaa72e3d61c396fb4eb3684cd988532103cad81486039"
+  },
+  "run_record_hashes": {
+    "linear": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "08b558ab3a46d5321c239954c3d92b9c50fac61c9d739f19429cfeb8e3250cf7"
+    },
+    "pchip": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "e9116f50f61069d1defb08466f2129b418c24d5fe3025f95c401904ed73ef8ca"
+    },
+    "radius_lower": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "e05e35df32f8089f6d342f4d7ad9f1bc55cb9c3c52d8833ace0721aa5aeeaf10"
+    },
+    "radius_upper": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "82946e4bc274db4ee220ae375a4e8a199f37247a85c2cfb23627da56ae6bd2a1"
+    },
+    "environment_terminal_hold": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "9e5e7e72d407e0be85983fcefe47459316f914383ab3e56dbb47949da90a6936"
+    }
+  },
+  "summary_csv_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "202946f9fe772bacb46c70114b029d5d08008a15299ee605664f58ed4db86f30"
+  }
+}

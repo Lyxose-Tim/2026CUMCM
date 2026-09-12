@@ -1,6 +1,7 @@
 """Event-specific numerical budgets, source checks, and regression evidence."""
 import argparse
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -19,6 +20,17 @@ from q3.run import cases
 def validation_sources():
     paths = ["q3/validation.py", "q3/refine.py"] + sorted(str(p).replace("\\", "/") for p in Path("tests").glob("test_*.py"))
     return {p: file_record(p) for p in paths}
+
+
+def normalize_test_output(output):
+    if not output:
+        return ""
+    if isinstance(output, bytes):
+        output = output.decode("utf-8", errors="replace")
+    lines = output.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+    while lines and lines[-1] == "":
+        lines.pop()
+    return "\n".join(line.rstrip() for line in lines) + "\n"
 
 
 def compare(a, b):
@@ -65,9 +77,16 @@ def validate(directory="results/q3"):
     directory = Path(directory)
     config = read_config("configs/q3.json")
     write_json(directory/"verification.json", {"passed": False, "status": "running"})
-    test = subprocess.run([sys.executable,"-m","pytest","-q","-p","no:cacheprovider"],
-                          capture_output=True, text=True, encoding="utf-8")
-    (directory/"unit_tests.txt").write_text(test.stdout+test.stderr, encoding="utf-8")
+    configured_basetemp = os.environ.get("CUMCM_PYTEST_BASETEMP")
+    base = Path(configured_basetemp) if configured_basetemp else Path(".scratch") / "pytest-validation"
+    basetemp = base / f"q3-{os.getpid()}"
+    basetemp.parent.mkdir(parents=True, exist_ok=True)
+    test = subprocess.run(
+        [sys.executable, "-m", "pytest", "-q", "--basetemp", basetemp, "-p", "no:cacheprovider"],
+        capture_output=True,
+    )
+    output = normalize_test_output((test.stdout or b"") + (test.stderr or b""))
+    (directory/"unit_tests.txt").write_text(output, encoding="utf-8")
     if test.returncode:
         raise RuntimeError("Unit/regression tests failed")
     runs = {c["name"]: load_run(directory/"runs"/c["name"]) for c in cases(config)}

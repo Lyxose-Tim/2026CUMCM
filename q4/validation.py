@@ -281,7 +281,9 @@ def validate(directory="results/q4"):
     directory = Path(directory)
     config = read_config("configs/q4.json")
     write_json(directory / "verification.json", {"passed": False, "status": "running"})
-    basetemp = Path(".scratch") / "pytest-q4-validation" / f"run-{os.getpid()}"
+    configured_basetemp = os.environ.get("CUMCM_PYTEST_BASETEMP")
+    base = Path(configured_basetemp) if configured_basetemp else Path(".scratch") / "pytest-validation"
+    basetemp = base / f"q4-{os.getpid()}"
     basetemp.parent.mkdir(parents=True, exist_ok=True)
     test = subprocess.run(
         [sys.executable, "-m", "pytest", "-q", "--basetemp", basetemp, "-p", "no:cacheprovider"],
