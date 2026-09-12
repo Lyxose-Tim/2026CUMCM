@@ -37,3 +37,21 @@ def test_changed_workbook_blocks_reports(tmp_path):
     (tmp_path/"result.xlsx").write_bytes(b"a changed workbook")
     with pytest.raises(ValueError,match="different workbook"):
         require_export(tmp_path,tmp_path/"result.xlsx")
+
+
+def test_dimensionless_artifact_tool_sheet_requires_normal_load(tmp_path):
+    # A minimal XLSX written through Artifact Tool may omit worksheet
+    # dimension metadata: read-only max_row is None, while normal load
+    # correctly discovers the populated cells used by the verifier.
+    from openpyxl import load_workbook
+    path="results/result3.xlsx"
+    ro=load_workbook(path,read_only=True,data_only=True)
+    try:
+        assert ro.active.max_row is None
+    finally:
+        ro.close()
+    normal=load_workbook(path,read_only=False,data_only=True)
+    try:
+        assert normal.active.max_row > 3000 and normal.active.max_column == 22
+    finally:
+        normal.close()

@@ -104,6 +104,11 @@ def validate(directory="results/q3"):
     n=formal["identity"]["case"]["N"]+1
     near_C=fields["near_states"][:,n:]
     near_Cmax=near_C.max(axis=1)
+    mesh_locations={}
+    for N in grids:
+        mr,mf=runs[f"base_N{N}"]
+        locations=mf["radius_m"][mf["near_states"][:,N+1:].argmax(axis=1)]
+        mesh_locations[str(N)]=locations.tolist()
     temporal_estimate=max(x["time_difference_s"] for x in temporal)
     time_estimate=spatial_estimate+temporal_estimate+config["bracket_width_s"]
     slope=abs(formal["root"]["slope_C_per_s"])
@@ -128,6 +133,7 @@ def validate(directory="results/q3"):
         "error_interpretation":"Richardson estimate using measured order + measured time change + root bracket; not a rigorous PDE bound",
         "slope_C_per_s":-slope,"C_error_1e_6_time_s":1e-6/slope,"rounding_5e_5_time_s":5e-5/slope,
         "near_Cmax":near_Cmax.tolist(),"near_argmax_radius_m":fields["radius_m"][near_C.argmax(axis=1)].tolist(),
+        "mesh_near_argmax_radius_m":mesh_locations,
         "argmax_radius_range_m":[float(trace["argmax_radius_m"].min()),float(trace["argmax_radius_m"].max())],
         "argmax_after_6h_range_m":[float(late["argmax_radius_m"].min()),float(late["argmax_radius_m"].max())],
         "max_radial_increase":float(trace["radial_increase"].max()),

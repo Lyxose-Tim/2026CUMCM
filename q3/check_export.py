@@ -28,7 +28,10 @@ def check(directory="results/q3",workbook="results/result3.xlsx"):
     directory=Path(directory)
     write_json(directory/"export_verification.json",{"passed":False,"status":"checking"})
     v,r,f=verified(directory)
-    wb=load_workbook(workbook,read_only=True,data_only=True)
+    # Artifact Tool omits the optional worksheet dimension metadata, so
+    # openpyxl's read-only mode reports max_row/max_column as None. This
+    # workbook is small enough for a normal independent load.
+    wb=load_workbook(workbook,read_only=False,data_only=True)
     try:
         if wb.sheetnames != ["Sheet1"]:
             raise ValueError("Wrong workbook sheets")

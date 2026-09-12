@@ -25,6 +25,7 @@ Excel作者端使用Codex `load_workspace_dependencies`返回的捆绑Node及`@o
 ./.venv/Scripts/python.exe -m q3.check_export
 ./.venv/Scripts/python.exe -m q3.figures
 ./.venv/Scripts/python.exe -m q3.reports
+./.venv/Scripts/python.exe -m q3.audit
 ```
 
 Linux/macOS使用`.venv/bin/python`和符号链接。图表需要Microsoft YaHei、SimHei或Noto Sans CJK SC。命令在仓库根目录运行。数字单元格为数值类型，以Decimal ROUND_HALF_UP统一四位小数；底层临界时间保留全精度。
@@ -55,3 +56,5 @@ Linux/macOS使用`.venv/bin/python`和符号链接。图表需要Microsoft YaHei
 已有运行若只有`status=running`而进程已结束，视作中断，不当成可用缓存。先将该不完整目录移到自己的诊断区，再重跑对应算例；已经完成且摘要匹配的其他算例可以复用。正式数值计算、缓存复用与单组新进程复现分别记录。
 
 数值误差估计与长期环境假设不确定性分别报告。当前没有内部场实验标签，不存在本任务的实验准确率或统计置信区间。
+
+`q3.audit`是已有交付的只读最终审计：绑定当前源码、测试、归档、Excel、图、报告、独立复算及视觉检查。重新生成交付后，实际渲染并检查Excel首尾与全部PDF，更新`visual_qa.json`（绑定真实文件），最后运行`q3.audit --write`生成新审计；不要将未查看的图标记为已检查。源代码ZIP也可执行审计，不依赖Git元数据。

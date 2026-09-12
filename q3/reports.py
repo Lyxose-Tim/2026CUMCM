@@ -124,6 +124,7 @@ def make(directory="results/q3"):
 
 - 全时程接受步和中点均检查全部计算节点。中心/表面本身为端点；首单元用偶二次重建，其余线性重建无内部超调，故重建全域最大值等于全部节点最大值。
 - 接受步最大值位置范围为{v['argmax_radius_range_m']} m；6 h后为{v['argmax_after_6h_range_m']} m；根前、根、根后位置为{v['near_argmax_radius_m']} m。早期近均匀平台上的argmax可能受浮点平局影响，不强行宣称唯一中心极值。
+- 四档网格根前/根/根后最大值位置（m）为`{v['mesh_near_argmax_radius_m']}`；用于核查最大值位置随网格的稳定性。
 - 最大Cmax数值增加量{diag['max_Cmax_increase']:.3e} kg/kg；径向相邻增加最大值{v['max_radial_increase']:.3e} kg/kg。比较原理和实测单调性共同支持首次穿越判断。
 - 全程最小含水率{diag['minimum_moisture']:.12f} kg/kg，未裁剪负值；温度历史包络超出量{diag['temperature_envelope_violation']:.3e} °C（舍入量级）。
 - 总体水分余额最大相对残差{diag['max_relative_balance']:.8e}；8点和4点Gauss表面流量求积累计差{diag['flux_quadrature_difference']:.8e}；逐控制体水分残差最大绝对值{diag['max_local_water_balance_absolute']:.8e}。
