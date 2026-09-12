@@ -39,6 +39,7 @@ def test_failed_readback_overwrites_previous_success(tmp_path, monkeypatch):
     class FakeSheet:
         max_row = 259201
         max_column = 22
+        freeze_panes = "B2"
 
         def iter_rows(self, values_only=True):
             yield ("time", *[index / 10 for index in range(21)])

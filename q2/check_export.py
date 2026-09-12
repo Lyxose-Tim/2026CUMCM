@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 from openpyxl import load_workbook
 
+from common.hashing import file_record
 from .archive import write_json
 from .export import rounded_array, verified_source
 from .inputs import sha256
@@ -43,7 +44,7 @@ def failure_record(directory, workbook, exc):
     }
     if workbook.is_file():
         result.update({
-            "workbook_sha256": sha256(workbook),
+            "workbook_hash": file_record(workbook),
             "workbook_bytes": workbook.stat().st_size,
         })
     write_json(directory / "export_verification.json", result)
@@ -65,6 +66,8 @@ def check(directory="results/q2", workbook="results/result2.xlsx"):
                 raise ValueError(f"Unexpected {sheet_name} declared row count")
             if sheet.max_column is not None and sheet.max_column != 22:
                 raise ValueError(f"Unexpected {sheet_name} dimensions")
+            if sheet.freeze_panes != "B2":
+                raise ValueError(f"Unexpected {sheet_name} freeze panes")
             rows = sheet.iter_rows(values_only=True)
             header = next(rows)
             if header != (manifest["inputs"]["template_A1"], *[j / 10 for j in range(21)]):
@@ -80,19 +83,23 @@ def check(directory="results/q2", workbook="results/result2.xlsx"):
                 checked += count
             if next(rows, None) is not None:
                 raise ValueError(f"Unexpected extra rows in {sheet_name}")
+            for coordinate in ("B2", "B129601", "B259201"):
+                cell = sheet[coordinate]
+                if cell.data_type != "n" or cell.number_format != "0.0000":
+                    raise ValueError(f"Unexpected numeric format at {sheet_name}!{coordinate}")
         result = {
             "passed": max_difference == 0.0 and checked == 10886400,
-            "workbook_sha256": sha256(workbook),
+            "workbook_hash": file_record(workbook),
             "workbook_bytes": workbook.stat().st_size,
             "numeric_result_cells_checked": checked,
             "max_absolute_readback_difference": max_difference,
             "sheets": ["温度", "水分浓度"],
             "rows_per_sheet": 259201,
             "columns_per_sheet": 22,
-            "numerical_verification_sha256": sha256(directory / "verification.json"),
-            "archive_manifest_sha256": sha256(directory / "archive" / "manifest.json"),
+            "numerical_verification_hash": file_record(directory / "verification.json"),
+            "archive_manifest_hash": file_record(directory / "archive" / "manifest.json"),
             "delivery_source": delivery_snapshot(),
-            "writer": "openpyxl write-only streaming; Artifact Tool format blueprint rendered separately",
+            "writer": "openpyxl write-only streaming",
         }
         write_json(directory / "export_verification.json", result)
         if not result["passed"]:

@@ -122,29 +122,30 @@
     }
   },
   "source": {
-    "hash_scheme": "sha256-text-lf-v1",
+    "hash_scheme": "sha256-text-lf-v2",
     "source_hashes": {
       "q1/fvm.py": "b1c77e6c1d41d69223e7cdaffc705fc64602a968b8afa3832fb544e415e0dd02",
       "q2/model.py": "88568971aba093a489a5b164919b0398b7caed2857a83aeb7884cbc6ea866cfa",
       "q2/inputs.py": "80d214c176014e285c7495ac25e4e3d9ba353c490b3732cd39302dfb843d2cc0",
       "q2/solver.py": "717e393c89a4f4ad6c53e92f303cc6ab97a9d188235832fef1165f8fb1221a5d",
-      "q2/archive.py": "59eba774573e659c2e10a7a05f5e863d2923151b82699a3a23e7c80d676eda75",
-      "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
-      "q2/provenance.py": "961a2972ce6723169896ddda91693ae7b212bcc70803449f101528972b55e6c4",
+      "q2/archive.py": "c237a5ea10adf1808d4383d56ffeb47a66bc1029c08b5e0b170e6a5cb7787699",
+      "q1/provenance.py": "17f4360f425c9785e75a5a9cd04e6d36c4121b3b4a7f1d059f7f51776db816f5",
+      "q2/provenance.py": "03af05f5bde94825b403090fae1ea85ef89cd44064c5b8d7c46e3c7abd4d966b",
       "q3/__init__.py": "710603612101c2e78c5e8ffe86117fda9ce090c32f95561eaf9a085d03c4893a",
       "q3/solver.py": "741951af295276cde4f447c9b26ed66e5191c9fb0c5d91d4b154898f4ead9278",
-      "q3/run.py": "107007c40e2995f3edd5c214a37c10737b7f07eb4a4066d4e3803c9837cecafa",
-      "q3/provenance.py": "fc65e11d6856eb1ff99da90933faa89536bdfa46bf9b9e6f9dbc70a9b8fc49f3",
+      "q3/run.py": "ea4fa8d1653c73d345eb8671ceeeabf3ee601e62f1c59cb81edf5a599c1370b1",
+      "q3/provenance.py": "c882fd692716d9b54f3d3b3139547b3611cc7765a2c5bf0223ec9217eb8a34e5",
+      "common/hashing.py": "805769e9de2eebc6b450da06da92f12dfad2387d6dde2dd508e5f37f4cb53997",
       "configs/q2.json": "03b76801552c8ce2b9bdf5730a5409caabc9ecf6ae9c1d042e2b583d306aff13",
       "configs/q3.json": "eab005b6faaa57764d71480423f57bb3d40e07286a160e6001d137583c9dc5b8",
       "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
     },
-    "source_digest": "6bc9bd9b771d11e3f74338a9b4449a70c40a9d4501f0b4702913315d5568bb21",
-    "code_commit": "e1779d7f8bfeb3b2ce7febf5197aee6634eb2d5d",
-    "python": "3.12.8",
+    "source_digest": "22fc4b9200e0c2a51e07818d2bea07f65d59999d48e49ed1597c78d0c15fcd1b",
+    "code_commit": null,
+    "python": "3.13.9",
     "packages": {
-      "numpy": "2.5.3",
-      "scipy": "1.18.1",
+      "numpy": "2.3.5",
+      "scipy": "1.16.3",
       "openpyxl": "3.1.5"
     }
   },
@@ -220,7 +221,84 @@
     "max_local_water_balance_absolute": 2.5849394142282115e-26
   },
   "files": {
-    "fields.npz": "08e55abf426692f600ff8ab473e107fdef0ab1bc9027a8b01f75f06b12b4d14f",
-    "accepted_steps.csv": "f1e2e1a096c9896479095efe5fbe4d6542919e48d6a9e2e8431bfe8f8bef049f"
-  }
+    "fields.npz": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "08e55abf426692f600ff8ab473e107fdef0ab1bc9027a8b01f75f06b12b4d14f"
+    },
+    "accepted_steps.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "23fffdc89e0599cbdd465623d10e2bcc802ba29d78a60409c479db7a804ba13f"
+    }
+  },
+  "metadata_migration_history": [
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v1",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "e0ba3b4a4b020630224c1d1f10ae9bbea424970afca95279955f6c0f3180b14f",
+      "verified_unchanged_numerical_files": [
+        "q1/fvm.py",
+        "q2/model.py",
+        "q2/inputs.py",
+        "q2/solver.py",
+        "q3/__init__.py",
+        "q3/solver.py",
+        "configs/q2.json",
+        "configs/q3.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "1398ec24539dfc0dd5e393de8c887108cdf4030c7183eee1d0732b71a1383bd9"
+      },
+      "record": "results/q3/runs/hm_1.1/run.json"
+    },
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "e157e9a1b558f6ec85821c8a324c610505d75093b4a2ef47bfd26af522b9cd30",
+      "verified_unchanged_numerical_files": [
+        "q1/fvm.py",
+        "q2/model.py",
+        "q2/inputs.py",
+        "q2/solver.py",
+        "q3/__init__.py",
+        "q3/solver.py",
+        "configs/q2.json",
+        "configs/q3.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "11c3e9276de4b783ed9024ffe41d5fab6c524885f742d56173eeafd9d1f50ab2"
+      },
+      "record": "results/q3/runs/hm_1.1/run.json"
+    },
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "03667e66b5a1ae91afe59238277ced8ec4b24b8273c2b398227613f6b85a0157",
+      "verified_unchanged_numerical_files": [
+        "q1/fvm.py",
+        "q2/model.py",
+        "q2/inputs.py",
+        "q2/solver.py",
+        "q3/__init__.py",
+        "q3/solver.py",
+        "configs/q2.json",
+        "configs/q3.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "11c3e9276de4b783ed9024ffe41d5fab6c524885f742d56173eeafd9d1f50ab2"
+      },
+      "record": "results/q3/runs/hm_1.1/run.json"
+    }
+  ]
 }

@@ -10,6 +10,7 @@ import sys
 
 import numpy as np
 
+from common.hashing import file_record
 from q1.fvm import Grid
 
 from .archive import save_archive, write_json
@@ -214,7 +215,7 @@ def main():
         },
         **snapshot,
         "command": ["python", "-m", "q2.run", "--data-root", "<A-problem-directory>"],
-        "verification_sha256": sha256(output / "verification.json"),
+        "verification_hash": file_record(output / "verification.json"),
     }
     save_archive(output / "archive", final, final_grid, metadata)
 

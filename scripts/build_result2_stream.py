@@ -1,6 +1,5 @@
 """Stream the verified Q2 payload into the final large XLSX workbook."""
 import argparse
-import hashlib
 import json
 from pathlib import Path
 
@@ -8,13 +7,7 @@ from openpyxl import Workbook
 from openpyxl.cell import WriteOnlyCell
 from openpyxl.styles import Font, PatternFill
 
-
-def sha256(path):
-    digest = hashlib.sha256()
-    with open(path, "rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(block)
-    return digest.hexdigest()
+from common.hashing import verify_file
 
 
 def cell(sheet, value, number_format, font=None, fill=None):
@@ -34,8 +27,7 @@ def main():
     args = parser.parse_args()
     payload = json.loads(Path(args.payload).read_text(encoding="utf-8"))
     for key in ("verification", "archive_manifest"):
-        if sha256(payload[f"{key}_file"]) != payload[f"{key}_sha256"]:
-            raise ValueError(f"{key} hash mismatch")
+        verify_file(payload[f"{key}_file"], payload[f"{key}_hash"])
 
     workbook = Workbook(write_only=True)
     normal = Font(name="Arial", size=10, color="1F2937")
@@ -57,8 +49,7 @@ def main():
     counts = {name: 0 for name in names}
     for chunk in payload["chunks"]:
         path = Path(chunk["file"])
-        if sha256(path) != chunk["sha256"]:
-            raise ValueError(f"Chunk hash mismatch: {path}")
+        verify_file(path, chunk["hash"])
         matrix = json.loads(path.read_text(encoding="utf-8"))
         if len(matrix) != chunk["rows"]:
             raise ValueError(f"Chunk row mismatch: {path}")

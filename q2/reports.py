@@ -4,16 +4,17 @@ import json
 import math
 from pathlib import Path
 
+from common.hashing import verify_file
 from .export import TABLE_TIMES, TABLE_RADIUS_INDICES, rounded_array, verified_source
 from .inputs import sha256
 from .provenance import delivery_snapshot
 
 
 def markdown_table(times, values):
-    header = "| t / s | 0 cm | 0.5 cm | 1.0 cm | 1.5 cm | 2.0 cm |\n|---:|---:|---:|---:|---:|---:|\n"
+    header = "| 时间 / h | 0 cm | 0.5 cm | 1.0 cm | 1.5 cm | 2.0 cm |\n|---:|---:|---:|---:|---:|---:|\n"
     rows = []
     for t, row in zip(times, rounded_array(values)):
-        rows.append("| " + " | ".join([str(int(t)), *[f"{value:.4f}" for value in row]]) + " |")
+        rows.append("| " + " | ".join([f"{float(t):.1f}", *[f"{value:.4f}" for value in row]]) + " |")
     return header + "\n".join(rows)
 
 
@@ -30,17 +31,21 @@ def validated_export(directory, workbook=None):
         raise ValueError("Q2 Excel verification has a nonzero or invalid difference")
     if not workbook.is_file():
         raise ValueError("Current result2.xlsx is missing")
-    if record.get("workbook_sha256") != sha256(workbook):
-        raise ValueError("Q2 Excel verification is stale for the current workbook")
+    try:
+        verify_file(workbook, record["workbook_hash"])
+    except (KeyError, ValueError) as exc:
+        raise ValueError("Q2 Excel verification is stale for the current workbook") from exc
     if record.get("workbook_bytes") != workbook.stat().st_size:
         raise ValueError("Q2 Excel size does not match its verification")
     bindings = {
-        "numerical_verification_sha256": directory / "verification.json",
-        "archive_manifest_sha256": directory / "archive" / "manifest.json",
+        "numerical_verification_hash": directory / "verification.json",
+        "archive_manifest_hash": directory / "archive" / "manifest.json",
     }
     for key, path in bindings.items():
-        if not path.is_file() or record.get(key) != sha256(path):
-            raise ValueError(f"Q2 Excel verification is stale for {path.name}")
+        try:
+            verify_file(path, record[key])
+        except (KeyError, ValueError) as exc:
+            raise ValueError(f"Q2 Excel verification is stale for {path.name}") from exc
     current_delivery = delivery_snapshot()
     recorded_delivery = record.get("delivery_source", {})
     if (
@@ -86,11 +91,11 @@ def main():
 
 ## 表 3 温度分布
 
-{markdown_table(TABLE_TIMES, table_T)}
+{markdown_table(TABLE_TIMES / 3600, table_T)}
 
 ## 表 4 水分浓度分布
 
-{markdown_table(TABLE_TIMES, table_C)}
+{markdown_table(TABLE_TIMES / 3600, table_C)}
 
 ## 72 h 端点
 
@@ -138,8 +143,8 @@ def main():
 ## Excel 与图表验收
 
 - `result2.xlsx` 为 {export_verification['workbook_bytes'] / 1024**2:.2f} MiB，包含两张259201行、22列工作表。
-- 已独立流式回读 {export_verification['numeric_result_cells_checked']} 个数值单元格，最大绝对差为 {export_verification['max_absolute_readback_difference']:.1f}，工作簿 SHA-256 为 `{export_verification['workbook_sha256']}`。
-- Artifact Tool 已写入、检查并渲染12行格式蓝图；完整工作簿在16 GB V8堆上限仍内存不足，最终改用 openpyxl write-only 流式生成。该降级不改变已哈希的数值载荷。
+- 已独立流式回读 {export_verification['numeric_result_cells_checked']} 个数值单元格，最大绝对差为 {export_verification['max_absolute_readback_difference']:.1f}，工作簿 SHA-256 为 `{export_verification['workbook_hash']['sha256']}`。
+- 正式工作簿由普通 Python 环境中的 openpyxl write-only 流式生成，不依赖私有作者端工具。
 - 六张PDF图均从绑定CSV生成并经PNG渲染检查，无缺字、裁切或重叠。
 - Excel交付源码摘要：`{export_verification['delivery_source']['source_digest']}`；对应提交：`{export_verification['delivery_source']['code_commit']}`。
 """

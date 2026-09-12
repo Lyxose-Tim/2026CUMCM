@@ -13,10 +13,9 @@ def run(command):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data-root", required=True)
-    parser.add_argument("--node", default="node")
     args = parser.parse_args()
     run([sys.executable, "-m", "q2.run", "--data-root", args.data_root])
-    run([sys.executable, "-m", "q2.export", "--node", args.node])
+    run([sys.executable, "-m", "q2.export"])
     run([sys.executable, "-m", "q2.figures"])
     run([sys.executable, "-m", "q2.reports"])
 

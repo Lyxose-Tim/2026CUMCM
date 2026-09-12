@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import crypto from 'node:crypto';
 import { FileBlob, SpreadsheetFile } from '@oai/artifact-tool';
+import { verifyHashRecord } from './hash_record.mjs';
 
 const arg = (name, fallback) => process.argv.includes(name) ? process.argv[process.argv.indexOf(name) + 1] : fallback;
 const digest = async p => crypto.createHash('sha256').update(await fs.readFile(p)).digest('hex');
@@ -14,15 +15,14 @@ if (process.argv.includes('--template-only')) {
   process.exit(0);
 }
 const payload = JSON.parse(await fs.readFile(arg('--payload', '.scratch/q4/workbook_payload.json'), 'utf8'));
-for (const [file, expected] of [[payload.template, payload.template_sha256],
-  [payload.verification_file, payload.verification_sha256], [payload.run_file, payload.run_sha256]]) {
-  if (await digest(file) !== expected) throw new Error(`Changed input: ${file}`);
+for (const [file, record] of [[payload.template, payload.template_hash],
+  [payload.verification_file, payload.verification_hash], [payload.run_file, payload.run_hash]]) {
+  await verifyHashRecord(file, record);
 }
 if (JSON.parse(await fs.readFile(payload.verification_file, 'utf8')).passed !== true)
   throw new Error('Q4 numerical verification failed');
-for (const [file, expected] of Object.entries(payload.sources)) {
-  const content = (await fs.readFile(file, 'utf8')).replaceAll('\r\n', '\n');
-  if (crypto.createHash('sha256').update(content).digest('hex') !== expected) throw new Error(`Changed export source: ${file}`);
+for (const [file, record] of Object.entries(payload.sources)) {
+  await verifyHashRecord(file, record);
 }
 const wb = await SpreadsheetFile.importXlsx(await FileBlob.load(payload.template));
 const sheet = wb.worksheets.getItem('Sheet1');

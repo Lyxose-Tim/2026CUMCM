@@ -1,30 +1,32 @@
 """Portable source identity; Git metadata is optional, changed code is not."""
-import hashlib
 import json
 from pathlib import Path
 import subprocess
 
+from common.hashing import (
+    RAW_HASH_SCHEME,
+    TEXT_HASH_SCHEME,
+    digest_mapping,
+    file_sha256,
+    raw_sha256,
+)
 from .inputs import sha256
 
 
-HASH_SCHEME='sha256-text-lf-v1'
-TEXT_SUFFIXES={'.py','.json','.csv','.md','.txt'}
+HASH_SCHEME=TEXT_HASH_SCHEME
 NUMERICAL_FILES=tuple(f'q1/{name}.py' for name in (
     '__init__','archive','inputs','fvm','solver','validation','reference',
     'sensitivity','sensitivity_metrics','provenance'))+(
-    'configs/q1.json','configs/q1_sensitivity.json','requirements.lock.txt')
+    'common/hashing.py','configs/q1.json','configs/q1_sensitivity.json','requirements.lock.txt')
 
 
 def artifact_sha256(path):
-    """Normalize CRLF only for declared text types; binary bytes remain exact."""
-    path=Path(path)
-    if path.suffix.lower() in TEXT_SUFFIXES:
-        return hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest()
-    return sha256(path)
+    """Compatibility entry point for the shared versioned hash contract."""
+    return file_sha256(path)
 
 
 def source_digest(hashes):
-    return hashlib.sha256(json.dumps(hashes,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+    return digest_mapping(hashes)
 
 
 def git_commit(directory='.'):
@@ -46,7 +48,8 @@ def source_snapshot(directory='.'):
     root=Path(directory)
     hashes={p:artifact_sha256(root/p) for p in NUMERICAL_FILES}
     return {'source_hash_scheme':HASH_SCHEME,'source_hashes':hashes,
-            'source_raw_hashes':{p:sha256(root/p) for p in NUMERICAL_FILES},
+            'source_raw_hash_scheme':RAW_HASH_SCHEME,
+            'source_raw_hashes':{p:raw_sha256(root/p) for p in NUMERICAL_FILES},
             'source_digest':source_digest(hashes),'code_commit':git_commit(root)}
 
 

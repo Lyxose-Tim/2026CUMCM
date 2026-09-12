@@ -1,16 +1,13 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import crypto from 'node:crypto';
 import { Workbook, SpreadsheetFile } from '@oai/artifact-tool';
+import { verifyHashRecord } from './hash_record.mjs';
 
 const payloadPath = process.argv[2] ?? '.scratch/q1_workbook_payload.json';
 const outputPath = process.argv[3] ?? 'results/result1.xlsx';
 const payload = JSON.parse(await fs.readFile(payloadPath, 'utf8'));
-const hashFile = async p => crypto.createHash('sha256').update(await fs.readFile(p)).digest('hex');
-if (await hashFile(payload.verification_file) !== payload.verification_sha256 ||
-    await hashFile(payload.archive_manifest_file) !== payload.archive_manifest_sha256) {
-  throw new Error('Prepared payload provenance changed');
-}
+await verifyHashRecord(payload.verification_file, payload.verification_hash);
+await verifyHashRecord(payload.archive_manifest_file, payload.archive_manifest_hash);
 const verification = JSON.parse(await fs.readFile(payload.verification_file,'utf8'));
 if (!verification.numerical_passed) throw new Error('Numerical validation blocks formal export');
 if (payload.worksheets.length !== 2) throw new Error('Expected two sheets');
