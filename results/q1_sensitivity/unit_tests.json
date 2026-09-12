@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "count": 47,
+  "count": 52,
   "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
   "test_source_hashes": {
     "q1/sensitivity_audit.py": "4d374853216a5ae2ca1b92813ccc39457fc8e34a2680eff4850f777efaa674e8",
@@ -10,13 +10,14 @@
     "tests/test_integration.py": "12b7a4d4e46ca20575526a3240c397a93c42731579a662ee00ab583e3f4a275c",
     "tests/test_provenance.py": "68fc81518024e2eae5236fcb3c45c8cda9ab5619554de8833cf6d92962027d67",
     "tests/test_q2_archive.py": "ae857944aa62b3b5c54619a78d84aa13b3f3c89d715336349d9ccc2b91b70700",
+    "tests/test_q2_delivery_gates.py": "8169807a9ce76c44140b9afd19a4764a90dd247ff2e414ee1c1045e5201bf443",
     "tests/test_q2_inputs.py": "9f6ca78d61ffb674a03c8950fc8041f941a4419f7298d174b16a586e1e3bd4ff",
     "tests/test_q2_model.py": "c674012403db73d39896969cea20c216261340337416412b416a757f31333a9b",
     "tests/test_q2_solver.py": "9137880c6e38017115212780407755ae934d630dc35300847ddaebf8bddc7edf",
     "tests/test_sensitivity.py": "9b62d4a9395982b0ea7a20d3ee05e04016f52054e063eb513e02d7bdba758e75",
     "tests/test_spatial.py": "23e46f7727d1ab435a59ff5c1d743ebcc6fe0566b826d16f912a8f60cf7bf1b5"
   },
-  "log_sha256": "ecd3bf069150b6600a72cf68b7d138e3ce07bd162af7fa03e8687e404020bb4e",
+  "log_sha256": "346093af6f707e94da60d1ca3edce9a29eb5184305cd17f739211d96b82df6a7",
   "command": [
     "python",
     "-m",
