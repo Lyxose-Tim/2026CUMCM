@@ -2,6 +2,9 @@
 import argparse
 import json
 from pathlib import Path
+from pathlib import PurePosixPath
+import xml.etree.ElementTree as ET
+from zipfile import ZipFile
 
 import numpy as np
 from openpyxl import load_workbook
@@ -9,8 +12,44 @@ from openpyxl import load_workbook
 from common.hashing import file_record
 from .archive import write_json
 from .export import rounded_array, verified_source
-from .inputs import sha256
 from .provenance import delivery_snapshot
+
+
+MAIN_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+OFFICE_REL_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+PACKAGE_REL_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
+
+
+def frozen_sheet_names(workbook):
+    frozen = []
+    with ZipFile(workbook) as archive:
+        book = ET.fromstring(archive.read("xl/workbook.xml"))
+        relationships = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+        targets = {
+            item.attrib["Id"]: item.attrib["Target"]
+            for item in relationships.findall(f"{{{PACKAGE_REL_NS}}}Relationship")
+        }
+        sheets = book.find(f"{{{MAIN_NS}}}sheets")
+        if sheets is None:
+            raise ValueError("Workbook has no worksheets")
+        for sheet in sheets:
+            relation = sheet.attrib[f"{{{OFFICE_REL_NS}}}id"]
+            target = targets[relation]
+            part = target.lstrip("/") if target.startswith("/") else str(PurePosixPath("xl") / target)
+            root = ET.fromstring(archive.read(part))
+            pane = root.find(
+                f"{{{MAIN_NS}}}sheetViews/{{{MAIN_NS}}}sheetView/{{{MAIN_NS}}}pane"
+            )
+            if pane is None:
+                continue
+            if (
+                pane.attrib.get("state") == "frozen"
+                and pane.attrib.get("topLeftCell") == "B2"
+                and float(pane.attrib.get("xSplit", 0)) == 1.0
+                and float(pane.attrib.get("ySplit", 0)) == 1.0
+            ):
+                frozen.append(sheet.attrib["name"])
+    return frozen
 
 
 def compare_chunk(rows, expected_times, expected_values, sheet_name):
@@ -60,14 +99,14 @@ def check(directory="results/q2", workbook="results/result2.xlsx"):
         checked = 0
         if book.sheetnames != ["温度", "水分浓度"]:
             raise ValueError("Unexpected result2 sheet names")
+        if frozen_sheet_names(workbook) != book.sheetnames:
+            raise ValueError("Unexpected result2 freeze panes")
         for sheet_name, key in (("温度", "temperature_C"), ("水分浓度", "moisture")):
             sheet = book[sheet_name]
             if sheet.max_row is not None and sheet.max_row != 259201:
                 raise ValueError(f"Unexpected {sheet_name} declared row count")
             if sheet.max_column is not None and sheet.max_column != 22:
                 raise ValueError(f"Unexpected {sheet_name} dimensions")
-            if sheet.freeze_panes != "B2":
-                raise ValueError(f"Unexpected {sheet_name} freeze panes")
             rows = sheet.iter_rows(values_only=True)
             header = next(rows)
             if header != (manifest["inputs"]["template_A1"], *[j / 10 for j in range(21)]):

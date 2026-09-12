@@ -1,4 +1,6 @@
 """Four paper-ready vector figures read their independently saved CSV sources."""
+from __future__ import annotations
+
 import argparse
 from pathlib import Path
 
@@ -8,9 +10,8 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager
 import numpy as np
 
+from common.hashing import file_record
 from q2.archive import write_json
-from q2.inputs import sha256
-from q2.provenance import portable_artifact_sha256
 from q3.validation import verified
 
 
@@ -106,10 +107,13 @@ def make(directory="results/q3",figure_dir="figures/q3"):
     axes[1].set(xlabel="10⁸ / N²",ylabel="基准时间 − 正式时间 / s")
     save(fig,"q3_convergence")
     write_json(directory/"figure_manifest.json",{
-        "font":font,"source_code_sha256":portable_artifact_sha256("q3/figures.py"),
-        "verification_sha256":portable_artifact_sha256(directory/"verification.json"),
-        "csv":{p.name:portable_artifact_sha256(p) for p in sorted(source.glob("*.csv"))},
-        "pdf":{name:sha256(figure_dir/name) for name in files}})
+        "schema_version":2,
+        "font":font,
+        "generator":file_record("q3/figures.py"),
+        "verification":file_record(directory/"verification.json"),
+        "formal_run":file_record(directory/"runs"/v["formal_case"]/"run.json"),
+        "csv":{path.name:file_record(path) for path in sorted(source.glob("*.csv"))},
+        "pdf":{name:file_record(figure_dir/name) for name in files}})
 
 
 if __name__ == "__main__":

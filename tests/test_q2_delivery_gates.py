@@ -62,6 +62,7 @@ def test_failed_readback_overwrites_previous_success(tmp_path, monkeypatch):
 
     monkeypatch.setattr(check_export, "verified_source", lambda directory: (data, {}, manifest, {}))
     monkeypatch.setattr(check_export, "load_workbook", lambda *args, **kwargs: FakeBook())
+    monkeypatch.setattr(check_export, "frozen_sheet_names", lambda workbook: FakeBook.sheetnames)
     with pytest.raises(ValueError, match="Missing or nonfinite"):
         check_export.check(directory, workbook_path)
     record = json.loads((directory / "export_verification.json").read_text(encoding="utf-8"))

@@ -43,8 +43,9 @@ for (const sheet of sheets.values()) {
   };
   sheet.getRange("A2:A12").format.numberFormat = "0";
   sheet.getRange("B2:V12").format.numberFormat = "0.0000";
-  sheet.getRange("A1:A12").format.columnWidth = 12;
-  sheet.getRange("B1:V12").format.columnWidth = 11;
+  sheet.getRange("A1:V1").format.rowHeight = 22;
+  sheet.getRange("A1:A12").format.columnWidth = 26;
+  sheet.getRange("B1:V12").format.columnWidth = 12;
 }
 workbook.recalculate();
 await fs.mkdir(previewDirectory, { recursive: true });

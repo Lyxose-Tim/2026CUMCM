@@ -1,0 +1,41 @@
+<mxfile host="app.diagrams.net" modified="2026-09-12T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="cumcm-roadmap" name="Page-1">
+    <mxGraphModel dx="1200" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="input" value="题面与附件&lt;br&gt;环境、半径、物性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F1F5;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="20" y="100" width="130" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="q1" value="问题一&lt;br&gt;常物性热湿传递" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F1F5;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="190" y="100" width="130" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="q2" value="问题二&lt;br&gt;变物性耦合 72 h" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF3E9;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="360" y="100" width="130" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="q3" value="问题三&lt;br&gt;全域达标事件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8F0DF;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="530" y="100" width="130" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="q4" value="问题四&lt;br&gt;收缩与物性机制" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8E9E9;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="700" y="100" width="130" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="verify" value="统一验证&lt;br&gt;守恒、Jacobian、网格、时间、方法、根定位" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F0F0;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="190" y="310" width="640" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="delivery" value="表格&lt;br&gt;图源&lt;br&gt;报告" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E7EDF2;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1">
+          <mxGeometry x="870" y="100" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="e1" value="边界与初值" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="input" target="q1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="退化核验" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q1" target="q2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="同一场变量" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q2" target="q3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="事件判据" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q3" target="q4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="A–D 对照" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q4" target="delivery"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="q1" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="q2" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="q3" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="q4" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="证据门禁" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="verify" target="delivery"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

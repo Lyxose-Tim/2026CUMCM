@@ -40,9 +40,10 @@ def rounded_matrix(values, places=4):
 def _configure_sheet(sheet, columns):
     sheet.freeze_panes = "B2"
     sheet.sheet_view.showGridLines = False
-    sheet.column_dimensions["A"].width = 14
+    sheet.row_dimensions[1].height = 22
+    sheet.column_dimensions["A"].width = 26
     for column in range(2, columns + 1):
-        sheet.column_dimensions[get_column_letter(column)].width = 11
+        sheet.column_dimensions[get_column_letter(column)].width = 12
 
 
 def _write_only_cell(sheet, value, number_format, *, header=False):

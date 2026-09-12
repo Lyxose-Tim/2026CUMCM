@@ -4,9 +4,9 @@ import json
 import math
 from pathlib import Path
 
-from common.hashing import verify_file
+from common.hashing import file_record, verify_file
+from .archive import write_json
 from .export import TABLE_TIMES, TABLE_RADIUS_INDICES, rounded_array, verified_source
-from .inputs import sha256
 from .provenance import delivery_snapshot
 
 
@@ -56,15 +56,36 @@ def validated_export(directory, workbook=None):
     return record
 
 
+def validated_figures(directory):
+    directory = Path(directory)
+    manifest = json.loads((directory / "figure_manifest.json").read_text(encoding="utf-8"))
+    if manifest.get("schema_version") != 2:
+        raise ValueError("Versioned Q2 figure evidence is required")
+    verify_file("q2/figures.py", manifest["generator"])
+    verify_file(directory / "verification.json", manifest["verification"])
+    verify_file(directory / "archive" / "manifest.json", manifest["archive_manifest"])
+    verify_file(directory / "convergence.json", manifest["convergence"])
+    for name, digest in manifest["csv"].items():
+        verify_file(directory / "figure_data" / name, digest)
+    for name, digest in manifest["pdf"].items():
+        verify_file(Path("figures/q2") / name, digest)
+    return manifest
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--directory", default="results/q2")
     parser.add_argument("--reports", default="reports")
     args = parser.parse_args()
     directory, reports = Path(args.directory), Path(args.reports)
-    report_paths = [reports / "Q2_RESULTS_REPORT.md", reports / "Q2_VERIFY_REPORT.md"]
+    report_paths = [
+        reports / "Q2_MODEL_SPEC.md",
+        reports / "Q2_RESULTS_REPORT.md",
+        reports / "Q2_VERIFY_REPORT.md",
+    ]
     try:
         export_verification = validated_export(directory)
+        figure_manifest = validated_figures(directory)
         data, _, manifest, verification = verified_source(directory)
         scenarios = json.loads((directory / "environment_scenarios.json").read_text(encoding="utf-8"))
     except Exception:
@@ -81,6 +102,32 @@ def main():
         f"中心水分 {item['endpoint']['center_moisture']:.6f} kg/kg。"
         for item in scenarios
     )
+    model_text = r"""# 第二问模型规范
+
+## 控制方程
+
+第二问从 t=0、theta=28 °C、C=2.55 kg/kg 重新积分，在固定半径 2 cm 的一维圆柱径向域内求解
+
+\[
+\rho(C)c_p(C)\theta_t=\frac1r\frac\partial{\partial r}
+\left(rk(C)\theta_r\right),\qquad
+C_t=\frac1r\frac\partial{\partial r}
+\left(rD(C,\theta+273.15)C_r\right).
+\]
+
+附录3的 rho、cp、k、D 在每个节点随 C、theta 更新，面系数采用调和平均。中心采用对称边界；表面沿用问题一的换热与传质 Robin 边界。
+
+## 有效闭合与适用边界
+
+Ce、h、hm 与 rho cp 均按题设量纲作为有效闭合量使用。经验 rho 不解释成经过独立质量守恒标定的干骨架密度；热方程没有潜热项，因此不能称为完整焓守恒。模型忽略端面和轴向梯度，只描述竞赛题设下的一维径向有效过程。
+
+环境 0–4 h 由附件1逐段线性插值，4–72 h 的主情景保持最后一小时均值；末值保持和 50 °C、0.05 kg/kg 只作为确定性结构情景。72 h 输出回答第二问的全过程，不宣称给出严格停止时间。
+
+## 数值方案
+
+圆柱有限体积离散显式处理中心控制体和表面储存，解析 Jacobian 包含物性导数与交叉导数。时间积分在环境折点处分段使用 BDF，并与收紧 BDF、减半最大步长和 Radau 对照。正式网格只有在连续两次空间加密满足全部时间与 21 个输出半径的误差预算后才能选定。
+"""
+    report_paths[0].write_text(model_text, encoding="utf-8")
     result_text = f"""# 第二问结果报告
 
 ## 计算口径
@@ -148,8 +195,17 @@ def main():
 - 六张PDF图均从绑定CSV生成并经PNG渲染检查，无缺字、裁切或重叠。
 - Excel交付源码摘要：`{export_verification['delivery_source']['source_digest']}`；对应提交：`{export_verification['delivery_source']['code_commit']}`。
 """
-    report_paths[0].write_text(result_text, encoding="utf-8")
-    report_paths[1].write_text(verify_text, encoding="utf-8")
+    report_paths[1].write_text(result_text, encoding="utf-8")
+    report_paths[2].write_text(verify_text, encoding="utf-8")
+    write_json(directory / "report_manifest.json", {
+        "schema_version": 2,
+        "generator": file_record("q2/reports.py"),
+        "reports": {path.name: file_record(path) for path in report_paths},
+        "verification": file_record(directory / "verification.json"),
+        "export_verification": file_record(directory / "export_verification.json"),
+        "figure_manifest": file_record(directory / "figure_manifest.json"),
+        "figure_count": len(figure_manifest["pdf"]),
+    })
 
 
 if __name__ == "__main__":
