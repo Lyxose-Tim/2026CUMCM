@@ -86,6 +86,10 @@ def test_shared_flux_conserves_each_control_volume_sum_and_center_is_symmetric()
         state[:21], state[21:], PARAMETERS
     )[1]
     assert qT[0] == 0.0 and qC[0] == 0.0
+    heat_cell_residual = grid.volume * storage * rhs[:21] + np.diff(grid.area * qT)
+    moisture_cell_residual = grid.volume * rhs[21:] + np.diff(grid.area * qC)
+    assert np.max(np.abs(heat_cell_residual)) < 1e-14
+    assert np.max(np.abs(moisture_cell_residual)) < 1e-14
     assert np.dot(grid.volume * storage, rhs[:21]) == pytest.approx(-grid.area[-1] * qT[-1])
     assert np.dot(grid.volume, rhs[21:]) == pytest.approx(-grid.area[-1] * qC[-1])
     assert qT[-1] < 0.0
