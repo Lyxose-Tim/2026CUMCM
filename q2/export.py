@@ -50,14 +50,14 @@ def prepare(directory="results/q2", payload_path=".scratch/q2_workbook/payload.j
     payload_path.parent.mkdir(parents=True, exist_ok=True)
     tables = {}
     chunks = []
-    for sheet_name, key, values in (
-        ("温度", "temperature", data["temperature_C"]),
-        ("水分浓度", "moisture", data["moisture"]),
+    for sheet_name, key, table_name, values in (
+        ("温度", "temperature", "table3_temperature", data["temperature_C"]),
+        ("水分浓度", "moisture", "table4_moisture", data["moisture"]),
     ):
         table = values[TABLE_TIMES][:, TABLE_RADIUS_INDICES]
         rows = [[int(t), *[f"{value:.4f}" for value in row]] for t, row in zip(TABLE_TIMES, rounded_array(table))]
-        tables[key] = rows
-        with (directory / f"table_{key}.csv").open("w", encoding="utf-8", newline="") as stream:
+        tables[table_name] = rows
+        with (directory / f"{table_name}.csv").open("w", encoding="utf-8", newline="") as stream:
             writer = csv.writer(stream)
             writer.writerow(["time_s", "r_0_cm", "r_0.5_cm", "r_1_cm", "r_1.5_cm", "r_2_cm"])
             writer.writerows(rows)
