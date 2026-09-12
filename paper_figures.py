@@ -14,7 +14,7 @@ from matplotlib import font_manager
 from matplotlib.patches import FancyBboxPatch
 import numpy as np
 
-from common.hashing import file_record, verify_file
+from common.hashing import TEXT_HASH_SCHEME, file_record, verify_file
 from q2.archive import write_json
 from q3.validation import verified as q3_verified
 from q4.validation import verified as q4_verified
@@ -372,7 +372,7 @@ def make(output="figures/paper", source="results/paper_figure_data") -> None:
         "schema_version": 2,
         "font": font,
         "generator": file_record("paper_figures.py"),
-        "drawio_source": file_record(drawio_path),
+        "drawio_source": file_record(drawio_path, TEXT_HASH_SCHEME),
         "evidence": {
             "q2_figure_manifest": file_record("results/q2/figure_manifest.json"),
             "q3_verification": file_record("results/q3/verification.json"),

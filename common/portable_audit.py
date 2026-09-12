@@ -103,7 +103,7 @@ def _paper_figures() -> dict:
         raise ValueError("Six versioned paper figures are required")
     verify_file("paper_figures.py", manifest["generator"])
     drawio = Path("figures/paper/fig01_model_roadmap.drawio")
-    verify_file(drawio, manifest["drawio_source"])
+    drawio_record = verify_file(drawio, manifest["drawio_source"])
     if ET.parse(drawio).getroot().tag != "mxfile":
         raise ValueError("Invalid DrawIO source root")
     evidence_paths = {
@@ -121,7 +121,7 @@ def _paper_figures() -> dict:
     return {
         "figure_count": len(manifest["pdf"]),
         "csv_count": len(manifest["csv"]),
-        "drawio": file_record(drawio),
+        "drawio": drawio_record,
     }
 
 
