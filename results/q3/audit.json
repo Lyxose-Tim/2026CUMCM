@@ -1,6 +1,6 @@
 {
   "passed": true,
-  "code_commit": "930f785884f498a2c8997475643c6649da0cb214",
+  "code_commit": "3c063107e7dbf033d98ebe618e0ed01d4f25a59f",
   "formal_case": "tight_N40960",
   "time_h": 57.474009775860864,
   "artifacts": {
@@ -22,7 +22,7 @@
     "q3/solver.py": "741951af295276cde4f447c9b26ed66e5191c9fb0c5d91d4b154898f4ead9278",
     "q3/validation.py": "35737e7c4d4aaf566d201620acefe97bda72f53e9e1350e024987891e168abf0",
     "Q3_REPRODUCE.md": "3cfc3eefbbf496b123d905ebf5581e3fcade74e83587192964d2bec46fc597b2",
-    "reports/Q3_DEPENDENCY_RECORD.md": "663f6715043c3e5e9ca24a064aba7b087ec5c2657f4838c5c3f20f2656c049cc",
+    "reports/Q3_DEPENDENCY_RECORD.md": "bafb608a0ba6b1729edac62d85c4e6d7c03f069454ed1f79724a6ce3cf81b54f",
     "reports/Q3_MODEL_SPEC.md": "f029cec7ae2e04f36919e89e3b179655d72d15252cfc901c2f83eaf8f3f5934b",
     "reports/Q3_RESULTS_REPORT.md": "f6002603ae8c6ed4cc8e2bbc9dc4005d1ffcd99f90cb0e197804cf9d0b3fab0d",
     "reports/Q3_VERIFY_REPORT.md": "707036fcb9091c67142be4867ad12d882dc22db54073b01d56280eeca74ec7d2",
