@@ -31,7 +31,10 @@ def git_commit(directory="."):
         return None
     try:
         result = subprocess.run(
-            ["git", "-C", str(root), "rev-parse", "HEAD"],
+            [
+                "git", "-c", f"safe.directory={root.as_posix()}",
+                "-C", str(root), "rev-parse", "HEAD",
+            ],
             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
             text=True, encoding="ascii", timeout=5, check=False,
         )

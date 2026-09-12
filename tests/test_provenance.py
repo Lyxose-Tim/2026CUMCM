@@ -30,8 +30,8 @@ def test_declared_text_requires_utf8_and_hash_record_is_versioned(tmp_path):
 
 
 def test_metadata_migration_refuses_numerical_source_change(tmp_path):
-    from common.hashing import LEGACY_TEXT_HASH_SCHEME, file_sha256
-    from common.migrate_provenance import verify_legacy_sources
+    from common.hashing import LEGACY_TEXT_HASH_SCHEME, TEXT_HASH_SCHEME, file_sha256
+    from common.migrate_provenance import verify_current_sources, verify_legacy_sources
     source = tmp_path / "model.py"
     source.write_text("coefficient = 1.0\n", encoding="utf-8")
     record = {
@@ -42,6 +42,31 @@ def test_metadata_migration_refuses_numerical_source_change(tmp_path):
     source.write_text("coefficient = 1.1\n", encoding="utf-8")
     with pytest.raises(ValueError, match="migration refused"):
         verify_legacy_sources(record, tmp_path, ["model.py"], set())
+    current = {
+        "source_hashes": {"model.py": file_sha256(source, TEXT_HASH_SCHEME)},
+    }
+    source.write_text("coefficient = 1.2\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="migration refused"):
+        verify_current_sources(current, tmp_path, ["model.py"], set())
+
+
+def test_git_commit_uses_repo_specific_safe_directory(monkeypatch, tmp_path):
+    from q1.provenance import git_commit as q1_git_commit
+    from q2.provenance import git_commit as q2_git_commit
+
+    (tmp_path / ".git").mkdir()
+    calls = []
+
+    def succeed(args, **_kwargs):
+        calls.append(args)
+        output = str(tmp_path) if "--show-toplevel" in args else "a" * 40
+        return subprocess.CompletedProcess(args, 0, output, "")
+
+    monkeypatch.setattr(subprocess, "run", succeed)
+    assert q1_git_commit(tmp_path) == "a" * 40
+    assert q2_git_commit(tmp_path) == "a" * 40
+    expected = f"safe.directory={tmp_path.resolve().as_posix()}"
+    assert all(call[1:3] == ["-c", expected] for call in calls)
 
 
 @pytest.mark.parametrize('kind',['missing_executable','not_a_repository'])

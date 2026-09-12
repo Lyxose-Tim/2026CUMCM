@@ -13,6 +13,7 @@ from common.hashing import (
     file_sha256,
     legacy_artifact_sha256,
     raw_sha256,
+    verify_file,
 )
 from q1.provenance import NUMERICAL_FILES as Q1_NUMERICAL, artifact_sha256, source_snapshot as q1_snapshot
 from q2.provenance import NUMERICAL_FILES as Q2_NUMERICAL, source_snapshot as q2_snapshot
@@ -71,11 +72,48 @@ def migration_record(path: Path, old_raw: str, critical: list[str], from_scheme=
     }
 
 
+def append_migration(record: dict, migration: dict) -> None:
+    previous = record.pop("metadata_migration", None)
+    history = record.setdefault("metadata_migration_history", [])
+    if previous is not None:
+        history.append(previous)
+    history.append(migration)
+
+
+def verify_current_sources(record: dict, root: Path, files, evidence_only) -> list[str]:
+    hashes = record.get("source_hashes", {})
+    critical = [name for name in files if name not in evidence_only]
+    changed = [
+        name for name in critical
+        if file_sha256(root / name, TEXT_HASH_SCHEME) != hashes.get(name)
+    ]
+    if changed:
+        raise ValueError("Numerical source changed; migration refused: " + ", ".join(changed))
+    return critical
+
+
 def migrate_q2(root: Path) -> dict:
     path = root / "results/q2/archive/manifest.json"
     record = read_json(path)
     if record.get("source_hash_scheme") == TEXT_HASH_SCHEME:
-        return {"status": "already-current", "path": path.as_posix()}
+        old_raw = raw_sha256(path)
+        critical = verify_current_sources(record, root, Q2_NUMERICAL, Q2_EVIDENCE_ONLY)
+        verification = root / "results/q2/verification.json"
+        geometry = path.parent / "geometry.npz"
+        verify_file(verification, record["verification_hash"])
+        verify_file(geometry, record["geometry_hash"])
+        for item in record["chunks"]:
+            verify_file(path.parent / item["file"], item["hash"])
+        current = q2_snapshot(root)
+        if all(record.get(key) == value for key, value in current.items()):
+            return {"status": "already-current", "path": path.as_posix()}
+        record.update(current)
+        append_migration(
+            record,
+            migration_record(path.relative_to(root), old_raw, critical, from_scheme=TEXT_HASH_SCHEME),
+        )
+        write_json(path, record)
+        return {"status": "refreshed", "path": path.as_posix(), "sha256": raw_sha256(path)}
     old_raw = raw_sha256(path)
     critical = verify_legacy_sources(record, root, Q2_NUMERICAL, Q2_EVIDENCE_ONLY)
     verification = root / "results/q2/verification.json"
@@ -96,7 +134,7 @@ def migrate_q2(root: Path) -> dict:
     record["geometry_hash"] = file_record(geometry, RAW_HASH_SCHEME)
     record.pop("verification_sha256", None)
     record.pop("geometry_sha256", None)
-    record["metadata_migration"] = migration_record(path.relative_to(root), old_raw, critical)
+    append_migration(record, migration_record(path.relative_to(root), old_raw, critical))
     write_json(path, record)
     return {"status": "migrated", "path": path.as_posix(), "sha256": raw_sha256(path)}
 
@@ -130,11 +168,7 @@ def migrate_q3(root: Path) -> dict:
         record["source"] = q3_snapshot(root)
         if source_scheme != TEXT_HASH_SCHEME:
             record["files"] = {name: file_record(path.parent / name) for name in record.get("files", {})}
-        previous = record.pop("metadata_migration", None)
-        history = record.setdefault("metadata_migration_history", [])
-        if previous is not None:
-            history.append(previous)
-        history.append(migration_record(
+        append_migration(record, migration_record(
             path.relative_to(root), old_raw, critical, from_scheme=source_scheme
         ))
         write_json(path, record)
@@ -147,7 +181,43 @@ def migrate_q1_sensitivity(root: Path) -> dict:
     manifest_path = base / "manifest.json"
     manifest = read_json(manifest_path)
     if manifest.get("source_hash_scheme") == TEXT_HASH_SCHEME:
-        return {"status": "already-current", "path": manifest_path.as_posix()}
+        current = q1_snapshot(root)
+        if all(manifest.get(key) == value for key, value in current.items()):
+            return {"status": "already-current", "path": manifest_path.as_posix()}
+        old_manifest_raw = raw_sha256(manifest_path)
+        critical = verify_current_sources(manifest, root, Q1_NUMERICAL, Q1_EVIDENCE_ONLY)
+        verification = base / "verification.json"
+        if artifact_sha256(verification) != manifest.get("verification_sha256"):
+            raise ValueError("Q1 sensitivity verification binding failed")
+        run_hashes = {}
+        for path in sorted((base / "runs").glob("*/run.json")):
+            expected = manifest.get("run_records", {}).get(path.parent.name)
+            if artifact_sha256(path) != expected:
+                raise ValueError(f"Q1 sensitivity run binding failed: {path.parent.name}")
+            record = read_json(path)
+            verify_current_sources(record, root, Q1_NUMERICAL, Q1_EVIDENCE_ONLY)
+            for name, digest in record.get("files", {}).items():
+                if artifact_sha256(path.parent / name) != digest:
+                    raise ValueError(f"Q1 sensitivity artifact binding failed: {path.parent.name}/{name}")
+            old_raw = raw_sha256(path)
+            record.update(current)
+            append_migration(
+                record,
+                migration_record(path.relative_to(root), old_raw, critical, from_scheme=TEXT_HASH_SCHEME),
+            )
+            write_json(path, record)
+            run_hashes[path.parent.name] = artifact_sha256(path)
+        manifest.update(current)
+        manifest["run_records"] = run_hashes
+        append_migration(
+            manifest,
+            migration_record(
+                manifest_path.relative_to(root), old_manifest_raw, critical,
+                from_scheme=TEXT_HASH_SCHEME,
+            ),
+        )
+        write_json(manifest_path, manifest)
+        return {"status": "refreshed", "records": len(run_hashes)}
     old_manifest_raw = raw_sha256(manifest_path)
     critical = verify_legacy_sources(manifest, root, Q1_NUMERICAL, Q1_EVIDENCE_ONLY)
     source = q1_snapshot(root)
@@ -162,7 +232,7 @@ def migrate_q1_sensitivity(root: Path) -> dict:
         record.update(source)
         record["artifact_hash_scheme"] = TEXT_HASH_SCHEME
         record["files"] = {name: artifact_sha256(path.parent / name) for name in record.get("files", {})}
-        record["metadata_migration"] = migration_record(path.relative_to(root), old_raw, critical)
+        append_migration(record, migration_record(path.relative_to(root), old_raw, critical))
         write_json(path, record)
         run_hashes[path.parent.name] = artifact_sha256(path)
     verification = base / "verification.json"
@@ -172,8 +242,9 @@ def migrate_q1_sensitivity(root: Path) -> dict:
     manifest["artifact_hash_scheme"] = TEXT_HASH_SCHEME
     manifest["verification_sha256"] = artifact_sha256(verification)
     manifest["run_records"] = run_hashes
-    manifest["metadata_migration"] = migration_record(
-        manifest_path.relative_to(root), old_manifest_raw, critical
+    append_migration(
+        manifest,
+        migration_record(manifest_path.relative_to(root), old_manifest_raw, critical),
     )
     write_json(manifest_path, manifest)
     return {"status": "migrated", "records": len(run_hashes)}
