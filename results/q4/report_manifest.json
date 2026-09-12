@@ -1,0 +1,9 @@
+{
+  "reports": {
+    "reports\\Q4_MODEL_SPEC.md": "a56a97f47bb654e5754f6308a87a59eff552e3a2d9a24a7682f664581475b7fb",
+    "reports\\Q4_RESULTS_REPORT.md": "ad7755c688dae795fe5cff0231a96de5c35207b0b71b2651307325986e2a7af0",
+    "reports\\Q4_VERIFY_REPORT.md": "7d7f73fcce71820ee13a749f38252062eb6528ac093a2c46560af527470da218",
+    "reports\\RESULTS_REPORT.md": "2bc368cda022780ce2ae8b76f936c022e1f547e3b3533501949b56a3d27e9c9f"
+  },
+  "verification_sha256": "5d8b296af64095aff7f3b291961c6c2b1353ea5ff064059fd6d55300f8dda198"
+}
