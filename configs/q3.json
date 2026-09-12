@@ -1,0 +1,20 @@
+{
+  "upstream_commit": "aa1d1b65ec7349c112fc2da0eef8110858a8a00a",
+  "q2_config": "configs/q2.json",
+  "threshold": 0.15,
+  "root_xtol_s": 0.000001,
+  "bracket_width_s": 0.00001,
+  "strict_offset_s": 1.0,
+  "formal_case": "tight_N20480",
+  "grids": [5120, 10240, 20480],
+  "sensitivity_grid": 5120,
+  "budgets": {
+    "space_time_s": 0.1,
+    "temporal_time_s": 0.02,
+    "space_C": 0.000008,
+    "temporal_C": 0.000002,
+    "relative_balance": 0.0000001,
+    "q2_T": 0.0000002,
+    "q2_C": 0.00000002
+  }
+}
