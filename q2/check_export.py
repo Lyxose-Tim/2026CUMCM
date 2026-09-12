@@ -23,7 +23,9 @@ def check(directory="results/q2", workbook="results/result2.xlsx"):
             raise ValueError("Unexpected result2 sheet names")
         for sheet_name, key in (("温度", "temperature_C"), ("水分浓度", "moisture")):
             sheet = book[sheet_name]
-            if sheet.max_row != 259201 or sheet.max_column != 22:
+            if sheet.max_row is not None and sheet.max_row != 259201:
+                raise ValueError(f"Unexpected {sheet_name} declared row count")
+            if sheet.max_column is not None and sheet.max_column != 22:
                 raise ValueError(f"Unexpected {sheet_name} dimensions")
             rows = sheet.iter_rows(values_only=True)
             header = next(rows)
