@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "checked_at": "2026-09-12T14:20:00+08:00",
+  "workbook_sha256": "4468dc3c8e640115f00c8e0d53cab881d87b102527b843c9ba636d65b2903ec1",
+  "workbook_views": {
+    "head": ".scratch/q3/workbook_previews/head.png",
+    "tail": ".scratch/q3/workbook_previews/tail.png"
+  },
+  "pdf": {
+    "q3_moisture_curves.pdf": "7a685569350d3dcedbc821d2c5c44c117ddf7eeb99168004a9ce670c873b9c27",
+    "q3_threshold_zoom.pdf": "89bb2ebb0e01496ff6bb7e6fab0c2b26f896bbab96dbc89583a3deb902688cdb",
+    "q3_radial_profiles.pdf": "d14f3019598cd4bba226fc21ff896de778b3e7272a639da09917951ddec9308c",
+    "q3_convergence.pdf": "3272085b942836aa4c4ca9d63aa76f66c7387aac6929020140c8c96ac376572d"
+  },
+  "checks": [
+    "workbook head and tail show numeric time/radius axes, four-decimal moisture and the precise terminal row",
+    "all four single-page vector PDFs were rendered to PNG and visually inspected",
+    "Chinese labels use Microsoft YaHei without missing glyphs",
+    "no clipped labels, overlapping panels, empty figures or unreadable legends were found"
+  ]
+}
