@@ -4,12 +4,13 @@ import csv
 import json
 from pathlib import Path
 import subprocess
+import sys
 
 import numpy as np
 
 from .archive import load_archive, write_json
 from .inputs import sha256
-from .provenance import verify_sources
+from .provenance import delivery_snapshot, verify_sources
 
 
 TABLE_TIMES = np.arange(1800, 10801, 1800, dtype=int)
@@ -76,6 +77,7 @@ def prepare(directory="results/q2", payload_path=".scratch/q2_workbook/payload.j
         "archive_manifest_file": str(directory / "archive" / "manifest.json"),
         "archive_manifest_sha256": sha256(directory / "archive" / "manifest.json"),
         "template_A1": manifest["inputs"]["template_A1"],
+        "delivery_source": delivery_snapshot(),
         "chunks": chunks,
     }
     write_json(payload_path, payload)
@@ -91,6 +93,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     prepare(args.directory, args.payload)
     if not args.prepare_only:
-        subprocess.run([args.node, "scripts/build_result2.mjs", "--payload", args.payload], check=True)
+        subprocess.run([args.node, "scripts/build_result2.mjs", "--payload", args.payload, "--preview-only"], check=True)
+        subprocess.run([sys.executable, "scripts/build_result2_stream.py", "--payload", args.payload], check=True)
         from .check_export import check
         check(args.directory, "results/result2.xlsx")

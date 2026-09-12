@@ -7,11 +7,14 @@ from .inputs import sha256
 
 
 NUMERICAL_FILES = tuple(f"q2/{name}.py" for name in (
-    "__init__", "inputs", "model", "solver", "archive", "provenance",
-    "validation", "run", "export", "check_export", "figures", "reproduce", "reports",
+    "__init__", "inputs", "model", "solver", "archive", "validation", "run",
 )) + (
-    "q1/fvm.py", "configs/q2.json", "requirements.lock.txt", "scripts/build_result2.mjs",
+    "q1/fvm.py", "configs/q2.json", "requirements.lock.txt",
 )
+
+DELIVERY_FILES = tuple(f"q2/{name}.py" for name in (
+    "provenance", "export", "check_export", "figures", "reproduce", "reports",
+)) + ("scripts/build_result2.mjs", "scripts/build_result2_stream.py")
 
 
 def git_commit(directory="."):
@@ -44,20 +47,31 @@ def source_snapshot(directory="."):
 def verify_sources(record, directory="."):
     if record.get("source_hash_scheme") != HASH_SCHEME:
         raise ValueError("Unsupported Q2 source hash scheme")
-    if set(record.get("source_hashes", {})) != set(NUMERICAL_FILES):
-        raise ValueError("Q2 source scope is incomplete or changed")
+    if not set(NUMERICAL_FILES).issubset(record.get("source_hashes", {})):
+        raise ValueError("Q2 numerical source scope is incomplete")
     current = source_snapshot(directory)
     changed = [path for path in NUMERICAL_FILES if current["source_hashes"][path] != record["source_hashes"][path]]
     if changed:
         raise ValueError("Current Q2 source mismatch: " + ", ".join(changed))
-    if record.get("source_digest") != current["source_digest"]:
-        raise ValueError("Recorded Q2 source digest mismatch")
     return {
         "matches": True,
         "source_digest": current["source_digest"],
+        "recorded_full_source_digest": record.get("source_digest"),
         "current_code_commit": current["code_commit"],
         "raw_byte_differences": [
             path for path in NUMERICAL_FILES
             if current["source_raw_hashes"][path] != record.get("source_raw_hashes", {}).get(path)
         ],
+    }
+
+
+def delivery_snapshot(directory="."):
+    root = Path(directory)
+    hashes = {path: artifact_sha256(root / path) for path in DELIVERY_FILES}
+    return {
+        "source_hash_scheme": HASH_SCHEME,
+        "source_hashes": hashes,
+        "source_raw_hashes": {path: sha256(root / path) for path in DELIVERY_FILES},
+        "source_digest": source_digest(hashes),
+        "code_commit": git_commit(root),
     }

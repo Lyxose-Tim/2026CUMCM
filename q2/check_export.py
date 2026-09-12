@@ -9,6 +9,7 @@ from openpyxl import load_workbook
 from .archive import write_json
 from .export import rounded_array, verified_source
 from .inputs import sha256
+from .provenance import delivery_snapshot
 
 
 def check(directory="results/q2", workbook="results/result2.xlsx"):
@@ -50,6 +51,8 @@ def check(directory="results/q2", workbook="results/result2.xlsx"):
         "sheets": ["温度", "水分浓度"],
         "rows_per_sheet": 259201,
         "columns_per_sheet": 22,
+        "delivery_source": delivery_snapshot(),
+        "writer": "openpyxl write-only streaming; Artifact Tool format blueprint rendered separately",
     }
     write_json(directory / "export_verification.json", result)
     if not result["passed"]:

@@ -16,9 +16,7 @@ def main():
     parser.add_argument("--node", default="node")
     args = parser.parse_args()
     run([sys.executable, "-m", "q2.run", "--data-root", args.data_root])
-    run([sys.executable, "-m", "q2.export", "--prepare-only"])
-    run([args.node, "scripts/build_result2.mjs"])
-    run([sys.executable, "-m", "q2.check_export"])
+    run([sys.executable, "-m", "q2.export", "--node", args.node])
     run([sys.executable, "-m", "q2.figures"])
     run([sys.executable, "-m", "q2.reports"])
 
