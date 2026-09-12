@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 import q2.check_export as check_export
+import q2.provenance as provenance
 import q2.reports as reports
 
 
@@ -99,3 +100,20 @@ def test_reports_reject_verification_bound_to_other_workbook(tmp_path):
     }), encoding="utf-8")
     with pytest.raises(ValueError, match="stale for the current workbook"):
         reports.validated_export(directory, workbook)
+
+
+def test_javascript_delivery_hash_accepts_line_endings_but_rejects_code_change(tmp_path, monkeypatch):
+    script = tmp_path / "scripts" / "build_result2.mjs"
+    script.parent.mkdir()
+    monkeypatch.setattr(provenance, "DELIVERY_FILES", ("scripts/build_result2.mjs",))
+    script.write_bytes(b"const chunkRows = 21600;\nexport { chunkRows };\n")
+    lf = provenance.delivery_snapshot(tmp_path)
+    script.write_bytes(b"const chunkRows = 21600;\r\nexport { chunkRows };\r\n")
+    crlf = provenance.delivery_snapshot(tmp_path)
+    assert crlf["source_digest"] == lf["source_digest"]
+    assert crlf["source_hashes"] == lf["source_hashes"]
+    assert crlf["source_raw_hashes"] != lf["source_raw_hashes"]
+    script.write_bytes(b"const chunkRows = 10800;\r\nexport { chunkRows };\r\n")
+    changed = provenance.delivery_snapshot(tmp_path)
+    assert changed["source_digest"] != lf["source_digest"]
+    assert changed["source_hashes"] != lf["source_hashes"]

@@ -1,4 +1,5 @@
 """Portable source identity for Q2 numerical and export artifacts."""
+import hashlib
 from pathlib import Path
 import subprocess
 
@@ -15,6 +16,16 @@ NUMERICAL_FILES = tuple(f"q2/{name}.py" for name in (
 DELIVERY_FILES = tuple(f"q2/{name}.py" for name in (
     "provenance", "export", "check_export",
 )) + ("scripts/build_result2.mjs", "scripts/build_result2_stream.py")
+
+JAVASCRIPT_TEXT_SUFFIXES = {".js", ".mjs", ".cjs"}
+
+
+def portable_artifact_sha256(path):
+    """Extend the repository's LF-normalized text hash to JavaScript modules."""
+    path = Path(path)
+    if path.suffix.lower() in JAVASCRIPT_TEXT_SUFFIXES:
+        return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+    return artifact_sha256(path)
 
 
 def git_commit(directory="."):
@@ -34,7 +45,7 @@ def git_commit(directory="."):
 
 def source_snapshot(directory="."):
     root = Path(directory)
-    hashes = {path: artifact_sha256(root / path) for path in NUMERICAL_FILES}
+    hashes = {path: portable_artifact_sha256(root / path) for path in NUMERICAL_FILES}
     return {
         "source_hash_scheme": HASH_SCHEME,
         "source_hashes": hashes,
@@ -67,7 +78,7 @@ def verify_sources(record, directory="."):
 
 def delivery_snapshot(directory="."):
     root = Path(directory)
-    hashes = {path: artifact_sha256(root / path) for path in DELIVERY_FILES}
+    hashes = {path: portable_artifact_sha256(root / path) for path in DELIVERY_FILES}
     return {
         "source_hash_scheme": HASH_SCHEME,
         "source_hashes": hashes,

@@ -122,3 +122,5 @@ manifest中的 `code_commit` 表示启动调用时的源码提交；各组run保
 `results/q2/archive/` 保存 0–259200 s、21 个正式半径的 float64 分块及 N=20480 的最终全网格状态。`result2.xlsx` 保存 1–259200 s；`q2.check_export` 流式回读两张 259201×22 工作表的全部 10886400 个结果单元格。
 
 Artifact Tool 已用于写入、检查和渲染 12 行格式蓝图。完整 10886400 格工作簿在 16 GB V8 堆上限仍内存不足，因此最终文件由 `scripts/build_result2_stream.py` 以 openpyxl write-only 模式生成；该降级、工作簿 SHA-256、尺寸和逐格零差结果记录在 `results/q2/export_verification.json`。数值源码与导出源码分别保留摘要，改动数值核心必须重算，改动导出器必须重新导出和回读。
+
+Q2 的 `sha256-text-lf-v1` 交付指纹将 `.js`、`.mjs`、`.cjs` 视作文本并规范化 CRLF→LF；因此 Windows `core.autocrlf=true` 的干净检出不会仅因换行误拒绝。清单同时保留原始字节哈希用于诊断，脚本实际字符变化仍会改变规范化摘要并阻止陈旧报告。
