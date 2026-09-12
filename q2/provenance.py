@@ -13,7 +13,7 @@ NUMERICAL_FILES = tuple(f"q2/{name}.py" for name in (
 )
 
 DELIVERY_FILES = tuple(f"q2/{name}.py" for name in (
-    "provenance", "export", "check_export", "figures", "reproduce", "reports",
+    "provenance", "export", "check_export",
 )) + ("scripts/build_result2.mjs", "scripts/build_result2_stream.py")
 
 

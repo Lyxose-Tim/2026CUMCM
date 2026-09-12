@@ -65,7 +65,7 @@ def main():
             for r, T, C in zip(radius, data["temperature_C"][index], data["moisture"][index])
         ])
     axes[0].set(xlabel="径向位置 / cm", ylabel="温度 / °C", title="径向温度剖面")
-    axes[1].set(xlabel="径向位置 / cm", ylabel="水分浓度 / kg·kg⁻¹", title="径向水分剖面")
+    axes[1].set(xlabel="径向位置 / cm", ylabel=r"水分浓度 / kg kg$^{-1}$", title="径向水分剖面")
     axes[1].legend(frameon=False, ncol=2)
     fig.tight_layout()
     save(fig, figure_dir / "q2_radial_profiles.pdf")
@@ -89,7 +89,7 @@ def main():
     axes[0].legend(frameon=False)
     axes[1].plot(time_h, data["moisture"][:, 0], label="中心")
     axes[1].plot(time_h, data["moisture"][:, -1], label="表面")
-    axes[1].set(xlabel="时间 / h", ylabel="水分浓度 / kg·kg⁻¹")
+    axes[1].set(xlabel="时间 / h", ylabel=r"水分浓度 / kg kg$^{-1}$")
     fig.tight_layout()
     save(fig, figure_dir / "q2_center_surface_72h.pdf")
 
@@ -108,7 +108,10 @@ def main():
         axes[0, 1].plot(time_h[sample], cp[:, j], label=label)
         axes[1, 0].plot(time_h[sample], k[:, j], label=label)
         axes[1, 1].plot(time_h[sample], D[:, j], label=label)
-    for ax, ylabel in zip(axes.ravel(), ("ρ / kg·m⁻³", "cₚ / J·kg⁻¹·K⁻¹", "k / W·m⁻¹·K⁻¹", "D / m²·s⁻¹")):
+    for ax, ylabel in zip(axes.ravel(), (
+        r"$\rho$ / kg m$^{-3}$", r"$c_p$ / J kg$^{-1}$ K$^{-1}$",
+        r"$k$ / W m$^{-1}$ K$^{-1}$", r"$D$ / m$^2$ s$^{-1}$",
+    )):
         ax.set_ylabel(ylabel)
     axes[0, 0].legend(frameon=False)
     axes[1, 0].set_xlabel("时间 / h")
@@ -134,7 +137,7 @@ def main():
     axes[0].plot(data["time_s"][:1801], np.max(np.abs(delta_T), axis=1))
     axes[1].plot(data["time_s"][:1801], np.max(np.abs(delta_C), axis=1))
     axes[0].set(xlabel="时间 / s", ylabel="最大绝对差 / °C", title="Q1/Q2 温度差异")
-    axes[1].set(xlabel="时间 / s", ylabel="最大绝对差 / kg·kg⁻¹", title="Q1/Q2 水分差异")
+    axes[1].set(xlabel="时间 / s", ylabel=r"最大绝对差 / kg kg$^{-1}$", title="Q1/Q2 水分差异")
     fig.tight_layout()
     save(fig, figure_dir / "q1_q2_first_1800s.pdf")
 
@@ -155,7 +158,7 @@ def main():
     scenario_rows.extend(zip(data["time_s"][::3600], [modes[0]] * len(data["time_s"][::3600]), data["temperature_C"][::3600, 0], data["temperature_C"][::3600, -1], data["moisture"][::3600, 0], data["moisture"][::3600, -1]))
     save_rows(source_dir / "q2_environment_scenarios.csv", ["time_s", "mode", "center_T", "surface_T", "center_C", "surface_C"], scenario_rows)
     axes[0].set(xlabel="时间 / h", ylabel="中心温度 / °C", title="长期环境假设对温度的影响")
-    axes[1].set(xlabel="时间 / h", ylabel="中心水分 / kg·kg⁻¹", title="长期环境假设对水分的影响")
+    axes[1].set(xlabel="时间 / h", ylabel=r"中心水分 / kg kg$^{-1}$", title="长期环境假设对水分的影响")
     axes[1].legend(frameon=False)
     fig.tight_layout()
     save(fig, figure_dir / "q2_environment_scenarios.pdf")
@@ -171,7 +174,7 @@ def main():
     twin = ax.twinx()
     twin.loglog([item["N"] for item in records], [item["difference"]["C"]["max_abs"] for item in records], "s-", color="#C44E52", label="水分")
     ax.set(xlabel="径向区间数 N", ylabel="温度最大差 / °C", title="空间网格收敛")
-    twin.set_ylabel("水分最大差 / kg·kg⁻¹")
+    twin.set_ylabel(r"水分最大差 / kg kg$^{-1}$")
     fig.tight_layout()
     save(fig, figure_dir / "q2_grid_convergence.pdf")
 
