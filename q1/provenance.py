@@ -32,12 +32,10 @@ def source_digest(hashes):
 def git_commit(directory='.'):
     """Do not require Git or accidentally identify the ZIP's parent repository."""
     directory=Path(directory).resolve()
+    if not (directory/'.git').exists():
+        return None
     git_prefix=['git','-c',f'safe.directory={directory.as_posix()}','-C',str(directory)]
     try:
-        top=subprocess.run([*git_prefix,'rev-parse','--show-toplevel'],
-                           capture_output=True,text=True,timeout=5,check=False)
-        if top.returncode or Path(top.stdout.strip()).resolve()!=directory:
-            return None
         result=subprocess.run([*git_prefix,'rev-parse','HEAD'],
                               capture_output=True,text=True,timeout=5,check=False)
         return result.stdout.strip() if result.returncode==0 else None
