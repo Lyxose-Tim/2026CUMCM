@@ -1,11 +1,7 @@
 """Additional N=40960 cases after the initial three-grid event comparison."""
 import argparse
 from q3.run import compute
-
-EXTRA_CASES = [
-    {"name": "base_N40960", "N": 40960},
-    {"name": "tight_N40960", "N": 40960, "tight": True, "half_step": True},
-]
+from q2.inputs import read_config
 
 if __name__ == "__main__":
     parser=argparse.ArgumentParser()
@@ -13,5 +9,5 @@ if __name__ == "__main__":
     parser.add_argument("--directory",default="results/q3")
     args=parser.parse_args()
     # Sequential: a very fine full-state history can require several GB.
-    for case in EXTRA_CASES:
+    for case in read_config("configs/q3.json")["refinement_cases"]:
         print(compute(args.data_root,args.directory,case),flush=True)

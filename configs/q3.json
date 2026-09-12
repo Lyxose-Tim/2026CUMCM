@@ -5,8 +5,22 @@
   "root_xtol_s": 0.000001,
   "bracket_width_s": 0.00001,
   "strict_offset_s": 1.0,
-  "formal_case": "tight_N20480",
-  "grids": [5120, 10240, 20480],
+  "formal_case": "tight_N40960",
+  "initial_formal_case": "tight_N20480",
+  "grids": [5120, 10240, 20480, 40960],
+  "temporal_cases": [
+    {"name": "tight_N20480", "N": 20480, "tight": true, "half_step": true},
+    {"name": "halfstep_N10240", "N": 10240, "half_step": true}
+  ],
+  "refinement_cases": [
+    {"name": "base_N40960", "N": 40960},
+    {"name": "tight_N40960", "N": 40960, "tight": true, "half_step": true}
+  ],
+  "temporal_comparisons": [
+    ["base_N20480", "tight_N20480"],
+    ["base_N10240", "halfstep_N10240"],
+    ["base_N40960", "tight_N40960"]
+  ],
   "sensitivity_grid": 5120,
   "budgets": {
     "space_time_s": 0.1,

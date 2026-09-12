@@ -16,17 +16,26 @@ from q3.solver import integrate_event, TRACE_COLUMNS
 from q3.provenance import snapshot, load_run
 
 
-def cases(config):
-    result = [{"name": f"base_N{n}", "N": n} for n in config["grids"]]
-    result += [{"name": "tight_N20480", "N": 20480, "tight": True, "half_step": True},
-               {"name": "halfstep_N10240", "N": 10240, "half_step": True}]
+def cases(config, include_refinement=True):
+    extra_names = {case["name"] for case in config["refinement_cases"]}
+    result = [{"name": f"base_N{n}", "N": n} for n in config["grids"]
+              if f"base_N{n}" not in extra_names]
+    result += copy.deepcopy(config["temporal_cases"])
     for mode in ["terminal_hold", "nominal"]:
         result.append({"name": mode, "N": config["sensitivity_grid"], "mode": mode})
     for key in ["hm", "D_prefactor"]:
         for factor in [0.9, 1.1]:
             result.append({"name": f"{key}_{factor:.1f}", "N": config["sensitivity_grid"],
                            "parameter": key, "factor": factor})
-    return result
+    all_cases = result + copy.deepcopy(config["refinement_cases"])
+    names = [case["name"] for case in all_cases]
+    if len(names) != len(set(names)):
+        raise ValueError("Duplicate configured case name")
+    if config["formal_case"] not in names:
+        raise ValueError("formal_case is not a configured case")
+    if any(name not in names for pair in config["temporal_comparisons"] for name in pair):
+        raise ValueError("Unknown temporal comparison case")
+    return all_cases if include_refinement else result
 
 
 def compute(data_root, directory, case):
@@ -86,7 +95,7 @@ def main():
     parser.add_argument("--cases", nargs="*")
     parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()
-    selected = cases(read_config("configs/q3.json"))
+    selected = cases(read_config("configs/q3.json"), include_refinement=bool(args.cases))
     if args.cases:
         selected = [c for c in selected if c["name"] in args.cases]
         if len(selected) != len(set(args.cases)):

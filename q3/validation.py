@@ -13,7 +13,6 @@ from q2.provenance import portable_artifact_sha256, verify_sources
 from q3.provenance import load_run
 from q3.solver import output_axis, full_max
 from q3.run import cases
-from q3.refine import EXTRA_CASES
 
 
 def validation_sources():
@@ -70,16 +69,16 @@ def validate(directory="results/q3"):
     (directory/"unit_tests.txt").write_text(test.stdout+test.stderr, encoding="utf-8")
     if test.returncode:
         raise RuntimeError("Unit/regression tests failed")
-    runs = {c["name"]: load_run(directory/"runs"/c["name"]) for c in cases(config)+EXTRA_CASES}
+    runs = {c["name"]: load_run(directory/"runs"/c["name"]) for c in cases(config)}
     checks = {name: check_run(*run, config) for name,run in runs.items()}
     spatial = []
-    grids=config["grids"]+[40960]
+    grids=config["grids"]
     for a,b in zip(grids[:-1],grids[1:]):
         ra,fa=runs[f"base_N{a}"]; rb,fb=runs[f"base_N{b}"]
         spatial.append({"coarse_N":a,"fine_N":b,"time_difference_s":abs(ra["root"]["time_s"]-rb["root"]["time_s"]),
                         **compare(fa,fb)})
     temporal = []
-    for a,b in [("base_N20480","tight_N20480"),("base_N10240","halfstep_N10240"),("base_N40960","tight_N40960")]:
+    for a,b in config["temporal_comparisons"]:
         ra,fa=runs[a];rb,fb=runs[b]
         temporal.append({"a":a,"b":b,"time_difference_s":abs(ra["root"]["time_s"]-rb["root"]["time_s"]),
                          **compare(fa,fb)})
@@ -92,7 +91,7 @@ def validate(directory="results/q3"):
             and all(1.8<p<2.2 for p in orders) and spatial_estimate<budgets["space_time_s"]
             and all(v["time_difference_s"]<budgets["temporal_time_s"] and v["C"]<budgets["temporal_C"] for v in temporal)):
         raise ValueError(f"Event convergence budget failed: {spatial}, {temporal}")
-    formal_case="tight_N40960"
+    formal_case=config["formal_case"]
     formal, fields = runs[formal_case]
     q2, _, q2_manifest=load_archive("results/q2/archive")
     verify_sources(q2_manifest)
@@ -118,7 +117,9 @@ def validate(directory="results/q3"):
     late=trace[trace["time_s"]>=21600]
     sensitivity=[]
     baseline=runs[f"base_N{config['sensitivity_grid']}"][0]["root"]["time_s"]
-    for c in cases(config)[5:]:
+    for c in cases(config):
+        if "mode" not in c and "parameter" not in c:
+            continue
         r=runs[c["name"]][0]
         t=r["root"]["time_s"]
         sensitivity.append({"case":c["name"],"N":c["N"],"time_h":t/3600,
@@ -149,7 +150,10 @@ def verified(directory="results/q3"):
     v=json.loads((directory/"verification.json").read_text(encoding="utf-8"))
     if v.get("passed") is not True or v["validation_sources"] != validation_sources():
         raise ValueError("Current-source numerical verification missing/failed")
-    expected={c["name"] for c in cases(read_config("configs/q3.json"))+EXTRA_CASES}
+    config=read_config("configs/q3.json")
+    if v["formal_case"] != config["formal_case"]:
+        raise ValueError("Verified formal_case differs from current config")
+    expected={c["name"] for c in cases(config)}
     if set(v["run_record_hashes"]) != expected:
         raise ValueError("Incomplete verification run set")
     for name,digest in v["run_record_hashes"].items():
