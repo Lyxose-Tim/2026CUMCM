@@ -1,0 +1,33 @@
+<mxfile host="app.diagrams.net" modified="2026-09-12T00:00:00.000Z" agent="Codex" version="24.7.17">
+  <diagram id="cumcm-roadmap" name="Page-1">
+    <mxGraphModel dx="1200" dy="720" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="domain" value="圆柱径向截面" style="ellipse;whiteSpace=wrap;html=1;fillColor=#F6F6F3;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="30" y="190" width="170" height="170" as="geometry"/></mxCell>
+        <mxCell id="radius" value="r=ξR(t)" style="endArrow=block;html=1;strokeColor=#183A59;fontFamily=Microsoft YaHei;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="115" y="275" as="sourcePoint"/><mxPoint x="200" y="275" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="center" value="r=0, ξ=0" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="35" y="370" width="100" height="30" as="geometry"/></mxCell>
+        <mxCell id="surface" value="r=R(t), ξ=1" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="145" y="370" width="110" height="30" as="geometry"/></mxCell>
+        <mxCell id="heat" value="表面热通量 qh" style="endArrow=block;html=1;strokeColor=#A64949;fontColor=#A64949;fontFamily=Microsoft YaHei;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="200" y="225" as="sourcePoint"/><mxPoint x="290" y="225" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="mass" value="表面湿通量 qm" style="endArrow=block;html=1;strokeColor=#407F46;fontColor=#407F46;fontFamily=Microsoft YaHei;" edge="1" parent="1"><mxGeometry relative="1" as="geometry"><mxPoint x="200" y="325" as="sourcePoint"/><mxPoint x="290" y="325" as="targetPoint"/></mxGeometry></mxCell>
+        <mxCell id="input" value="题面与附件&lt;br&gt;边界、半径、物性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F1F5;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="330" y="80" width="170" height="75" as="geometry"/></mxCell>
+        <mxCell id="q1" value="问题一：附录2&lt;br&gt;常热物性、D(C)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F1F5;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="580" y="80" width="190" height="75" as="geometry"/></mxCell>
+        <mxCell id="q2" value="问题二：附录3&lt;br&gt;从原初值独立积分" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#EDF3E9;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="330" y="245" width="190" height="75" as="geometry"/></mxCell>
+        <mxCell id="q3" value="问题三&lt;br&gt;全域达标事件" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8F0DF;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="600" y="245" width="170" height="75" as="geometry"/></mxCell>
+        <mxCell id="q4" value="问题四：附录4&lt;br&gt;R(t)收缩域" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8E9E9;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="850" y="245" width="190" height="75" as="geometry"/></mxCell>
+        <mxCell id="verify" value="分层验证：守恒、Jacobian、网格、时间、Radau、共同近根状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F0F0;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="330" y="430" width="540" height="75" as="geometry"/></mxCell>
+        <mxCell id="delivery" value="表格、图源&lt;br&gt;报告与审计" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E7EDF2;strokeColor=#52616B;fontFamily=Microsoft YaHei;" vertex="1" parent="1"><mxGeometry x="930" y="430" width="140" height="75" as="geometry"/></mxCell>
+        <mxCell id="e1" value="题设参数" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="input" target="q1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="原始初值 + 附录3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="input" target="q2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="冻结物性退化核验" style="edgeStyle=orthogonalEdgeStyle;rounded=0;dashed=1;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q1" target="q2"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="同一场变量" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q2" target="q3"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e5" value="继承全域判据" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q3" target="q4"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e6" value="A–D与正式结果" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="q4" target="delivery"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="q2" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="q3" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;" edge="1" parent="1" source="q4" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e11" value="证据门禁" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;fontFamily=Microsoft YaHei;" edge="1" parent="1" source="verify" target="delivery"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

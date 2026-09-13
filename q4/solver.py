@@ -4,7 +4,7 @@ import time
 
 import numpy as np
 from numpy.polynomial.legendre import leggauss
-from scipy.integrate import BDF
+from scipy.integrate import BDF, Radau
 from scipy.optimize import brentq
 
 from q2.solver import evaluate_selected
@@ -16,11 +16,34 @@ TRACE_COLUMNS = [
     "center_C", "mean_C", "surface_C", "Cmin", "Tmin_C", "Tmax_C",
     "radial_increase", "relative_balance",
 ]
+OUTPUT_SUMMARY_COLUMNS = TRACE_COLUMNS[:-1]
+
+
+class EventIntegrationError(RuntimeError):
+    """Base class for typed Q4 integration outcomes."""
+
+    def __init__(self, message, result=None):
+        super().__init__(message)
+        self.result = result
+
+
+class ThresholdNotReached(EventIntegrationError):
+    """The configured horizon was integrated successfully without a crossing."""
+
+
+class StrictPostStateUnavailable(EventIntegrationError):
+    """A root was found, but the configured horizon lacks a strict post-state."""
+
+
+class IntegrationFailure(EventIntegrationError):
+    """The numerical integration or a physical-state invariant failed."""
 
 
 def union_breaks(environment, radius, horizon_s):
     breaks = np.union1d(environment.breaks, radius.breaks)
     breaks = breaks[(breaks >= 0) & (breaks <= horizon_s)]
+    if len(breaks) == 0 or breaks[0] != 0.0:
+        breaks = np.r_[0.0, breaks]
     if breaks[-1] != horizon_s:
         breaks = np.r_[breaks, horizon_s]
     return breaks
@@ -78,6 +101,8 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
     root_states = None
     near_states = None
     counts = dict(nfev=0, njev=0, nlu=0)
+    terminal_time = 0.0
+    terminal_balance = 0.0
 
     def summarize(t, y, balance=np.nan):
         cmax, index = full_max(y, n)
@@ -88,6 +113,8 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
                 C.min(), T.min(), T.max(), np.diff(C).max(), balance]
 
     def append_output(t, y):
+        if output_times and float(t) == output_times[-1]:
+            return
         R = float(radius(t))
         output_times.append(float(t))
         output_radius.append(R)
@@ -104,19 +131,25 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
                 return dense(t)
         raise RuntimeError("Full-state event history coverage missing")
 
-    breaks = union_breaks(env, radius, radius.observations[-1, 0])
+    horizon_s = min(float(env.horizon_s), float(radius.horizon_s))
+    breaks = union_breaks(env, radius, horizon_s)
+    method = settings.get("method", "BDF")
+    solver_type = {"BDF": BDF, "Radau": Radau}.get(method)
+    if solver_type is None:
+        raise ValueError(f"Unsupported Q4 integration method: {method}")
     done = False
     for a, b in zip(breaks[:-1], breaks[1:]):
         max_step = settings["max_step_observed"] if a < 14400 else settings["max_step_extended"]
-        solver = BDF(model.rhs, float(a), state, float(b), jac=model.jac,
-                     rtol=settings["rtol"], atol=atol, max_step=max_step,
-                     first_step=min(1e-4, b - a) if a == 0 else None)
+        solver = solver_type(model.rhs, float(a), state, float(b), jac=model.jac,
+                             rtol=settings["rtol"], atol=atol, max_step=max_step,
+                             first_step=min(1e-4, b - a) if a == 0 else None)
         while solver.status == "running":
             left = solver.t
             message = solver.step()
             if solver.status == "failed":
-                raise RuntimeError(f"BDF integration failed: {message}")
+                raise IntegrationFailure(f"{method} integration failed: {message}")
             right, state = solver.t, solver.y
+            terminal_time = float(right)
             dense = solver.dense_output()
             history.append((left, right, dense))
             while history and history[0][1] < right - 1200:
@@ -131,7 +164,7 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
                                 y[:n].max() - max(p["T0"], float(hiT)))
                 temperature_envelope_violation = max(temperature_envelope_violation, float(violation))
                 if violation > 1e-7 or current_max > p["C0"] + 1e-8:
-                    raise RuntimeError("Historical state envelope failed")
+                    raise IntegrationFailure("Historical state envelope failed")
 
             flux_estimates = []
             for nodes, weights in quadrature:
@@ -144,6 +177,7 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
             quad_error += abs(flux_estimates[1] - flux_estimates[0])
             balance = (np.dot(grid.volume, state[n:]) - initial_content +
                        grid.area[-1] * integrated_flux) / initial_content
+            terminal_balance = float(balance)
             max_balance = max(max_balance, abs(float(balance)))
             traces.append(summarize(right, state, balance))
 
@@ -159,7 +193,7 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
                                    "bracket_g": signs, "root_g": full_max(dense(root), n)[0] - threshold}
                     root_states = np.array([dense(bracket[0]), dense(root), dense(bracket[1])])
                 elif gl <= 0:
-                    raise RuntimeError("Missed the first downward crossing")
+                    raise IntegrationFailure("Missed the first downward crossing")
 
             limit = right if root is None else min(root, right)
             while next_output <= limit:
@@ -172,7 +206,7 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
                 near_states = np.array([evaluate_history(t) for t in near_times])
                 near_summary = np.array([summarize(t, y) for t, y in zip(near_times, near_states)])
                 if not (near_summary[0, 2] > threshold and near_summary[2, 2] < threshold):
-                    raise RuntimeError("Strict pre/post state test failed")
+                    raise IntegrationFailure("Strict pre/post state test failed")
                 if output_times[-1] != root:
                     append_output(root, near_states[1])
                 root_record["near_summary"] = near_summary[:, :-1].tolist()
@@ -183,19 +217,44 @@ def integrate_event(model, settings, event_cfg, *, fixed_radius_m):
             counts[key] += getattr(solver, key)
         if done:
             break
-    if not done:
-        raise RuntimeError("No complete drying event by the available radius horizon")
-    return {
+
+    if not output_times or output_times[-1] != (root if done else terminal_time):
+        append_output(root if done else terminal_time, near_states[1] if done else state)
+
+    terminal_row = summarize(terminal_time, state, terminal_balance)
+    result = {
         "time_s": np.array(output_times), "surface_radius_m": np.array(output_radius),
         "temperature_C": np.array(output_T), "moisture": np.array(output_C),
         "summary": np.array(output_summary), "trace": np.array(traces),
         "xi": grid.r, "volume_xi": grid.volume, "fixed_radius_m": np.array(fixed_radius_m),
-        "initial_state": initial, "bracket_states": root_states, "near_states": near_states,
+        "initial_state": initial,
+        "terminal_state": state.copy(),
+        "bracket_states": root_states if root_states is not None else np.empty((0, 2 * n)),
+        "near_states": near_states if near_states is not None else np.empty((0, 2 * n)),
         "root": root_record,
+        "terminal": {
+            **dict(zip(TRACE_COLUMNS, (float(value) for value in terminal_row))),
+            "threshold": float(threshold),
+            "g": float(terminal_row[2] - threshold),
+            "integration_horizon_s": horizon_s,
+        },
         "diagnostics": {**counts, "wall_seconds": time.perf_counter() - started,
+            "method": method,
             "initial_step_s": 1e-4, "accepted_steps": len(traces),
             "max_relative_balance": max_balance,
             "flux_quadrature_difference": quad_error, "minimum_moisture": minimum_moisture,
             "temperature_envelope_violation": temperature_envelope_violation,
             "max_Cmax_increase": max_increase},
     }
+    if done:
+        result["outcome"] = "event"
+        return result
+    if root_record is not None:
+        result["outcome"] = "root_found_post_state_unavailable"
+        raise StrictPostStateUnavailable(
+            "A threshold root was found, but no strict post-state is available", result
+        )
+    result["outcome"] = "threshold_not_reached"
+    raise ThresholdNotReached(
+        f"Threshold not reached by {horizon_s / 3600:.6g} h", result
+    )

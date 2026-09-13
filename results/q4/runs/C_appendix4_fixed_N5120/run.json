@@ -1,12 +1,17 @@
 {
-  "status": "no_event",
+  "status": "computed",
   "identity": {
     "case": {
       "name": "C_appendix4_fixed_N5120",
       "N": 5120,
       "properties": "appendix4",
       "radius": "fixed",
-      "allow_no_event": true
+      "interpolation": "linear",
+      "environment_mode": "last_hour_mean",
+      "horizon_s": 540000,
+      "method": "BDF",
+      "tolerance_scale": 1.0,
+      "max_step_scale": 1.0
     },
     "inputs": {
       "sha256": {
@@ -24,7 +29,8 @@
         "mode": "last_hour_mean",
         "temperature_C": 49.99893442622951,
         "moisture": 0.04998754098360656,
-        "observed_end_s": 14400
+        "observed_end_s": 14400,
+        "horizon_s": 540000.0
       },
       "q4_radius": {
         "sha256": "5563acbfa4b4afb10cc6c03e2207e5369bf39da27576672aff14cc5c32e704af",
@@ -32,7 +38,11 @@
         "rows": 145,
         "initial_radius_m": 0.02,
         "final_radius_m": 0.01198,
-        "fixed": true
+        "fixed": true,
+        "interpolation": "linear",
+        "record_offset_cm": 0.0,
+        "horizon_s": 540000.0,
+        "observed_end_s": 259200.0
       },
       "q4_template": {
         "sha256": "86e9300ffa3d30c43de895ea6723da943e85b8740b137bcae5af7107f076eeac",
@@ -67,110 +77,10 @@
       "max_step_extended": 300.0
     },
     "event": {
-      "upstream_commit": "dc581a37a6a91119412d2ad9abf44f794de846e8",
-      "q2_config": "configs/q2.json",
       "threshold": 0.15,
       "root_xtol_s": 1e-06,
       "bracket_width_s": 1e-05,
-      "strict_offset_s": 1.0,
-      "formal_case": "main_appendix4_shrink_N20480",
-      "grids": [
-        5120,
-        10240,
-        20480
-      ],
-      "radius": {
-        "interpolation": "linear",
-        "unit": "cm",
-        "fixed_output_radius_cm": [
-          0.0,
-          0.1,
-          0.2,
-          0.3,
-          0.4,
-          0.5,
-          0.6,
-          0.7,
-          0.8,
-          0.9,
-          1.0,
-          1.1,
-          1.2,
-          1.3,
-          1.4,
-          1.5,
-          1.6,
-          1.7,
-          1.8,
-          1.9,
-          2.0
-        ]
-      },
-      "input_sha256": {
-        "radius": "5563acbfa4b4afb10cc6c03e2207e5369bf39da27576672aff14cc5c32e704af",
-        "template": "86e9300ffa3d30c43de895ea6723da943e85b8740b137bcae5af7107f076eeac"
-      },
-      "appendix4_parameters": {
-        "rho_intercept": 760.0,
-        "rho_slope": 90.0,
-        "cp_intercept": 1850.0,
-        "cp_scale": 2150.0,
-        "k_intercept": 0.12,
-        "k_scale": 0.2,
-        "D_prefactor": 0.00042,
-        "D_moisture_exponent": 0.3,
-        "D_temperature_exponent_K": 3850.0
-      },
-      "cases": [
-        {
-          "name": "A_appendix3_fixed_N5120",
-          "N": 5120,
-          "properties": "appendix3",
-          "radius": "fixed"
-        },
-        {
-          "name": "B_appendix3_shrink_N5120",
-          "N": 5120,
-          "properties": "appendix3",
-          "radius": "shrink"
-        },
-        {
-          "name": "C_appendix4_fixed_N5120",
-          "N": 5120,
-          "properties": "appendix4",
-          "radius": "fixed",
-          "allow_no_event": true
-        },
-        {
-          "name": "D_appendix4_shrink_N5120",
-          "N": 5120,
-          "properties": "appendix4",
-          "radius": "shrink"
-        }
-      ],
-      "refinement_cases": [
-        {
-          "name": "main_appendix4_shrink_N10240",
-          "N": 10240,
-          "properties": "appendix4",
-          "radius": "shrink"
-        },
-        {
-          "name": "main_appendix4_shrink_N20480",
-          "N": 20480,
-          "properties": "appendix4",
-          "radius": "shrink",
-          "tight": true,
-          "half_step": true
-        }
-      ],
-      "budgets": {
-        "relative_balance": 2e-07,
-        "space_time_s": 0.4,
-        "space_C": 2e-05,
-        "regression_time_s": 0.08,
-        "regression_C": 3e-08
-      }
+      "strict_offset_s": 1.0
     },
     "fixed_radius_m": [
       0.0,
@@ -194,10 +104,11 @@
       0.018000000000000002,
       0.019,
       0.02
-    ]
+    ],
+    "config_path": "configs/q4.json"
   },
   "source": {
-    "hash_scheme": "sha256-text-lf-v1",
+    "hash_scheme": "sha256-text-lf-v2",
     "source_hashes": {
       "q1/fvm.py": "b1c77e6c1d41d69223e7cdaffc705fc64602a968b8afa3832fb544e415e0dd02",
       "q2/inputs.py": "80d214c176014e285c7495ac25e4e3d9ba353c490b3732cd39302dfb843d2cc0",
@@ -205,17 +116,18 @@
       "q2/solver.py": "717e393c89a4f4ad6c53e92f303cc6ab97a9d188235832fef1165f8fb1221a5d",
       "q3/solver.py": "741951af295276cde4f447c9b26ed66e5191c9fb0c5d91d4b154898f4ead9278",
       "q4/__init__.py": "fea2712dee760e86f0f959eec312a27bddbbbd24b48abddc10091599486a5d9e",
-      "q4/inputs.py": "b3c5295191d1100103eb38ebb1cc4a763625eed9d1df4783f1909a5043e5cf5e",
+      "q4/inputs.py": "7cf5712dc902b2b1dedae9369ff7d894306c0b2550ca28ed10074c3ebca71515",
       "q4/model.py": "885a9f890644d438b19a96ffa0a5b75194d07dde7ac4ca26fc9c03b88f9e7142",
-      "q4/solver.py": "b414b7765a8fa5a36e09e4f2eefb848105d8a30f34c71766ac120444579097a2",
-      "q4/run.py": "8293085f8b221fa9a083865ca2572bde7f6faab66da540f09a18afafe65c72ab",
-      "q4/provenance.py": "bc3b034e3e753cb95d094743c5196699df093e159f3290f086528883c5789b52",
+      "q4/solver.py": "4c7cd95ba1963c926e750d085b85c1ee41f6061639d471dcec39ae6bb299f0b3",
+      "q4/run.py": "1f1097dca092dc865906785f34494e290ef9002ce9ce0b01d1e09a6227ddf1ba",
+      "q4/provenance.py": "e8d880815d69cc17352d0f964beed4fc95c056b0b3e94ea1703a089172b4508d",
+      "common/hashing.py": "805769e9de2eebc6b450da06da92f12dfad2387d6dde2dd508e5f37f4cb53997",
       "configs/q2.json": "03b76801552c8ce2b9bdf5730a5409caabc9ecf6ae9c1d042e2b583d306aff13",
-      "configs/q4.json": "d6c62ed620d711bc50f9a633cfc11e88f6d4a3f3a1af1d250f905a36b8b35505",
+      "configs/q4.json": "5fc139d1e2ae6d6642ccb21c23fb9b86fcea12cb9ff0de4e9c2c469e2df66a1e",
       "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
     },
-    "source_digest": "d1b06e116cc0ef02f43f8560647ca9fe39c264ca7da0fc0f90495d85eeeb6e14",
-    "code_commit": null,
+    "source_digest": "c39300d5f9df6503c42534c1e3deff3dcc510fa19f906af30a3aacb1c4fb3fcb",
+    "code_commit": "15dad4de12e621176723be24a5094f8b0cfb2395",
     "python": "3.13.9",
     "packages": {
       "numpy": "2.3.5",
@@ -223,7 +135,148 @@
       "openpyxl": "3.1.5"
     }
   },
-  "horizon_s": 259200.0,
-  "horizon_h": 72.0,
-  "reason": "No full-domain threshold crossing within the observed radius horizon"
+  "root": {
+    "time_s": 467456.2328027442,
+    "time_h": 129.84895355631784,
+    "radius_m": 0.02,
+    "accepted_bracket_s": [
+      467393.2033468657,
+      467693.2033468657
+    ],
+    "bracket_s": [
+      467456.2328000241,
+      467456.2328089648
+    ],
+    "bracket_g": [
+      5.032640970625835e-13,
+      -1.1509404540532842e-12
+    ],
+    "root_g": 0.0,
+    "near_summary": [
+      [
+        467455.2328027442,
+        0.02,
+        0.15000018501983817,
+        0.0,
+        0.0,
+        0.15000018501983817,
+        0.11835316884199812,
+        0.051559002961406725,
+        0.051559002961406725,
+        49.99893442622951,
+        49.99893442622951,
+        -1.8544163704614647e-09
+      ],
+      [
+        467456.2328027442,
+        0.02,
+        0.15,
+        0.0,
+        0.0,
+        0.15,
+        0.11835304312531413,
+        0.0515589961059369,
+        0.0515589961059369,
+        49.99893442622951,
+        49.99893442622951,
+        -1.8544124846808785e-09
+      ],
+      [
+        467457.2328027442,
+        0.02,
+        0.14999981498100423,
+        0.0,
+        0.0,
+        0.14999981498100423,
+        0.11835291740917855,
+        0.051558989250514296,
+        0.051558989250514296,
+        49.99893442622951,
+        49.99893442622951,
+        -1.8544085989002923e-09
+      ]
+    ],
+    "slope_C_per_s": -1.850194169678021e-07
+  },
+  "terminal": {
+    "time_s": 467693.2033468657,
+    "radius_m": 0.02,
+    "Cmax": 0.14995617948798715,
+    "argmax_xi": 0.0,
+    "argmax_radius_m": 0.0,
+    "center_C": 0.14995617948798715,
+    "mean_C": 0.11832326742962283,
+    "surface_C": 0.051557372891887526,
+    "Cmin": 0.051557372891887526,
+    "Tmin_C": 49.99893442622951,
+    "Tmax_C": 49.99893442622951,
+    "radial_increase": -1.8534963008853822e-09,
+    "relative_balance": -3.761410277821875e-09,
+    "threshold": 0.15,
+    "g": -4.3820512012848756e-05,
+    "integration_horizon_s": 540000.0
+  },
+  "diagnostics": {
+    "nfev": 41191,
+    "njev": 392,
+    "nlu": 5625,
+    "wall_seconds": 109.71748640000078,
+    "method": "BDF",
+    "initial_step_s": 0.0001,
+    "accepted_steps": 20032,
+    "max_relative_balance": 3.76399219529192e-09,
+    "flux_quadrature_difference": 9.655539292597757e-17,
+    "minimum_moisture": 0.051557372891887526,
+    "temperature_envelope_violation": 2.1316282072803006e-14,
+    "max_Cmax_increase": 2.220446049250313e-15
+  },
+  "files": {
+    "fields.npz": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "9b5f32ce9e97d9d76bf3d4e6a6750193bfdb52181c19d5b8c7601ec6dc818614"
+    },
+    "accepted_steps.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f5870cfd7de6185cc564de7445b09d27a1e1f481a45135b5136ed5a414eb9aa2"
+    }
+  },
+  "metadata_migration_history": [
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-q4-evidence-contract-refresh",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "7507dd4455bcb79d7b4fbb156adf95556a2411226e09add13818c0e3c9f82db5",
+      "verified_unchanged_numerical_files": [
+        "q1/fvm.py",
+        "q2/inputs.py",
+        "q2/model.py",
+        "q2/solver.py",
+        "q3/solver.py",
+        "q4/__init__.py",
+        "q4/model.py",
+        "q4/solver.py",
+        "q4/run.py",
+        "configs/q2.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "e291658f32fcee28d0b5d553988bab88fba628dca93414e9df1ae26f0cf42111"
+      },
+      "record": "results/q4/runs/C_appendix4_fixed_N5120/run.json",
+      "reason": "Add separate radius observation metadata and strengthen archive loading; PDE operators, case parameters, solver settings, NPZ, and accepted steps are unchanged.",
+      "previous_source_digest": "dda00699b89b8f6cd2f8dfe95ab6ab5ab6e10ce18e4b1b0e2e3ad258dceaeb6f",
+      "refreshed_metadata_files": [
+        "common/hashing.py",
+        "configs/q4.json",
+        "q4/inputs.py",
+        "q4/provenance.py"
+      ],
+      "unchanged_artifact_raw_sha256": {
+        "fields.npz": "9b5f32ce9e97d9d76bf3d4e6a6750193bfdb52181c19d5b8c7601ec6dc818614",
+        "accepted_steps.csv": "8b83ad366d16a31186b501f2eab5d6e58f835866e6ae1ae86d20decdc549a1bb"
+      }
+    }
+  ]
 }

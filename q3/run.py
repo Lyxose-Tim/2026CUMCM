@@ -8,6 +8,7 @@ from pathlib import Path
 import numpy as np
 from openpyxl import load_workbook
 
+from common.hashing import file_record
 from q1.fvm import Grid
 from q2.inputs import read_config, read_inputs, sha256
 from q2.model import CoupledRadialModel
@@ -81,7 +82,7 @@ def compute(data_root, directory, case):
                    header=",".join(TRACE_COLUMNS), comments="", fmt="%.17g")
         write_json(directory/"run.json", {"status": "computed", "identity": identity,
             "source": source, "root": solution["root"], "diagnostics": solution["diagnostics"],
-            "files": {p: sha256(directory/p) for p in ["fields.npz", "accepted_steps.csv"]}})
+            "files": {p: file_record(directory / p) for p in ["fields.npz", "accepted_steps.csv"]}})
         return case["name"], solution["root"]["time_h"], solution["diagnostics"]["wall_seconds"]
     except Exception as exc:
         write_json(directory/"failure.json", {"error": repr(exc), "identity": identity, "source": source})

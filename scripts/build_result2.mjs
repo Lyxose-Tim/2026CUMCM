@@ -1,16 +1,11 @@
-import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { SpreadsheetFile, Workbook } from "@oai/artifact-tool";
+import { verifyHashRecord } from "./hash_record.mjs";
 
 function argument(name, fallback) {
   const position = process.argv.indexOf(name);
   return position >= 0 ? process.argv[position + 1] : fallback;
-}
-
-async function sha256(file) {
-  const content = await fs.readFile(file);
-  return crypto.createHash("sha256").update(content).digest("hex");
 }
 
 const payloadFile = argument("--payload", ".scratch/q2_workbook/payload.json");
@@ -19,12 +14,8 @@ if (!process.argv.includes("--preview-only")) {
   throw new Error("Use q2.export: the Artifact Tool stage is intentionally bounded to a rendered format blueprint");
 }
 const payload = JSON.parse(await fs.readFile(payloadFile, "utf8"));
-if (await sha256(payload.verification_file) !== payload.verification_sha256) {
-  throw new Error("Q2 verification hash mismatch");
-}
-if (await sha256(payload.archive_manifest_file) !== payload.archive_manifest_sha256) {
-  throw new Error("Q2 archive manifest hash mismatch");
-}
+await verifyHashRecord(payload.verification_file, payload.verification_hash);
+await verifyHashRecord(payload.archive_manifest_file, payload.archive_manifest_hash);
 
 const names = ["\u6e29\u5ea6", "\u6c34\u5206\u6d53\u5ea6"];
 const workbook = Workbook.create();
@@ -38,7 +29,7 @@ for (const sheet of sheets.values()) {
 }
 for (const sheetName of names) {
   const chunk = payload.chunks.find((item) => item.sheet === sheetName);
-  if (await sha256(chunk.file) !== chunk.sha256) throw new Error(`Chunk hash mismatch: ${chunk.file}`);
+  await verifyHashRecord(chunk.file, chunk.hash);
   const sample = JSON.parse(await fs.readFile(chunk.file, "utf8")).slice(0, 11);
   sheets.get(sheetName).getRange("A2:V12").values = sample;
 }
@@ -52,8 +43,9 @@ for (const sheet of sheets.values()) {
   };
   sheet.getRange("A2:A12").format.numberFormat = "0";
   sheet.getRange("B2:V12").format.numberFormat = "0.0000";
-  sheet.getRange("A1:A12").format.columnWidth = 12;
-  sheet.getRange("B1:V12").format.columnWidth = 11;
+  sheet.getRange("A1:V1").format.rowHeight = 22;
+  sheet.getRange("A1:A12").format.columnWidth = 26;
+  sheet.getRange("B1:V12").format.columnWidth = 12;
 }
 workbook.recalculate();
 await fs.mkdir(previewDirectory, { recursive: true });

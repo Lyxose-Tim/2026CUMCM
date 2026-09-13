@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "base_case": "D_appendix4_shrink_N5120",
+  "output_directory": "results/q4/sensitivity",
+  "scenarios": [
+    {"name": "linear", "interpolation": "linear"},
+    {"name": "pchip", "interpolation": "pchip"},
+    {"name": "radius_lower", "interpolation": "linear", "radius_offset_cm": -0.0005},
+    {"name": "radius_upper", "interpolation": "linear", "radius_offset_cm": 0.0005},
+    {"name": "environment_terminal_hold", "interpolation": "linear", "environment_mode": "terminal_hold"}
+  ]
+}

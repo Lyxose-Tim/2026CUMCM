@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "generator": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "0aa1abedc93f0f84e9419600f88a7ffe5bc9c9ad38fe59b0385160d5c842c449"
+  },
+  "attachment_sha256": "5563acbfa4b4afb10cc6c03e2207e5369bf39da27576672aff14cc5c32e704af",
+  "observed_end_s": 259200.0,
+  "rows": 145,
+  "csv": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "b55d5310d5f41bc5c453eb38eba3b266804102e01dc39b91c5e2993266f543cb"
+  },
+  "verification": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "0418873d2a804e0c8510550167d8afe7241385390e4845505ff4a0f5a27ca1a8"
+  }
+}

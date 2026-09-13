@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "git_required": false,
+  "python": "3.13.9",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "sections": {
+    "q1_workbook": {
+      "workbook": {
+        "hash_scheme": "sha256-raw-v1",
+        "sha256": "8e9854e828480373315048836df6dbeb1232cdecf0ae0f89c94ed6dc1eaa612a"
+      },
+      "numeric_result_cells_checked": 75600
+    },
+    "q2": {
+      "N": 20480,
+      "numerical_passed": true,
+      "workbook": {
+        "hash_scheme": "sha256-raw-v1",
+        "sha256": "fc226e50942ac70fcadc423f25ec0167d32c6db39e8b0701694ab6e7d1cf9714"
+      },
+      "figure_count": 6,
+      "reports": 3,
+      "schema_version": 2
+    },
+    "q3": {
+      "formal_case": "tight_N40960",
+      "event_time_h": 57.474009775860864,
+      "workbook": {
+        "hash_scheme": "sha256-raw-v1",
+        "sha256": "18283187451c5530ea6988f3d24dfb09d87a1817fed146bd1d08c17a57d6e997"
+      },
+      "figure_count": 4,
+      "reports": 3,
+      "schema_version": 2
+    },
+    "q4": {
+      "formal_case": "main_appendix4_shrink_N20480",
+      "event_time_h": 51.09201068370164,
+      "workbook": {
+        "hash_scheme": "sha256-raw-v1",
+        "sha256": "332244a5bbc27e2beb2f98851c6dd9463ec2516b2a1122a53bfb56e3a89938b0"
+      },
+      "figure_count": 5,
+      "sensitivity_scenarios": 5,
+      "reports": 4,
+      "schema_version": 2
+    },
+    "paper_figures": {
+      "figure_count": 6,
+      "csv_count": 10,
+      "drawio": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "42e74c409a87e9793e60551d28bf01472b1d87572fc1686980ef8b108bad10b2"
+      }
+    }
+  }
+}

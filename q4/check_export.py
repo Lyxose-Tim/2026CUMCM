@@ -1,10 +1,12 @@
 """Independent readback for result4.xlsx with out-of-material blanks."""
 import argparse
+import json
 from pathlib import Path
 
 import numpy as np
 from openpyxl import load_workbook
 
+from common.hashing import file_record, verify_file
 from q2.archive import write_json
 from q2.inputs import sha256
 from q2.provenance import portable_artifact_sha256
@@ -30,6 +32,17 @@ def check(directory="results/q4", workbook="results/result4.xlsx"):
     directory = Path(directory)
     write_json(directory / "export_verification.json", {"passed": False, "status": "checking"})
     verification, record, fields = verified(directory)
+    radius_manifest_path = directory / "radius_input_manifest.json"
+    radius_manifest = json.loads(radius_manifest_path.read_text(encoding="utf-8"))
+    if (radius_manifest.get("schema_version") != 1
+            or radius_manifest.get("attachment_sha256")
+            != record["identity"]["inputs"]["q4_radius"]["sha256"]
+            or radius_manifest.get("observed_end_s")
+            != record["identity"]["inputs"]["q4_radius"]["observed_end_s"]):
+        raise ValueError("Q4 radius observation evidence differs from the verified input")
+    verify_file("q4/export.py", radius_manifest["generator"])
+    verify_file(directory / "verification.json", radius_manifest["verification"])
+    verify_file(directory / "radius_observations.csv", radius_manifest["csv"])
     wb = load_workbook(workbook, read_only=False, data_only=True)
     try:
         if wb.sheetnames != ["Sheet1"]:
@@ -38,6 +51,8 @@ def check(directory="results/q4", workbook="results/result4.xlsx"):
         expected = np.c_[fields["time_s"][1:], rounded(fields["moisture"][1:])]
         if sheet.max_row != len(expected) + 1 or sheet.max_column != 23:
             raise ValueError("Unexpected Q4 workbook dimensions")
+        if sheet.freeze_panes != "B2":
+            raise ValueError("Missing Q4 freeze panes")
         header = [cell.value for cell in next(sheet.iter_rows(max_row=1))]
         assert_headers(header, record)
         actual = []
@@ -64,7 +79,7 @@ def check(directory="results/q4", workbook="results/result4.xlsx"):
     table = np.loadtxt(directory / "table6.csv", delimiter=",", skiprows=1)
     indices = np.array([np.argmin(abs(fields["time_s"] - t * 3600)) for t in table[:, 0]])
     np.testing.assert_allclose(fields["time_s"][indices], table[:, 0] * 3600, rtol=0, atol=1e-9)
-    np.testing.assert_allclose(table[:, 1:], fields["moisture"][indices][:, [0, 5, 10, 15, 20, 21]], equal_nan=True)
+    np.testing.assert_allclose(table[:, 1:], fields["moisture"][indices][:, [0, 5, 10, 21]], equal_nan=True)
     result = {
         "passed": True,
         "cells_checked": int(np.isfinite(expected_values).sum()),
@@ -73,11 +88,14 @@ def check(directory="results/q4", workbook="results/result4.xlsx"):
         "columns": 23,
         "moisture_max_abs_difference": diff,
         "terminal_time_difference_s": float(terminal_time_difference),
-        "workbook_sha256": sha256(workbook),
+        "workbook_hash": file_record(workbook),
         "headers": workbook_headers(record),
-        "verification_sha256": portable_artifact_sha256(directory / "verification.json"),
+        "verification_hash": file_record(directory / "verification.json"),
         "delivery_sources": delivery_sources(),
-        "table6_sha256": portable_artifact_sha256(directory / "table6.csv"),
+        "table6_hash": file_record(directory / "table6.csv"),
+        "radius_input_manifest_hash": file_record(radius_manifest_path),
+        "radius_observations_hash": file_record(directory / "radius_observations.csv"),
+        "writer": "openpyxl normal mode",
     }
     write_json(directory / "export_verification.json", result)
     return result

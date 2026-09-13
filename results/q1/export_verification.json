@@ -1,7 +1,11 @@
 {
   "passed": true,
   "numeric_result_cells_checked": 75600,
-  "workbook_sha256": "e40b93f454859f00b1076c5f1bc369f60e30c2a460878d64dc5aa4763c730018",
+  "workbook_sha256": "8e9854e828480373315048836df6dbeb1232cdecf0ae0f89c94ed6dc1eaa612a",
+  "workbook_hash": {
+    "hash_scheme": "sha256-raw-v1",
+    "sha256": "8e9854e828480373315048836df6dbeb1232cdecf0ae0f89c94ed6dc1eaa612a"
+  },
   "table_values_match": true,
   "figure_source_values_match": true,
   "sheets": [
@@ -10,5 +14,6 @@
   ],
   "range_per_sheet": "A1:V1801",
   "rounding": "Decimal(str(float)); ROUND_HALF_UP; 4 decimal places",
+  "writer": "openpyxl normal mode",
   "original_template_sha256": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4"
 }

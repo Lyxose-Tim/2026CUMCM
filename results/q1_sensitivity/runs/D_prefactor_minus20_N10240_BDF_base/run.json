@@ -39,7 +39,7 @@
     },
     "template_A1": "时间\\到药材中心的距离"
   },
-  "source_hash_scheme": "sha256-text-lf-v1",
+  "source_hash_scheme": "sha256-text-lf-v2",
   "source_hashes": {
     "q1/__init__.py": "194c84380e07091c4d3697abff5dfa40c7e6d9976ce01908980f841667ef181f",
     "q1/archive.py": "baeb5bffa371c7ce2ba55502672ca474ee5510e47b9742b2372e89ae057cc3a2",
@@ -50,7 +50,8 @@
     "q1/reference.py": "e3b3455585cc44b9cfa40f0f03eee86e47d50bd81ed21da3ae0c627e3fac635b",
     "q1/sensitivity.py": "4aff7d513470b88a87640ef6ed039d0d7adb5c0c2bb8e7a5fb9c0cc1b7140a28",
     "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
-    "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
+    "q1/provenance.py": "c13bc27bcbb7f264de1f6cf95d8f59baf44febb57253f0a3ad4e6df42d2d4025",
+    "common/hashing.py": "805769e9de2eebc6b450da06da92f12dfad2387d6dde2dd508e5f37f4cb53997",
     "configs/q1.json": "c4ff31112068a65d62b023d4beaa85199a4912ad699f6a873003087fad8529c8",
     "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
     "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
@@ -58,20 +59,21 @@
   "source_raw_hashes": {
     "q1/__init__.py": "b7bb7ea87fd2a5ea0c4c7a4d0cab59a350c61353dcececaa814600b595048856",
     "q1/archive.py": "dd9099ca5ed0b102f55d76a0813644e1e04b8fc6c6ac2e495c95e5d411668644",
-    "q1/inputs.py": "08ac749c16710ba6efe733112311adcf1ab1dcb3c4e69b84e852ae95e2f3aa0d",
+    "q1/inputs.py": "8980f6975cbdae1dd1ec4b11781cba0214f61bd6f965143efa4ba18cdde8ec90",
     "q1/fvm.py": "1dd9fb6539d7b190b8ed4a3f53806e637852ac8c9507f2fa595fbdea31ea23e6",
-    "q1/solver.py": "50740ae52bc2da0504090ef1f9f6afd834140e595a7acc183e51e19550d8e0f0",
-    "q1/validation.py": "81c42c578482c6363f6818ebb988170686575d45013615c1b09085af5a35ebb8",
+    "q1/solver.py": "48b66bc6c4d6da4427c801d0fb6c0721577308a7e608d36ed54ece6823e6f142",
+    "q1/validation.py": "67e8284a83d4aed7d3e66c0db648f50802d262395c26171645a78dd485615562",
     "q1/reference.py": "830e01ecc6a0606970db3074563652c6a4b39d35d9873ad38858b051f533a4c8",
-    "q1/sensitivity.py": "4aff7d513470b88a87640ef6ed039d0d7adb5c0c2bb8e7a5fb9c0cc1b7140a28",
-    "q1/sensitivity_metrics.py": "13accd0664d0d1f7b106d8319c4e96fe49778800f7ad38608e414965ada27c0b",
-    "q1/provenance.py": "5af6a139141e9c7b886abc9ac2f718357c31c9178df9df4ae748d52441aa141a",
+    "q1/sensitivity.py": "dfcc1b94da4940b10a8508fe030e13177b0a582a72b069ac7cdcdd1bfffaf491",
+    "q1/sensitivity_metrics.py": "5296c19d469220eaf920539687c88206087ba139f99686aafd3f69726840aff9",
+    "q1/provenance.py": "e2a56517ad945eb7a70d3eba5f9a9c621ad0b1298f77f4d504d76a98ef581911",
+    "common/hashing.py": "805769e9de2eebc6b450da06da92f12dfad2387d6dde2dd508e5f37f4cb53997",
     "configs/q1.json": "b91a004a6feee1971946182974d12244a88993d44c3b990cb0fbfd773ccb2267",
-    "configs/q1_sensitivity.json": "c738c808ca0ea1b128afc8d571b09b5ec22ac87a8d7140969281a93bc8fcdddd",
+    "configs/q1_sensitivity.json": "ab8bc4b2315cd01724a3eaf73d4b273eeedd8a5b322b2cf09090c2d9c1ef7037",
     "requirements.lock.txt": "b056a1c86a34d1308c246524f270ffd717469c318a2169fa371a0efbae102b7f"
   },
-  "source_digest": "27bba63885c66b62b457aa5a30444062a7dadf1c772405f5e02ee83a6fb8b532",
-  "code_commit": "2e79bdfdbe2aba62df0af01d9b504b0c6bd9727f",
+  "source_digest": "05cad92943ea081b721dd5d8db0d29cf37fbb6c4bd0ca2ec027883371f7eba29",
+  "code_commit": "5010d51043561f4b4de6466b121b4cdf44d7027f",
   "dependencies": {
     "numpy": "2.5.3",
     "scipy": "1.18.1",
@@ -132,10 +134,91 @@
   },
   "accepted_and_output_envelopes_passed": true,
   "passed": true,
-  "artifact_hash_scheme": "sha256-text-lf-v1",
+  "artifact_hash_scheme": "sha256-text-lf-v2",
   "files": {
     "series.npz": "a3968dd6a4f7a2f32c00884ac1c9b532001eb0cf1486c8098072da93207df8c5",
     "balance.csv": "25383d69617950507d82533b2281422eb9af6c7ae5aadce2f57268054437fb59",
     "accepted_steps.csv": "378e499de012f0eef3234522332dedf53dc5e54dd25a1ae4117952eadf4be83d"
-  }
+  },
+  "source_raw_hash_scheme": "sha256-raw-v1",
+  "metadata_migration_history": [
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v1",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "789c1c6cb7522a243f1dd5ebcc822d7c8ee819c43477c08952f49f149d7720fa",
+      "verified_unchanged_numerical_files": [
+        "q1/__init__.py",
+        "q1/archive.py",
+        "q1/inputs.py",
+        "q1/fvm.py",
+        "q1/solver.py",
+        "q1/validation.py",
+        "q1/reference.py",
+        "q1/sensitivity.py",
+        "q1/sensitivity_metrics.py",
+        "configs/q1.json",
+        "configs/q1_sensitivity.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "e5536458929e206fe76e72284097c7739d1fd29da3f64e8773b337840b6bfcfa"
+      },
+      "record": "results/q1_sensitivity/runs/D_prefactor_minus20_N10240_BDF_base/run.json"
+    },
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "f750ebd95d7f3a5e098d6eb4ff1ee654a152ca59649b09c37d110140aa9976fa",
+      "verified_unchanged_numerical_files": [
+        "q1/__init__.py",
+        "q1/archive.py",
+        "q1/inputs.py",
+        "q1/fvm.py",
+        "q1/solver.py",
+        "q1/validation.py",
+        "q1/reference.py",
+        "q1/sensitivity.py",
+        "q1/sensitivity_metrics.py",
+        "configs/q1.json",
+        "configs/q1_sensitivity.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "423166b921d59628a9b8f15b23639b64a5a206abf3207601335532fcdd428a6a"
+      },
+      "record": "results/q1_sensitivity/runs/D_prefactor_minus20_N10240_BDF_base/run.json"
+    },
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-hash-contract-migration",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "9d259aac2b83a09809f4bfb3be261baa13851e482e47c74a12a47fe0e6c499f9",
+      "verified_unchanged_numerical_files": [
+        "q1/__init__.py",
+        "q1/archive.py",
+        "q1/inputs.py",
+        "q1/fvm.py",
+        "q1/solver.py",
+        "q1/validation.py",
+        "q1/reference.py",
+        "q1/sensitivity.py",
+        "q1/sensitivity_metrics.py",
+        "configs/q1.json",
+        "configs/q1_sensitivity.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "423166b921d59628a9b8f15b23639b64a5a206abf3207601335532fcdd428a6a"
+      },
+      "record": "results/q1_sensitivity/runs/D_prefactor_minus20_N10240_BDF_base/run.json"
+    }
+  ]
 }

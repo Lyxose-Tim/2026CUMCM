@@ -1,0 +1,6 @@
+scenario,event_time_h,event_delta_vs_linear_s,radius_offset_cm,radius_interpolation,environment_mode
+linear,51.09212078510221,0,0,linear,last_hour_mean
+pchip,51.088619140038929,-12.605922227812698,0,pchip,last_hour_mean
+radius_lower,51.054603810903352,-135.06110711587826,-0.00050000000000000001,linear,last_hour_mean
+radius_upper,51.129654193391787,135.12026984247495,0.00050000000000000001,linear,last_hour_mean
+environment_terminal_hold,50.824320222084864,-964.08202686245204,0,linear,terminal_hold

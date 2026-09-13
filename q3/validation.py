@@ -1,12 +1,14 @@
 """Event-specific numerical budgets, source checks, and regression evidence."""
 import argparse
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
 
 import numpy as np
 
+from common.hashing import file_record, verify_file
 from q2.archive import load_archive, write_json
 from q2.inputs import read_config, sha256
 from q2.provenance import portable_artifact_sha256, verify_sources
@@ -17,7 +19,18 @@ from q3.run import cases
 
 def validation_sources():
     paths = ["q3/validation.py", "q3/refine.py"] + sorted(str(p).replace("\\", "/") for p in Path("tests").glob("test_*.py"))
-    return {p: portable_artifact_sha256(p) for p in paths}
+    return {p: file_record(p) for p in paths}
+
+
+def normalize_test_output(output):
+    if not output:
+        return ""
+    if isinstance(output, bytes):
+        output = output.decode("utf-8", errors="replace")
+    lines = output.replace("\r\n", "\n").replace("\r", "\n").split("\n")
+    while lines and lines[-1] == "":
+        lines.pop()
+    return "\n".join(line.rstrip() for line in lines) + "\n"
 
 
 def compare(a, b):
@@ -64,9 +77,16 @@ def validate(directory="results/q3"):
     directory = Path(directory)
     config = read_config("configs/q3.json")
     write_json(directory/"verification.json", {"passed": False, "status": "running"})
-    test = subprocess.run([sys.executable,"-m","pytest","-q","-p","no:cacheprovider"],
-                          capture_output=True, text=True, encoding="utf-8")
-    (directory/"unit_tests.txt").write_text(test.stdout+test.stderr, encoding="utf-8")
+    configured_basetemp = os.environ.get("CUMCM_PYTEST_BASETEMP")
+    base = Path(configured_basetemp) if configured_basetemp else Path(".scratch") / "pytest-validation"
+    basetemp = base / f"q3-{os.getpid()}"
+    basetemp.parent.mkdir(parents=True, exist_ok=True)
+    test = subprocess.run(
+        [sys.executable, "-m", "pytest", "-q", "--basetemp", basetemp, "-p", "no:cacheprovider"],
+        capture_output=True,
+    )
+    output = normalize_test_output((test.stdout or b"") + (test.stderr or b""))
+    (directory/"unit_tests.txt").write_text(output, encoding="utf-8")
     if test.returncode:
         raise RuntimeError("Unit/regression tests failed")
     runs = {c["name"]: load_run(directory/"runs"/c["name"]) for c in cases(config)}
@@ -129,7 +149,7 @@ def validate(directory="results/q3"):
         "spatial":spatial,"temporal":temporal,"q2_regression":regression,
         "observed_orders":orders,"estimated_space_time_error_s":spatial_estimate,
         "initial_adjacent_difference_goal_passed":all(s["time_difference_s"]<budgets["space_time_s"] for s in spatial),
-        "q2_archive_manifest_sha256":portable_artifact_sha256("results/q2/archive/manifest.json"),
+        "q2_archive_manifest_hash":file_record("results/q2/archive/manifest.json"),
         "estimated_numerical_time_change_s":time_estimate,
         "error_interpretation":"Richardson estimate using measured order + measured time change + root bracket; not a rigorous PDE bound",
         "slope_C_per_s":-slope,"C_error_1e_6_time_s":1e-6/slope,"rounding_5e_5_time_s":5e-5/slope,
@@ -139,8 +159,8 @@ def validate(directory="results/q3"):
         "argmax_after_6h_range_m":[float(late["argmax_radius_m"].min()),float(late["argmax_radius_m"].max())],
         "max_radial_increase":float(trace["radial_increase"].max()),
         "sensitivity":sensitivity,
-        "run_record_hashes":{k:portable_artifact_sha256(directory/"runs"/k/"run.json") for k in runs},
-        "validation_sources":validation_sources(),"unit_tests_sha256":portable_artifact_sha256(directory/"unit_tests.txt")}
+        "run_record_hashes":{k:file_record(directory/"runs"/k/"run.json") for k in runs},
+        "validation_sources":validation_sources(),"unit_tests_hash":file_record(directory/"unit_tests.txt")}
     write_json(directory/"verification.json",result)
     return result
 
@@ -157,11 +177,9 @@ def verified(directory="results/q3"):
     if set(v["run_record_hashes"]) != expected:
         raise ValueError("Incomplete verification run set")
     for name,digest in v["run_record_hashes"].items():
-        if portable_artifact_sha256(directory/"runs"/name/"run.json") != digest:
-            raise ValueError("Changed run record")
+        verify_file(directory/"runs"/name/"run.json", digest)
         load_run(directory/"runs"/name)
-    if portable_artifact_sha256(directory/"unit_tests.txt") != v["unit_tests_sha256"]:
-        raise ValueError("Changed test evidence")
+    verify_file(directory/"unit_tests.txt", v["unit_tests_hash"])
     record,fields=load_run(directory/"runs"/v["formal_case"])
     return v,record,fields
 

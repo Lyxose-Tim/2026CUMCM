@@ -8,13 +8,65 @@ def test_text_hash_accepts_only_line_ending_equivalence(tmp_path):
     from q1.provenance import artifact_sha256
     a,b=tmp_path/'a.py',tmp_path/'b.py'
     a.write_bytes(b'k = 0.36\nD = 7e-9\n')
-    b.write_bytes(b'k = 0.36\r\nD = 7e-9\r\n')
+    b.write_bytes(b'k = 0.36\rD = 7e-9\r')
     assert artifact_sha256(a)==artifact_sha256(b)
     b.write_bytes(b'k = 0.37\r\nD = 7e-9\r\n')
     assert artifact_sha256(a)!=artifact_sha256(b)
     x,y=tmp_path/'a.npz',tmp_path/'b.npz'
     x.write_bytes(b'\n'); y.write_bytes(b'\r\n')
     assert artifact_sha256(x)!=artifact_sha256(y)
+
+
+def test_declared_text_requires_utf8_and_hash_record_is_versioned(tmp_path):
+    from common.hashing import TEXT_HASH_SCHEME, file_record, verify_file
+    path = tmp_path / "model.yaml"
+    path.write_text("radius: 0.02\n", encoding="utf-8")
+    record = file_record(path)
+    assert record["hash_scheme"] == TEXT_HASH_SCHEME
+    assert verify_file(path, record) == record
+    path.write_bytes(b"\xff\xfe")
+    with pytest.raises(ValueError, match="UTF-8"):
+        file_record(path)
+
+
+def test_metadata_migration_refuses_numerical_source_change(tmp_path):
+    from common.hashing import LEGACY_TEXT_HASH_SCHEME, TEXT_HASH_SCHEME, file_sha256
+    from common.migrate_provenance import verify_current_sources, verify_legacy_sources
+    source = tmp_path / "model.py"
+    source.write_text("coefficient = 1.0\n", encoding="utf-8")
+    record = {
+        "source_hash_scheme": LEGACY_TEXT_HASH_SCHEME,
+        "source_hashes": {"model.py": file_sha256(source, LEGACY_TEXT_HASH_SCHEME)},
+    }
+    assert verify_legacy_sources(record, tmp_path, ["model.py"], set()) == ["model.py"]
+    source.write_text("coefficient = 1.1\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="migration refused"):
+        verify_legacy_sources(record, tmp_path, ["model.py"], set())
+    current = {
+        "source_hashes": {"model.py": file_sha256(source, TEXT_HASH_SCHEME)},
+    }
+    source.write_text("coefficient = 1.2\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="migration refused"):
+        verify_current_sources(current, tmp_path, ["model.py"], set())
+
+
+def test_git_commit_uses_repo_specific_safe_directory(monkeypatch, tmp_path):
+    from q1.provenance import git_commit as q1_git_commit
+    from q2.provenance import git_commit as q2_git_commit
+
+    (tmp_path / ".git").mkdir()
+    calls = []
+
+    def succeed(args, **_kwargs):
+        calls.append(args)
+        output = str(tmp_path) if "--show-toplevel" in args else "a" * 40
+        return subprocess.CompletedProcess(args, 0, output, "")
+
+    monkeypatch.setattr(subprocess, "run", succeed)
+    assert q1_git_commit(tmp_path) == "a" * 40
+    assert q2_git_commit(tmp_path) == "a" * 40
+    expected = f"safe.directory={tmp_path.resolve().as_posix()}"
+    assert all(call[1:3] == ["-c", expected] for call in calls)
 
 
 @pytest.mark.parametrize('kind',['missing_executable','not_a_repository'])

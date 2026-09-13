@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .inputs import sha256
+from common.hashing import RAW_HASH_SCHEME, file_record, verify_file
 
 
 def write_json(path, data):
@@ -27,7 +27,8 @@ def save_archive(directory, solution, grid, metadata, chunk_rows=21600):
             moisture=solution.moisture[start:end],
         )
         chunks.append({
-            "file": path.name, "sha256": sha256(path), "bytes": path.stat().st_size,
+            "file": path.name, "hash": file_record(path, RAW_HASH_SCHEME),
+            "bytes": path.stat().st_size,
             "first_time_s": float(solution.times[start]), "last_time_s": float(solution.times[end - 1]),
         })
     geometry = directory / "geometry.npz"
@@ -48,7 +49,7 @@ def save_archive(directory, solution, grid, metadata, chunk_rows=21600):
         "dtype": "float64",
         "formal_radius_cm": [j / 10 for j in range(21)],
         "chunks": chunks,
-        "geometry_sha256": sha256(geometry),
+        "geometry_hash": file_record(geometry, RAW_HASH_SCHEME),
     }
     write_json(directory / "manifest.json", manifest)
     return manifest
@@ -58,15 +59,13 @@ def load_archive(directory):
     directory = Path(directory)
     manifest = json.loads((directory / "manifest.json").read_text(encoding="utf-8"))
     geometry_path = directory / "geometry.npz"
-    if sha256(geometry_path) != manifest["geometry_sha256"]:
-        raise ValueError("Q2 archive geometry hash mismatch")
+    verify_file(geometry_path, manifest["geometry_hash"])
     with np.load(geometry_path) as source:
         geometry = {key: source[key] for key in source.files}
     pieces = {"time_s": [], "temperature_C": [], "moisture": []}
     for item in manifest["chunks"]:
         path = directory / item["file"]
-        if sha256(path) != item["sha256"]:
-            raise ValueError(f"Q2 archive hash mismatch: {path.name}")
+        verify_file(path, item["hash"])
         with np.load(path) as source:
             for key in pieces:
                 pieces[key].append(source[key])

@@ -1,0 +1,5 @@
+item,label
+center,"r=0, xi=0"
+surface,"r=R(t), xi=1"
+heat_flux,-k theta_r = h(theta_s-T_e)
+mass_flux,-D C_r = h_m(C_s-C_e)

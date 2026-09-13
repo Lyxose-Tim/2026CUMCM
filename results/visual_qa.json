@@ -1,0 +1,52 @@
+{
+  "schema_version": 2,
+  "passed": true,
+  "artifact_tool_bundle": "26.909.12148",
+  "workbooks": {
+    "result1.xlsx": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "8e9854e828480373315048836df6dbeb1232cdecf0ae0f89c94ed6dc1eaa612a",
+      "reviewed": "both sheets, rows 1-12 and 1790-1801"
+    },
+    "result2.xlsx": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "fc226e50942ac70fcadc423f25ec0167d32c6db39e8b0701694ab6e7d1cf9714",
+      "reviewed": "two-sheet hash-bound Artifact Tool format blueprint plus 10886400-cell streaming readback"
+    },
+    "result3.xlsx": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "18283187451c5530ea6988f3d24dfb09d87a1817fed146bd1d08c17a57d6e997",
+      "reviewed": "rows 1-12 and 3439-3450"
+    },
+    "result4.xlsx": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "332244a5bbc27e2beb2f98851c6dd9463ec2516b2a1122a53bfb56e3a89938b0",
+      "reviewed": "rows 1-12 and 3056-3067, including dynamic surface and out-of-domain blanks"
+    }
+  },
+  "figure_manifests": {
+    "q2": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "2a3080763d9b3a380c1cf9f8e52205bb745efabcfd666ea9e59275faeb9d04cc"
+    },
+    "q3": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "7242181c11b2ff7186ae4ded8a80542d49cb32ab201e9ebbb272b0a7a025daad"
+    },
+    "q4": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "493e387a75e4e565a6c485fbf205e3c0257fd564ccdb7f944206eaee173f4729"
+    },
+    "paper": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "e2469f238c946a1e603c90a14ee463f12443faf76130ec7547524a8761c0dfe9"
+    }
+  },
+  "checks": [
+    "all workbook headers are visible and numeric columns remain readable at normal zoom",
+    "Q4 fixed-radius cells outside the shrinking physical domain are blank while the dynamic surface column remains numeric",
+    "all 15 Q3, Q4 and paper PDFs were rendered after their final regeneration",
+    "all six Q2 PDFs were rendered and inspected after the final Q2 figure generation",
+    "no blank panels, missing glyphs, incoherent overlaps, clipped legends or misleading dual axes were found"
+  ]
+}

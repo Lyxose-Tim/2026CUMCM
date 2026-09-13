@@ -7,6 +7,8 @@ from pathlib import Path
 
 import numpy as np
 
+from common.hashing import file_record
+from common.workbooks import write_dense_workbook
 from .archive import load_archive,write_json
 from .inputs import sha256
 
@@ -55,14 +57,43 @@ def prepare(directory="results/q1",payload_path=".scratch/q1_workbook_payload.js
             writer.writerow(["time_s","r_0_cm","r_0.5_cm","r_1_cm","r_1.5_cm","r_2_cm"])
             writer.writerows(tables[key])
     write_json(directory/"tables.json",tables)
-    payload = {"verification_file":str(directory/"verification.json"),"verification_sha256":sha256(directory/"verification.json"),"archive_manifest_file":str(directory/"archive"/"manifest.json"),"archive_manifest_sha256":sha256(directory/"archive"/"manifest.json"),"worksheets":worksheets}
+    payload = {
+        "verification_file": str(directory / "verification.json"),
+        "verification_hash": file_record(directory / "verification.json"),
+        "archive_manifest_file": str(directory / "archive" / "manifest.json"),
+        "archive_manifest_hash": file_record(directory / "archive" / "manifest.json"),
+        "worksheets": worksheets,
+    }
     write_json(payload_path,payload)
     return data,g,m,v
+
+
+def export_workbook(directory="results/q1", workbook="results/result1.xlsx", payload_path=".scratch/q1_workbook_payload.json"):
+    data, geometry, manifest, _ = prepare(directory, payload_path)
+    headers = [manifest["inputs"]["template_A1"], *[index / 10 for index in range(21)]]
+    indices = geometry["output_indices"]
+    sheets = [
+        {
+            "name": name,
+            "header": headers,
+            "times": data["time_s"][1:],
+            "values": data[key][1:, indices],
+        }
+        for name, key in (("温度", "temperature_C"), ("水分浓度", "moisture"))
+    ]
+    write_dense_workbook(workbook, sheets, time_format="0")
+    from .check_export import check
+    return check(directory, workbook)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--directory",default="results/q1")
     parser.add_argument("--payload",default=".scratch/q1_workbook_payload.json")
+    parser.add_argument("--workbook",default="results/result1.xlsx")
+    parser.add_argument("--prepare-only",action="store_true")
     args = parser.parse_args()
-    prepare(args.directory,args.payload)
+    if args.prepare_only:
+        prepare(args.directory,args.payload)
+    else:
+        print(json.dumps(export_workbook(args.directory, args.workbook, args.payload), ensure_ascii=False))

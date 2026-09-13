@@ -1,16 +1,64 @@
 {
+  "schema_version": 3,
   "font": "Microsoft YaHei",
-  "source_code_sha256": "710429674637ebebca29dd51c9772bce85730af5e8d78972fccdd22e4d5a6f60",
-  "verification_sha256": "5d8b296af64095aff7f3b291961c6c2b1353ea5ff064059fd6d55300f8dda198",
+  "generator": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "f79a88029601a8497aca575ec83c4fabc6daacd0b451961a1f3b24ca9ec7b1ab"
+  },
+  "verification": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "0418873d2a804e0c8510550167d8afe7241385390e4845505ff4a0f5a27ca1a8"
+  },
+  "sensitivity_summary": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "90831a2b1cba391c87a68fa708d7bf8d18d5703de2d0ceba2f7a9758369c45d0"
+  },
   "csv": {
-    "case_summary.csv": "6182a0911e393ddcd560218d5c91ff889c6a7d39ef8568b09507e54ba68f886f",
-    "fixed_radius_profiles.csv": "433e949b72940c0758a899ec3e56add781abcd56de7f0ec39f78a072651eed1c",
-    "radius.csv": "dc72c296e800f8cca364a119ff48bc8cabcc173566ba5c86c78fb84cd583b358",
-    "response.csv": "a96b8ed07a2dc3d2a371c8873ad87161903ed3c99fbdcab7b6f70658803bae8e"
+    "case_summary.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "dae5530cea60a4e74b6947591a8ce9ac45743a5498f6d20fbbd10fc4c47bf7f7"
+    },
+    "fixed_radius_profiles.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "4b390c1de28052019f9f9ab9f8757346e0f7561e10f3cce62ada04ae90fe29d7"
+    },
+    "numerical_comparisons.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f549dc2cc4713a1376c65ff24de0bcb3319a6503f60ba11808575826f66c2382"
+    },
+    "radius.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "dc72c296e800f8cca364a119ff48bc8cabcc173566ba5c86c78fb84cd583b358"
+    },
+    "response.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "a96b8ed07a2dc3d2a371c8873ad87161903ed3c99fbdcab7b6f70658803bae8e"
+    },
+    "structural_sensitivity.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "33259fdb402db5b3681a2826695a72f5b034a35b766c3673d8ee37fc72cbd81d"
+    }
   },
   "pdf": {
-    "q4_moisture_radius.pdf": "58bb8996bffa3b4f1f876d3fdc5f3d9a6536251478471620e8cb017ac83cba13",
-    "q4_fixed_radius_profiles.pdf": "130c391a5dc1cd5265cf7aafce58af2193b86e985fc285af3e2be5dcaa459a5b",
-    "q4_case_comparison.pdf": "6f50cb6d5189ea9a60b37066bc5385414538d22e988b14a4efc33ae8469e7447"
+    "q4_moisture_radius.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "2d6571240846fb19453f290b9b42bd8520cc24c76ba30930b7af660420c6ddaf"
+    },
+    "q4_fixed_radius_profiles.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "a84875332f765b0fef0bb6a74258209a68ca46d03bc7631ac02c4c9b73d749c8"
+    },
+    "q4_case_comparison.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "6157a5725c19a0b1d019fb8e861dc842f36c5c888d8ffe311153e647d022cdd9"
+    },
+    "q4_numerical_comparisons.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "02e4aed2209d1b9c161c0be4ced6c37dd92bcdfb847f3a29ebd1f8cac791fb8f"
+    },
+    "q4_structural_sensitivity.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "fd85e371491f11b268341813caabc847ddde92e49a4655664a2a00da29f80588"
+    }
   }
 }

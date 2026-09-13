@@ -1,7 +1,10 @@
 {
   "passed": true,
-  "workbook_sha256": "c1a00b710d2a13ebf8884887cc3075d945fcb37aa46f266328c6618be174f177",
-  "workbook_bytes": 33984006,
+  "workbook_hash": {
+    "hash_scheme": "sha256-raw-v1",
+    "sha256": "fc226e50942ac70fcadc423f25ec0167d32c6db39e8b0701694ab6e7d1cf9714"
+  },
+  "workbook_bytes": 33984081,
   "numeric_result_cells_checked": 10886400,
   "max_absolute_readback_difference": 0.0,
   "sheets": [
@@ -10,26 +13,37 @@
   ],
   "rows_per_sheet": 259201,
   "columns_per_sheet": 22,
-  "numerical_verification_sha256": "bca889ad42f08718f21ccd1603fa28c3e2b4b399046262e17b33b87010a5b5f1",
-  "archive_manifest_sha256": "54e4a55218d63b01cc62d995bca385f5ace353ce295a54a9b2c1d4d4f48a1250",
-  "delivery_source": {
-    "source_hash_scheme": "sha256-text-lf-v1",
-    "source_hashes": {
-      "q2/provenance.py": "961a2972ce6723169896ddda91693ae7b212bcc70803449f101528972b55e6c4",
-      "q2/export.py": "e945b0ce0c33b280b91d42861994e92d848654e7d602f7e6b425e57cb27abc9d",
-      "q2/check_export.py": "f3af50d7de3c1cc0ecb0e421824f381a67eb0722198003c226739c4ce7cbed0c",
-      "scripts/build_result2.mjs": "2d5570927b33e83ce155e19c78cf1b3addc90b50d549979c07856578ff80ed78",
-      "scripts/build_result2_stream.py": "5d8f06c5d0436bab212c8dd802a0d40e3ea5a25be3905aa2005188348c1e8a6e"
-    },
-    "source_raw_hashes": {
-      "q2/provenance.py": "88c556d5f50ecbb20b841ff34949b616a71292a69a34ec62e2c35e2c29e4da22",
-      "q2/export.py": "c3417454af615226730b4fe8f1674c5394e291ea74bea6e4b14c00aac55da25c",
-      "q2/check_export.py": "8cd8e24d9747a151bea1617a927fdce3b076de731a5e410b80f78df961ac58e9",
-      "scripts/build_result2.mjs": "8d066f774a72ef1f5530061a2984448f9fbe059ab23af6c9d5fa59ce7a144003",
-      "scripts/build_result2_stream.py": "5b852392c0b237f98cdc997f24c0f5eb7d139fa10cd59aa78d0c31aca2c6acc1"
-    },
-    "source_digest": "2da8c3e3138d280d44d3c72d7e83aedcec124133230eeb82d7a83b650c68a752",
-    "code_commit": "e1779d7f8bfeb3b2ce7febf5197aee6634eb2d5d"
+  "numerical_verification_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "d987384618c4f391232c17fc1731bdc45bd820411799c0850c58b77f3499d1ba"
   },
-  "writer": "openpyxl write-only streaming; Artifact Tool format blueprint rendered separately"
+  "archive_manifest_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "5ca0c9be81a92ec37c4c1c176bdc0a377826bcd83c6783a036cc0a5c573417d6"
+  },
+  "delivery_source": {
+    "source_hash_scheme": "sha256-text-lf-v2",
+    "source_hashes": {
+      "q2/provenance.py": "78443879aaba88809fefbaba8ab168e3cb9c7c3a8add24769c6104116b6fc397",
+      "q2/export.py": "b72103e1274dd66efe6e86d68b1a1d6750d2194a5d3f1971f8f9830719cc28a9",
+      "q2/check_export.py": "1a200f74aca560fde4d19de34b7d0955b411ba48ee358cd64668b1a242c39e65",
+      "common/workbooks.py": "0d29a0cd2307d9a3e4cc1130ee8efbee3725f3630d87d1242475f2a810b343c0",
+      "scripts/hash_record.mjs": "6b24dcc6bc29fe6c0813224573bd9796765c669518dd1b8c900648e98b016cea",
+      "scripts/build_result2.mjs": "6ff09387f854ad3dee2e9bb1fad290de31cfa7bec0ca7f6b6a20d27579dc682e",
+      "scripts/build_result2_stream.py": "6e095c9d4c57f6b8de0b2c2295cc8d5dd31a3f776b97fdf2bccd9a6e5d75f3a0"
+    },
+    "source_raw_hash_scheme": "sha256-raw-v1",
+    "source_raw_hashes": {
+      "q2/provenance.py": "514e6d046dfe3c9cf2e3b3112dc5fd028e931f349c5fbeea8cd66961ae63bea7",
+      "q2/export.py": "727592ba70d9ece7fa0fb774f1c4c4ff804a24d964341a7096ffb65422094a70",
+      "q2/check_export.py": "bc8e2d0e87b482d49b51b2a295169aca1a4c180ae4ca8b9c55c2414dfd27eb6e",
+      "common/workbooks.py": "0d29a0cd2307d9a3e4cc1130ee8efbee3725f3630d87d1242475f2a810b343c0",
+      "scripts/hash_record.mjs": "6b24dcc6bc29fe6c0813224573bd9796765c669518dd1b8c900648e98b016cea",
+      "scripts/build_result2.mjs": "f8d338344bfe1c1afb3c960439da11797aea3bb2d7847bbe75781e606121dac6",
+      "scripts/build_result2_stream.py": "f3986b263090ef6a012ca900ce1681566a367c614cfd4451c64d111bda3c6456"
+    },
+    "source_digest": "7de7431b939bb416701e9d44d99f6fee3006efccca7acb6f012ae57f1ee03c90",
+    "code_commit": "61935d42fe8a160e6d107597e4bf3aed7107f64d"
+  },
+  "writer": "openpyxl write-only streaming"
 }

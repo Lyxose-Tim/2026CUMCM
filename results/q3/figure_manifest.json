@@ -1,17 +1,52 @@
 {
+  "schema_version": 2,
   "font": "Microsoft YaHei",
-  "source_code_sha256": "93ed274e430bf21213e09d76db3b26bd578088686d2914e2b7145994b5e2b953",
-  "verification_sha256": "db85f63c9c8b3ee6d388e8f2e97ea114463d3643a29e8198a00237ebd2121708",
+  "generator": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "0104c72396bd3664d3d07065415a1692819d06e44f9ad0e888f59f27c273fcd8"
+  },
+  "verification": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "c4a50348aa912c2fa78581bc979da4efe33959bded8b1b0b0a2d04567cf5fe6d"
+  },
+  "formal_run": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "070e397d83b8ac60a4b48739ef48a1b17f8145f0e61a0d48edc1c7fcad472e4c"
+  },
   "csv": {
-    "convergence.csv": "f16aa7ebaac85b0c1916581ee8d7e1bf8ab8de32802864c9e3baa0918403169b",
-    "endpoint_profile.csv": "0013287ab14f3062328c868f73db1d08435930dd8890af9f69d0492dbaf6434f",
-    "profiles.csv": "8a6efdcd3575fc960aea9229bc50527be50f5a353ab05b6afcf184d695506608",
-    "response.csv": "7870382444fabd0e02deec39ad5799f7bb56304d8ce8361228a676ade913b58e"
+    "convergence.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "f16aa7ebaac85b0c1916581ee8d7e1bf8ab8de32802864c9e3baa0918403169b"
+    },
+    "endpoint_profile.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "0013287ab14f3062328c868f73db1d08435930dd8890af9f69d0492dbaf6434f"
+    },
+    "profiles.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "8a6efdcd3575fc960aea9229bc50527be50f5a353ab05b6afcf184d695506608"
+    },
+    "response.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "7870382444fabd0e02deec39ad5799f7bb56304d8ce8361228a676ade913b58e"
+    }
   },
   "pdf": {
-    "q3_moisture_curves.pdf": "08bb74c6537ef164c4623011f0074f9b8f02273a010854b4bda5844ed4773e34",
-    "q3_threshold_zoom.pdf": "333aceb1dbbb24f8475dad0caea623dcd337e1bbe2948844bae264a648d8d8eb",
-    "q3_radial_profiles.pdf": "24f396c914d337d9b4dfb11dded684625d5ea1f58817ed30fa9d10d4b0d2d3ca",
-    "q3_convergence.pdf": "ce69b40a3c01be2c7a445bd744e8fb299012283a55615c64b1a0a4d92cac0104"
+    "q3_moisture_curves.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "1656ea899648947f04044a4e6aa1dffdb1fec9907fa89366ee08c08899eac067"
+    },
+    "q3_threshold_zoom.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "160da591bf5a0aafa91137ce45a46af7e05959e23a0aa5a0a4c8408f5faeef18"
+    },
+    "q3_radial_profiles.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "623a274742558d55ec8d302479b674745b25c405a382e082b071df4b83566339"
+    },
+    "q3_convergence.pdf": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "5cab1f43a450f81e8adfbd1c9ea52b8fc8d39d108e3f78a8a42a9ec91b274d5a"
+    }
   }
 }

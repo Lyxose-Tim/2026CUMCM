@@ -1,0 +1,283 @@
+{
+  "status": "computed",
+  "identity": {
+    "case": {
+      "name": "sensitivity_pchip_N5120",
+      "N": 5120,
+      "properties": "appendix4",
+      "radius": "shrink",
+      "interpolation": "pchip",
+      "environment_mode": "last_hour_mean",
+      "horizon_s": 259200,
+      "method": "BDF",
+      "tolerance_scale": 1.0,
+      "max_step_scale": 1.0,
+      "scenario": "pchip"
+    },
+    "inputs": {
+      "sha256": {
+        "environment": "7ef32870abeef420b89560b2530ff60dfe4255917805151d89988d0311af9dd7",
+        "template": "23b261b295c1b787d000eebbca6521c37075107b6fcf78724f8d395ce1798ff4",
+        "problem": "052d8014bff5727c019b72e44fdffaf5c145ce04050dd938baaf3527db331736"
+      },
+      "source_names": {
+        "environment": "附件/附件1.xlsx",
+        "template": "附件/附件3/result2.xlsx",
+        "problem": "A题.pdf"
+      },
+      "template_A1": "时间\\到药材中心的距离",
+      "environment_extension": {
+        "mode": "last_hour_mean",
+        "temperature_C": 49.99893442622951,
+        "moisture": 0.04998754098360656,
+        "observed_end_s": 14400,
+        "horizon_s": 259200.0
+      },
+      "q4_radius": {
+        "sha256": "5563acbfa4b4afb10cc6c03e2207e5369bf39da27576672aff14cc5c32e704af",
+        "source": "附件\\附件2.xlsx",
+        "rows": 145,
+        "initial_radius_m": 0.02,
+        "final_radius_m": 0.01198,
+        "fixed": false,
+        "interpolation": "pchip",
+        "record_offset_cm": 0.0,
+        "horizon_s": 259200.0,
+        "observed_end_s": 259200.0
+      },
+      "q4_template": {
+        "sha256": "86e9300ffa3d30c43de895ea6723da943e85b8740b137bcae5af7107f076eeac",
+        "source": "附件\\附件3\\result4.xlsx",
+        "A1": "时间\\到药材中心的距离",
+        "surface_header": "药材表面"
+      }
+    },
+    "parameters": {
+      "L": 0.25,
+      "R": 0.02,
+      "T0": 28.0,
+      "C0": 2.55,
+      "h": 25.0,
+      "hm": 8e-07,
+      "rho_intercept": 760.0,
+      "rho_slope": 90.0,
+      "cp_intercept": 1850.0,
+      "cp_scale": 2150.0,
+      "k_intercept": 0.12,
+      "k_scale": 0.2,
+      "D_prefactor": 0.00042,
+      "D_moisture_exponent": 0.3,
+      "D_temperature_exponent_K": 3850.0
+    },
+    "settings": {
+      "method": "BDF",
+      "rtol": 1e-10,
+      "atol_T": 1e-11,
+      "atol_C": 1e-13,
+      "max_step_observed": 30.0,
+      "max_step_extended": 300.0
+    },
+    "event": {
+      "threshold": 0.15,
+      "root_xtol_s": 1e-06,
+      "bracket_width_s": 1e-05,
+      "strict_offset_s": 1.0
+    },
+    "fixed_radius_m": [
+      0.0,
+      0.001,
+      0.002,
+      0.003,
+      0.004,
+      0.005,
+      0.006,
+      0.006999999999999999,
+      0.008,
+      0.009000000000000001,
+      0.01,
+      0.011000000000000001,
+      0.012,
+      0.013000000000000001,
+      0.013999999999999999,
+      0.015,
+      0.016,
+      0.017,
+      0.018000000000000002,
+      0.019,
+      0.02
+    ],
+    "config_path": "configs/q4.json"
+  },
+  "source": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "source_hashes": {
+      "q1/fvm.py": "b1c77e6c1d41d69223e7cdaffc705fc64602a968b8afa3832fb544e415e0dd02",
+      "q2/inputs.py": "80d214c176014e285c7495ac25e4e3d9ba353c490b3732cd39302dfb843d2cc0",
+      "q2/model.py": "88568971aba093a489a5b164919b0398b7caed2857a83aeb7884cbc6ea866cfa",
+      "q2/solver.py": "717e393c89a4f4ad6c53e92f303cc6ab97a9d188235832fef1165f8fb1221a5d",
+      "q3/solver.py": "741951af295276cde4f447c9b26ed66e5191c9fb0c5d91d4b154898f4ead9278",
+      "q4/__init__.py": "fea2712dee760e86f0f959eec312a27bddbbbd24b48abddc10091599486a5d9e",
+      "q4/inputs.py": "7cf5712dc902b2b1dedae9369ff7d894306c0b2550ca28ed10074c3ebca71515",
+      "q4/model.py": "885a9f890644d438b19a96ffa0a5b75194d07dde7ac4ca26fc9c03b88f9e7142",
+      "q4/solver.py": "4c7cd95ba1963c926e750d085b85c1ee41f6061639d471dcec39ae6bb299f0b3",
+      "q4/run.py": "1f1097dca092dc865906785f34494e290ef9002ce9ce0b01d1e09a6227ddf1ba",
+      "q4/provenance.py": "e8d880815d69cc17352d0f964beed4fc95c056b0b3e94ea1703a089172b4508d",
+      "common/hashing.py": "805769e9de2eebc6b450da06da92f12dfad2387d6dde2dd508e5f37f4cb53997",
+      "configs/q2.json": "03b76801552c8ce2b9bdf5730a5409caabc9ecf6ae9c1d042e2b583d306aff13",
+      "configs/q4.json": "5fc139d1e2ae6d6642ccb21c23fb9b86fcea12cb9ff0de4e9c2c469e2df66a1e",
+      "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
+    },
+    "source_digest": "c39300d5f9df6503c42534c1e3deff3dcc510fa19f906af30a3aacb1c4fb3fcb",
+    "code_commit": "15dad4de12e621176723be24a5094f8b0cfb2395",
+    "python": "3.13.9",
+    "packages": {
+      "numpy": "2.3.5",
+      "scipy": "1.16.3",
+      "openpyxl": "3.1.5"
+    }
+  },
+  "root": {
+    "time_s": 183919.02890414014,
+    "time_h": 51.08861914003893,
+    "radius_m": 0.012,
+    "accepted_bracket_s": [
+      183871.75393434017,
+      183963.62286167184
+    ],
+    "bracket_s": [
+      183919.02889936732,
+      183919.02890484314
+    ],
+    "bracket_g": [
+      2.4518997943090426e-12,
+      -3.5985103785662886e-13
+    ],
+    "root_g": 1.1379786002407855e-15,
+    "near_summary": [
+      [
+        183918.02890414014,
+        0.012,
+        0.15000051348696028,
+        0.0,
+        0.0,
+        0.15000051348696028,
+        0.11840507788267804,
+        0.05260753788949921,
+        0.05260753788949921,
+        49.99893442622951,
+        49.99893442622951,
+        -1.8527657741351788e-09
+      ],
+      [
+        183919.02890414014,
+        0.012,
+        0.15000000000000113,
+        0.0,
+        0.0,
+        0.15000000000000113,
+        0.11840472855172976,
+        0.05260750615592438,
+        0.05260750615592438,
+        49.99893442622951,
+        49.99893442622951,
+        -1.8527550604829912e-09
+      ],
+      [
+        183920.02890414014,
+        0.012,
+        0.1499994865195346,
+        0.0,
+        0.0,
+        0.1499994865195346,
+        0.11840437922501654,
+        0.05260747442295703,
+        0.05260747442295703,
+        49.99893442622951,
+        49.99893442622951,
+        -1.852744319075228e-09
+      ]
+    ],
+    "slope_C_per_s": -5.134837128412117e-07
+  },
+  "terminal": {
+    "time_s": 183963.62286167184,
+    "radius_m": 0.012,
+    "Cmax": 0.1499771081847943,
+    "argmax_xi": 0.0,
+    "argmax_radius_m": 0.0,
+    "center_C": 0.1499771081847943,
+    "mean_C": 0.11838915480764466,
+    "surface_C": 0.05260609164780422,
+    "Cmin": 0.05260609164780422,
+    "Tmin_C": 49.99893442622951,
+    "Tmax_C": 49.99893442622951,
+    "radial_increase": -1.8522772482487682e-09,
+    "relative_balance": -9.937068385009925e-10,
+    "threshold": 0.15,
+    "g": -2.28918152057056e-05,
+    "integration_horizon_s": 259200.0
+  },
+  "diagnostics": {
+    "nfev": 38934,
+    "njev": 342,
+    "nlu": 5218,
+    "wall_seconds": 90.96527770000102,
+    "method": "BDF",
+    "initial_step_s": 0.0001,
+    "accepted_steps": 19045,
+    "max_relative_balance": 9.937068385009925e-10,
+    "flux_quadrature_difference": 1.081725514955492e-16,
+    "minimum_moisture": 0.05260609164780422,
+    "temperature_envelope_violation": 2.1316282072803006e-14,
+    "max_Cmax_increase": 2.6645352591003757e-15
+  },
+  "files": {
+    "fields.npz": {
+      "hash_scheme": "sha256-raw-v1",
+      "sha256": "97529dc8710692b805cb886cab8ce5f5c6c0b5bf049cdec883b191712cac900e"
+    },
+    "accepted_steps.csv": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "fb20a01b5eba07eb807df834965878cb82c05b9bbccef1b1f533ec8c54d05b71"
+    }
+  },
+  "metadata_migration_history": [
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-q4-evidence-contract-refresh",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "e95d198d61d8282ad811a6d123f4afa1aa39dcf510507b781d4d2482becf0f11",
+      "verified_unchanged_numerical_files": [
+        "q1/fvm.py",
+        "q2/inputs.py",
+        "q2/model.py",
+        "q2/solver.py",
+        "q3/solver.py",
+        "q4/__init__.py",
+        "q4/model.py",
+        "q4/solver.py",
+        "q4/run.py",
+        "configs/q2.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "e291658f32fcee28d0b5d553988bab88fba628dca93414e9df1ae26f0cf42111"
+      },
+      "record": "results/q4/sensitivity/runs/sensitivity_pchip_N5120/run.json",
+      "reason": "Add separate radius observation metadata and strengthen archive loading; PDE operators, case parameters, solver settings, NPZ, and accepted steps are unchanged.",
+      "previous_source_digest": "dda00699b89b8f6cd2f8dfe95ab6ab5ab6e10ce18e4b1b0e2e3ad258dceaeb6f",
+      "refreshed_metadata_files": [
+        "common/hashing.py",
+        "configs/q4.json",
+        "q4/inputs.py",
+        "q4/provenance.py"
+      ],
+      "unchanged_artifact_raw_sha256": {
+        "fields.npz": "97529dc8710692b805cb886cab8ce5f5c6c0b5bf049cdec883b191712cac900e",
+        "accepted_steps.csv": "304cc223f4fcb0c0dbc48200e42e2402bded23962090f171555409b585ed2186"
+      }
+    }
+  ]
+}

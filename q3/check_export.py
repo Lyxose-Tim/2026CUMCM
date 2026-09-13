@@ -5,6 +5,7 @@ from pathlib import Path
 import numpy as np
 from openpyxl import load_workbook
 
+from common.hashing import file_record
 from q2.archive import write_json
 from q2.inputs import sha256
 from q2.provenance import portable_artifact_sha256
@@ -39,6 +40,8 @@ def check(directory="results/q3",workbook="results/result3.xlsx"):
         expected=np.c_[f["time_s"][1:],rounded(f["moisture"][1:])]
         if sheet.max_row != len(expected)+1 or sheet.max_column != 22:
             raise ValueError("Unexpected workbook dimensions")
+        if sheet.freeze_panes != "B2":
+            raise ValueError("Missing Q3 freeze panes")
         iterator=sheet.iter_rows()
         header=next(iterator)
         if header[0].value != r["identity"]["inputs"]["q3_template"]["A1"]:
@@ -70,8 +73,9 @@ def check(directory="results/q3",workbook="results/result3.xlsx"):
     np.testing.assert_array_equal(table[:,1:],f["moisture"][indices][:,[0,5,10,15,20]])
     result={"passed":True,"cells_checked":len(expected)*21,"rows":len(expected),"columns":22,
             "moisture_max_abs_difference":difference,"terminal_time_difference_s":float(time_error),
-            "workbook_sha256":sha256(workbook),"verification_sha256":portable_artifact_sha256(directory/"verification.json"),
-            "delivery_sources":delivery_sources(),"table5_sha256":portable_artifact_sha256(directory/"table5.csv")}
+            "workbook_hash":file_record(workbook),"verification_hash":file_record(directory/"verification.json"),
+            "delivery_sources":delivery_sources(),"table5_hash":file_record(directory/"table5.csv"),
+            "writer":"openpyxl normal mode"}
     write_json(directory/"export_verification.json",result)
     return result
 

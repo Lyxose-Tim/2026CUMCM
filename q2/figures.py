@@ -1,15 +1,22 @@
 """Generate publication-ready Q2 PDF figures and their bound CSV sources."""
+from __future__ import annotations
+
 import argparse
 import csv
 import json
 from pathlib import Path
 
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
 import numpy as np
 
+from common.hashing import file_record
 from q1.archive import load_archive as load_q1_archive
 
-from .archive import load_archive
+from .archive import load_archive, write_json
 from .export import verified_source
 from .model import properties
 
@@ -23,14 +30,23 @@ def save_rows(path, header, rows):
 
 
 def setup():
+    available = {font.name for font in font_manager.fontManager.ttflist}
+    font = next(
+        (name for name in ["Microsoft YaHei", "SimHei", "Noto Sans CJK SC"] if name in available),
+        None,
+    )
+    if font is None:
+        raise RuntimeError("A Chinese font is required")
     plt.rcParams.update({
-        "font.family": ["Microsoft YaHei", "SimHei", "Arial"],
+        "font.family": font,
         "axes.unicode_minus": False,
         "font.size": 9,
         "axes.grid": True,
         "grid.alpha": 0.22,
+        "pdf.fonttype": 42,
         "savefig.bbox": "tight",
     })
+    return font
 
 
 def save(fig, path):
@@ -47,9 +63,9 @@ def main():
     source_dir = directory / "figure_data"
     figure_dir.mkdir(parents=True, exist_ok=True)
     source_dir.mkdir(parents=True, exist_ok=True)
-    setup()
+    font = setup()
 
-    data, _, manifest, _ = verified_source(directory)
+    data, _, manifest, verification = verified_source(directory)
     time_h = data["time_s"] / 3600
     radius = np.arange(21) / 10
 
@@ -82,15 +98,23 @@ def main():
         "time_s", "center_temperature_C", "surface_temperature_C",
         "center_moisture", "surface_moisture",
     ], rows)
-    fig, axes = plt.subplots(2, 1, figsize=(8.8, 6.0), sharex=True)
-    axes[0].plot(time_h, data["temperature_C"][:, 0], label="中心")
-    axes[0].plot(time_h, data["temperature_C"][:, -1], label="表面")
-    axes[0].set(ylabel="温度 / °C", title="中心与表面 72 h 轨迹")
-    axes[0].legend(frameon=False)
-    axes[1].plot(time_h, data["moisture"][:, 0], label="中心")
-    axes[1].plot(time_h, data["moisture"][:, -1], label="表面")
-    axes[1].set(xlabel="时间 / h", ylabel=r"水分浓度 / kg kg$^{-1}$")
-    fig.tight_layout()
+    early = time_h <= 4
+    fig, axes = plt.subplots(2, 2, figsize=(10.0, 6.2), layout="constrained")
+    for axis, limit, title in (
+        (axes[0, 0], slice(None), "温度全程（0–72 h）"),
+        (axes[0, 1], early, "温度早期细节（0–4 h）"),
+    ):
+        axis.plot(time_h[limit], data["temperature_C"][limit, 0], label="中心", color="#176B8B")
+        axis.plot(time_h[limit], data["temperature_C"][limit, -1], label="表面", color="#A64949")
+        axis.set(ylabel="温度 / °C", title=title)
+    for axis, limit, title in (
+        (axes[1, 0], slice(None), "含水率全程（0–72 h）"),
+        (axes[1, 1], early, "含水率早期细节（0–4 h）"),
+    ):
+        axis.plot(time_h[limit], data["moisture"][limit, 0], label="中心", color="#176B8B")
+        axis.plot(time_h[limit], data["moisture"][limit, -1], label="表面", color="#A64949")
+        axis.set(xlabel="时间 / h", ylabel=r"干基含水率 / kg kg$^{-1}$", title=title)
+    axes[0, 0].legend(frameon=False)
     save(fig, figure_dir / "q2_center_surface_72h.pdf")
 
     p = manifest["configuration"]["parameters"]
@@ -113,6 +137,7 @@ def main():
         r"$k$ / W m$^{-1}$ K$^{-1}$", r"$D$ / m$^2$ s$^{-1}$",
     )):
         ax.set_ylabel(ylabel)
+    axes[1, 1].set_yscale("log")
     axes[0, 0].legend(frameon=False)
     axes[1, 0].set_xlabel("时间 / h")
     axes[1, 1].set_xlabel("时间 / h")
@@ -180,6 +205,32 @@ def main():
     ax.legend([line_T, line_C], ["温度", "水分"], frameon=False, loc="upper right")
     fig.tight_layout()
     save(fig, figure_dir / "q2_grid_convergence.pdf")
+
+    pdf_names = [
+        "q2_radial_profiles.pdf",
+        "q2_center_surface_72h.pdf",
+        "q2_property_evolution.pdf",
+        "q1_q2_first_1800s.pdf",
+        "q2_environment_scenarios.pdf",
+        "q2_grid_convergence.pdf",
+    ]
+    pdf_paths = [figure_dir / name for name in pdf_names]
+    if not all(path.exists() for path in pdf_paths):
+        raise RuntimeError("Q2 figure generation is incomplete")
+    write_json(directory / "figure_manifest.json", {
+        "schema_version": 2,
+        "font": font,
+        "generator": file_record("q2/figures.py"),
+        "verification": file_record(directory / "verification.json"),
+        "archive_manifest": file_record(directory / "archive" / "manifest.json"),
+        "convergence": file_record(directory / "convergence.json"),
+        "csv": {path.name: file_record(path) for path in sorted(source_dir.glob("*.csv"))},
+        "pdf": {path.name: file_record(path) for path in pdf_paths},
+        "numerical_status": {
+            "numerical_passed": bool(verification["numerical_passed"]),
+            "archive_status": manifest["status"],
+        },
+    })
 
 
 if __name__ == "__main__":
