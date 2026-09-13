@@ -64,7 +64,7 @@ def _panel_label(axis, label: str) -> None:
 
 
 def _save(fig, path: Path) -> None:
-    fig.savefig(path, bbox_inches="tight")
+    fig.savefig(path, bbox_inches="tight", dpi=300)
     plt.close(fig)
 
 
@@ -126,24 +126,42 @@ def _roadmap(source_dir: Path, figure_dir: Path) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
-    center = (0.145, 0.55)
-    radius = 0.105
-    ax.add_patch(Circle(center, radius, facecolor="#F6F6F3", edgecolor="#52616B", linewidth=1.2))
-    ax.plot(center[0], center[1], "o", color=COLORS["blue_dark"], ms=3)
-    ax.annotate(
+    geometry_ax = ax.inset_axes([0.015, 0.275, 0.265, 0.51])
+    geometry_ax.set_xlim(-0.95, 1.60)
+    geometry_ax.set_ylim(-1.0, 1.0)
+    geometry_ax.set_aspect("equal", adjustable="box")
+    geometry_ax.axis("off")
+    center = (0.0, 0.0)
+    radius = 0.62
+    geometry_ax.add_patch(
+        Circle(center, radius, facecolor="#F6F6F3", edgecolor="#52616B", linewidth=1.2)
+    )
+    geometry_ax.plot(center[0], center[1], "o", color=COLORS["blue_dark"], ms=3)
+    geometry_ax.annotate(
         "", xy=(center[0] + radius, center[1]), xytext=center,
         arrowprops={"arrowstyle": "->", "color": COLORS["blue_dark"], "lw": 1.2},
     )
-    ax.text(center[0] + radius * 0.48, center[1] + 0.025, r"$r=\xi R(t)$", ha="center", fontsize=8)
-    ax.text(center[0], center[1] - 0.025, r"$r=0,\ \xi=0$", ha="center", va="top", fontsize=7)
-    ax.text(center[0] + radius, center[1] - 0.035, r"$r=R(t),\ \xi=1$", ha="center", va="top", fontsize=7)
-    for dy, color, label in ((0.055, COLORS["red"], r"$q_h$"), (-0.055, COLORS["green"], r"$q_m$")):
-        ax.annotate(
-            "", xy=(center[0] + radius + 0.075, center[1] + dy),
+    geometry_ax.text(radius * 0.50, 0.09, r"$r=\xi R(t)$", ha="center", fontsize=8)
+    geometry_ax.annotate(
+        r"$r=0,\ \xi=0$", xy=center, xytext=(-0.38, -0.82),
+        ha="center", va="top", fontsize=7,
+        arrowprops={"arrowstyle": "-", "color": COLORS["gray"], "lw": 0.7},
+    )
+    geometry_ax.annotate(
+        r"$r=R(t),\ \xi=1$", xy=(radius, 0.0), xytext=(0.88, -0.75),
+        ha="center", va="top", fontsize=7,
+        arrowprops={"arrowstyle": "-", "color": COLORS["gray"], "lw": 0.7},
+    )
+    for dy, color, label in ((0.30, COLORS["red"], r"$q_h$"), (-0.30, COLORS["green"], r"$q_m$")):
+        geometry_ax.annotate(
+            "", xy=(center[0] + radius + 0.68, center[1] + dy),
             xytext=(center[0] + radius, center[1] + dy),
             arrowprops={"arrowstyle": "->", "color": color, "lw": 1.2},
         )
-        ax.text(center[0] + radius + 0.045, center[1] + dy + 0.018, label, color=color, ha="center")
+        geometry_ax.text(
+            center[0] + radius + 0.34, center[1] + dy + 0.10,
+            label, color=color, ha="center", fontsize=8,
+        )
     ax.text(0.02, 0.90, "(a) 圆柱径向域与表面通量", fontweight="bold")
     ax.text(0.31, 0.95, "(b) 四问继承、退化核验与交付门禁", fontweight="bold")
     fills = ["#E8F1F5", "#E8F1F5", "#EDF3E9", "#F8F0DF", "#F8E9E9", "#F0F0F0", "#E7EDF2"]
@@ -409,19 +427,33 @@ def _physical_radius(
         return times, radii, matrix
 
     fig, axes = plt.subplots(2, 2, figsize=(10.4, 6.5), layout="constrained")
+    common_time_end_h = max(float(q3_record["root"]["time_h"]), float(q4_record["root"]["time_h"]))
     meshes = []
     for axis, question, title in zip(axes[0], ["Q3", "Q4"], ["Q3 固定物理域", "Q4 收缩物理域"]):
         times, radii, matrix = field_matrix(question)
-        mesh = axis.pcolormesh(times, radii, matrix, shading="auto", cmap="viridis", vmin=0.05, vmax=2.55)
+        mesh = axis.pcolormesh(
+            times, radii, matrix, shading="auto", cmap="viridis", vmin=0.05, vmax=2.55,
+            edgecolors="none", antialiased=False, rasterized=True,
+        )
         meshes.append(mesh)
-        axis.contour(times, radii, matrix, levels=[0.15], colors="white", linewidths=1.0)
+        contour = axis.contour(
+            times, radii, matrix, levels=[0.15], colors="white", linewidths=1.0, zorder=3,
+        )
+        axis.clabel(contour, fmt={0.15: "C=0.15"}, inline=True, fontsize=7)
         boundary = [row for row in plotted_boundary if row["question"] == question]
         axis.plot(
             [float(row["time_h"]) for row in boundary],
             [float(row["surface_radius_cm"]) for row in boundary],
             color="#E6C04B", linewidth=1.6, label="物理表面 R(t)", zorder=4,
         )
+        if times[-1] < common_time_end_h - 1e-9:
+            axis.axvspan(times[-1], common_time_end_h, color="#F1F1F1", zorder=0)
+            axis.text(
+                (times[-1] + common_time_end_h) / 2.0, 1.67, "终止后\n未展示",
+                ha="center", va="center", fontsize=7, color=COLORS["gray"],
+            )
         axis.set(xlabel="时间 / h", ylabel="物理半径 / cm", title=title)
+        axis.set_xlim(0.0, common_time_end_h)
         axis.set_ylim(0.0, max(2.03, float(np.nanmax(radii)) + 0.03))
         axis.legend(frameon=False, fontsize=7, loc="lower left")
     colorbar = fig.colorbar(meshes[-1], ax=axes[0, :].tolist(), shrink=0.88, pad=0.02)
@@ -711,6 +743,15 @@ def make(output="figures/paper", source="results/paper_figure_data") -> None:
     write_json("results/paper_figure_manifest.json", {
         "schema_version": 3,
         "font": font,
+        "rendering": {
+            "pdf_raster_dpi": 300,
+            "fig04_field_layer": "rasterized",
+            "fig04_contour_layer": "vector_C_equals_0.15",
+            "fig04_common_time_end_h": max(
+                float(q3_record["root"]["time_h"]), float(q4_record["root"]["time_h"])
+            ),
+            "fig04_post_event_region": "blank_labeled_not_shown",
+        },
         "generator": file_record("paper_figures.py"),
         "drawio_source": file_record(drawio_path, TEXT_HASH_SCHEME),
         "evidence": {

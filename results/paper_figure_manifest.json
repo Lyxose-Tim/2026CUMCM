@@ -1,13 +1,20 @@
 {
   "schema_version": 3,
   "font": "Microsoft YaHei",
+  "rendering": {
+    "pdf_raster_dpi": 300,
+    "fig04_field_layer": "rasterized",
+    "fig04_contour_layer": "vector_C_equals_0.15",
+    "fig04_common_time_end_h": 57.474009775860864,
+    "fig04_post_event_region": "blank_labeled_not_shown"
+  },
   "generator": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "e8601dc58f2ba89b450912d82765385b7c40f1e4d4d0b27d3e109de35170d629"
+    "sha256": "29fdee7ec0ca0545d1be92053cd7d0920027ed01ce7bebcd36db3602712b90f2"
   },
   "drawio_source": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "b4dc47d706222bc8455ba13aac1fb461c559a0b81e8c04f33096cbc117333804"
+    "sha256": "4057a2253381ace65a587e8944ecff87d703f003569ce71655fa7dedff2a862f"
   },
   "evidence": {
     "q2_figure_manifest": {
@@ -104,27 +111,27 @@
   "pdf": {
     "fig01_model_roadmap.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "c708e7e17cc19ca8ba5ee2107fcf10fb1d479b48e42e7ee91f671b52052822d6"
+      "sha256": "a012e5dc9b446850c73bafb14b33902e268bc41381627cdd883da03367c3ed5b"
     },
     "fig02_environment_radius.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "ae42ef4c18b8504747c5885afd23afc2665daeb5b0b9789db523147ca3bc38cb"
+      "sha256": "5e279d6bc58c66981a6c8e5118397eef354cf7cd5b1f849facdf50e01ce6a0e9"
     },
     "fig03_q1_q2_early.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "2aa70314442e1db5a787fb0d7207570cd12b8e2aedf2844d058b2d670f122a2a"
+      "sha256": "949056d7047bd1fe06524d11c29141d2f43b78c526744c980de9fa5543202056"
     },
     "fig04_physical_radius_drying.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "0a3f77f01992f6cc105b40c4102fa6256a286334c8f3fb95cd21d8dcbed266dd"
+      "sha256": "b046b77b727e5b11c6249c1da5761656cfad419b548c009b9b3240d4b4723246"
     },
     "fig05_criteria_numerical_layers.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "5cdca51779e7405827ad76fe78bd8515b51fa361f5043e262a3d60ef13501cd8"
+      "sha256": "1d6cbe829851c343b03878015a1a2a5afe051b85dd937fc4c56d1f1e8729cfa9"
     },
     "fig06_mechanism_structural_sensitivity.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "eced1621a1867709c56e5317fdfb83691c7910bd762bf27249005e9891d3c912"
+      "sha256": "892cf0b6734817fb8c725ec899bd290917a801858a721415fb70e152564f3ce3"
     }
   }
 }
