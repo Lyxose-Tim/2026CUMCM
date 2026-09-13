@@ -6,6 +6,7 @@
 - 论文 PDF：figures/paper/fig01_model_roadmap.pdf
 - 节点数据：results/paper_figure_data/fig01_model_roadmap_nodes.csv
 - 连线数据：results/paper_figure_data/fig01_model_roadmap_edges.csv
+- 圆柱坐标与表面通量语义：results/paper_figure_data/fig01_model_geometry.csv
 - 总清单：results/paper_figure_manifest.json
 
 图示表达题面输入、Q1–Q4 递进、统一数值验证和表格/图源/报告交付，不承载任何未经计算的数值结论。

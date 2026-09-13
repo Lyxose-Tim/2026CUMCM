@@ -1,11 +1,11 @@
-source,target,label
-input,q1,边界与初值
-q1,q2,求解器退化核验
-q2,q3,同一场变量
-q3,q4,事件判据
-q4,delivery,A–D 对照
-q1,verify,
-q2,verify,
-q3,verify,
-q4,verify,
-verify,delivery,证据门禁
+source,target,label,style
+input,q1,题设参数,solid
+input,q2,原始初值 + 附录3,solid
+q1,q2,冻结物性退化核验,dashed
+q2,q3,同一场变量,solid
+q3,q4,继承全域判据,solid
+q4,delivery,A–D 与正式结果,solid
+q2,verify,,solid
+q3,verify,,solid
+q4,verify,,solid
+verify,delivery,证据门禁,solid

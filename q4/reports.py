@@ -89,6 +89,11 @@ def write_reports(directory="results/q4"):
     crossover_C = 0.15 / np.log(1.0 / 0.175)
     surface_ratio = float(ratio[-1])
     reversed_nodes = int(np.count_nonzero(ratio > 1.0))
+    radius_observations = np.genfromtxt(
+        directory / "radius_observations.csv", delimiter=",", names=True
+    )
+    radius_observed_end_s = float(radius_observations["time_s"][-1])
+    radius_observed_end_cm = float(radius_observations["radius_cm"][-1])
 
     model_spec = r"""# 问题四模型规范
 
@@ -127,7 +132,7 @@ D_4=4.2\times10^{-4}\exp(-0.30/C)
 \exp[-3850/(\theta+273.15)].
 \]
 
-附件2半径记录覆盖 **0–72 h**，主方案只在观测点之间作分段线性插值，不作半径外推，也没有 1.2 cm 限幅规则。正式 Q4 事件发生在半径记录覆盖内；附录4固定半径 C 组超过 72 h 时始终保持 2 cm，不需要移动半径。PCHIP 仅作为观测点间结构敏感性情景。环境 0–4 h 使用附件1逐段线性插值，之后主方案保持最后一小时均值；末值保持另列为结构情景。
+附件2半径记录覆盖 **0–72 h**，末个观测点为 **RADIUS_END_H_TOKEN h、RADIUS_END_CM_TOKEN cm**。主方案只在观测点之间作分段线性插值，不作半径外推，也没有 1.2 cm 限幅规则。正式 Q4 事件发生在半径记录覆盖内；附录4固定半径 C 组超过 72 h 时始终保持 2 cm，不需要移动半径。PCHIP 仅作为观测点间结构敏感性情景。环境 0–4 h 使用附件1逐段线性插值，之后主方案保持最后一小时均值；末值保持另列为结构情景。
 
 Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是独立标定的干骨架密度，热方程不含蒸发潜热，模型忽略端面和轴向梯度。因此它是竞赛题设下的一维有效模型，不是完整焓守恒或实验校准模型。
 
@@ -137,6 +142,8 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 """
     model_spec = model_spec.replace("FORMAL_CASE_TOKEN", verification["formal_case"])
     model_spec = model_spec.replace("FORMAL_N_TOKEN", str(record["identity"]["case"]["N"]))
+    model_spec = model_spec.replace("RADIUS_END_H_TOKEN", f"{radius_observed_end_s / 3600:.0f}")
+    model_spec = model_spec.replace("RADIUS_END_CM_TOKEN", f"{radius_observed_end_cm:.3f}")
     (REPORT_DIR / "Q4_MODEL_SPEC.md").write_text(model_spec, encoding="utf-8")
 
     structural_lines = [
@@ -148,7 +155,7 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 
 ## 正式结果
 
-附录4物性、收缩半径和主环境延拓下，全域达标时间为 **{root['time_h']:.10f} h**（{root['time_s']:.9f} s）；临界时材料半径为 **{root['radius_m'] * 100:.4f} cm**。根处中心值为 0.15 kg/kg，动态表面值为 {root['near_summary'][1][7]:.12f} kg/kg，说明表面和平均值早于内部最湿点达到阈值，不能作为停机判据。
+附录4物性、收缩半径和主环境延拓下，全域达标时间为 **{root['time_h']:.10f} h**（{root['time_s']:.9f} s）；临界时材料半径为 **{root['radius_m'] * 100:.4f} cm**。该值是 51.0920 h 观测区间内插值结果，不是人为下限；附件2在 72 h 的末个实测半径为 {radius_observed_end_cm:.3f} cm。根处中心值为 0.15 kg/kg，动态表面值为 {root['near_summary'][1][7]:.12f} kg/kg，说明表面和平均值早于内部最湿点达到阈值，不能作为停机判据。
 
 ## A–D 机制对照
 

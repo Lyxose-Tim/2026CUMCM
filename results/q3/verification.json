@@ -508,11 +508,15 @@
     },
     "tests/test_q4_delivery.py": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "1150a232517541f84e195cb7fbfcd875663f5e4fab73b4cbfcdc9ee010444e7c"
+      "sha256": "500c218462074df9eb0cbcbcbb8b34cf6edfa3e39d9a024841e9a2137d3eefd7"
+    },
+    "tests/test_q4_evidence_closure.py": {
+      "hash_scheme": "sha256-text-lf-v2",
+      "sha256": "a587cf329120e333a3d35185aa40af722684924e93e717c8a762d5086a98f0fe"
     },
     "tests/test_q4_inputs.py": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "f942ed050e80ebb618a292e18a7a26a80b3b1e3d629fc8c9856a8540b2a4f1cf"
+      "sha256": "f163e32f6309722d52c6eee560dc575a53d7f26a3e276b81fc6341edb7782f6e"
     },
     "tests/test_q4_model.py": {
       "hash_scheme": "sha256-text-lf-v2",
@@ -520,7 +524,7 @@
     },
     "tests/test_q4_outcomes.py": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "d85e77954cb5942d9e2acb41fb8d5442c675c0717892f20bc330826c324b2ffd"
+      "sha256": "69e5eb178959d7ed3215cec05bd2f10aeeb9d13f9af7623dab5163353c36a6dc"
     },
     "tests/test_q4_run.py": {
       "hash_scheme": "sha256-text-lf-v2",
@@ -541,6 +545,6 @@
   },
   "unit_tests_hash": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "28b1f76a3487954924d7a313e40c39df9f93d0b61250c52495d2c6cc1c30d8b8"
+    "sha256": "4050c1cd29c2dbefe242cad53e88e47ce5b8cc15d489a7b1bb8ea92a876130b0"
   }
 }

@@ -7,7 +7,7 @@
   },
   "verification": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "71d9b58e3e40250c5027885b413990ce23b34004b56fe43d4fba9821a614d07d"
+    "sha256": "c4a50348aa912c2fa78581bc979da4efe33959bded8b1b0b0a2d04567cf5fe6d"
   },
   "formal_run": {
     "hash_scheme": "sha256-text-lf-v2",
@@ -34,19 +34,19 @@
   "pdf": {
     "q3_moisture_curves.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "65e1e4b057500a10886d29f88c903a5f27bfc1b2f948ddf1cd85450396f07091"
+      "sha256": "1656ea899648947f04044a4e6aa1dffdb1fec9907fa89366ee08c08899eac067"
     },
     "q3_threshold_zoom.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "833d34beccfd911d71b501c12fadc9130bd3395a0f924fbda6a24ae5201817e1"
+      "sha256": "160da591bf5a0aafa91137ce45a46af7e05959e23a0aa5a0a4c8408f5faeef18"
     },
     "q3_radial_profiles.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "b16adbec4883194019764edffa8800663adeac70d0a836b344e7c7263836e7dd"
+      "sha256": "623a274742558d55ec8d302479b674745b25c405a382e082b071df4b83566339"
     },
     "q3_convergence.pdf": {
       "hash_scheme": "sha256-raw-v1",
-      "sha256": "fd26c79e450b9be9e236acaae16be19675414d648c46ec0c2cd784122cba3ac4"
+      "sha256": "5cab1f43a450f81e8adfbd1c9ea52b8fc8d39d108e3f78a8a42a9ec91b274d5a"
     }
   }
 }

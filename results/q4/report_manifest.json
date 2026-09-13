@@ -1,41 +1,41 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "generator": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "35683162a61a1ff6acd318e988a9f603aac3a4fd68c1b2ffa36685dcb4a56cfb"
+    "sha256": "c88bec7db07c586f2a15a88c71e45a94d02de274a573355afc5542fc59b89879"
   },
   "reports": {
     "Q4_MODEL_SPEC.md": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "8295f33eff1add0365072c6e20de9d735d8e0dd771613510035b970231a99cfd"
+      "sha256": "3152c19790fba2f7c029ab07406ac3c88f6642d3bcb728c653891978d04fd21f"
     },
     "Q4_RESULTS_REPORT.md": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "6760fbcf19d226b5c4b5079a7676f469070eb4455289792921ba32c1fa22c743"
+      "sha256": "94b95c6ca58f249de7cfba55ae25bfdbc27f32a3a5b447dbedc975fc8c0062d5"
     },
     "Q4_VERIFY_REPORT.md": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "88519e23bb802ae9a45491ff0b1f1536e396aef3e71ab9efd3b626bcca1b03da"
+      "sha256": "590b168e09921874760a3c7e91773b9234a54a36004893a4170c1286c58ac416"
     },
     "RESULTS_REPORT.md": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "e44b86f3fc43bfd3ec73815e02d65b6e712917f9bad4a890007df1c27896e60a"
+      "sha256": "ca47aa960e86cd62a1f719d503d46983854de72e2c5848dc10dfee822098b144"
     }
   },
   "verification": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "de1b8fff881b5e2e6e900a4f427d04982e5159019ad4246deecfb69e17678fae"
+    "sha256": "0418873d2a804e0c8510550167d8afe7241385390e4845505ff4a0f5a27ca1a8"
   },
   "export_verification": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "2218e8b379ebf65ee36a8015b36a7fa79657b879f671ebfb721613e2fa4cc7d6"
+    "sha256": "5994bf352ce3e5be15e832b9d949616a513b7782bfbb1bf5567edbc501e011e2"
   },
   "figure_manifest": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "493e387a75e4e565a6c485fbf205e3c0257fd564ccdb7f944206eaee173f4729"
+    "sha256": "15c4493869bb9542b339fd59af300bee2a31615b0f9d6186998c4b4c1a730cab"
   },
   "sensitivity_summary": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "07af6923a05ca955bfca6558bf94b13a8ce813f493192ee6f50a07eb5554dac2"
+    "sha256": "90831a2b1cba391c87a68fa708d7bf8d18d5703de2d0ceba2f7a9758369c45d0"
   }
 }

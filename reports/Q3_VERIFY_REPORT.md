@@ -32,7 +32,7 @@
 
 ## 交付与追溯
 
-- 工作簿 3449 行、22 列，哈希方案 sha256-raw-v1，SHA-256 18283187451c5530ea6988f3d24dfb09d87a1817fed146bd1d08c17a57d6e997。
+- 工作簿 3449 行、22 列，哈希方案 sha256-raw-v1，SHA-256 d592a8bc4ea47129115798ae66aec24ec384ded44e6e3c89db5ecfd7c72f8254。
 - 正式数值提交记录 5010d51043561f4b4de6466b121b4cdf44d7027f，源摘要 e619b49b6203ac40a6553ce5d548a57ba059112e05e814f415fe10f3fad24171。
 - 图表字体 Microsoft YaHei，四张 PDF 和对应 CSV 均由 results/q3/figure_manifest.json 逐文件绑定。
 - 本地测试输出绑定在 results/q3/unit_tests.txt；未把本地测试称作远端 CI，也未声称完成实验验证。

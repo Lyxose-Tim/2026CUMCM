@@ -1,0 +1,4 @@
+criterion,label,time_s,method
+surface_C,动态表面,46035.319866372993,linear_interpolation_between_archived_60s_outputs
+mean_C,体积平均,125903.3598939294,linear_interpolation_between_archived_60s_outputs
+global_max_C,全域最大,183931.23846132591,full_grid_continuous_event_root

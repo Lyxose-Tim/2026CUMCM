@@ -97,7 +97,6 @@ def _roadmap(source_dir: Path, figure_dir: Path) -> None:
         ("q2", "q3", "同一场变量", "solid"),
         ("q3", "q4", "继承全域判据", "solid"),
         ("q4", "delivery", "A–D 与正式结果", "solid"),
-        ("q1", "verify", "", "solid"),
         ("q2", "verify", "", "solid"),
         ("q3", "verify", "", "solid"),
         ("q4", "verify", "", "solid"),
@@ -160,18 +159,44 @@ def _roadmap(source_dir: Path, figure_dir: Path) -> None:
         a, b = by_id[source], by_id[target]
         start = (a["x"] + a["w"], a["y"] + a["h"] / 2)
         end = (b["x"], b["y"] + b["h"] / 2)
-        if source in {"q1", "q2", "q3", "q4"} and target == "verify":
+        connectionstyle = "arc3,rad=0"
+        label_xy = ((start[0] + end[0]) / 2, (start[1] + end[1]) / 2 + 0.025)
+        label_ha = "center"
+        if (source, target) == ("input", "q2"):
             start = (a["x"] + a["w"] / 2, a["y"])
-            end = (b["x"] + min(max(start[0] - b["x"], 0.03), b["w"] - 0.03), b["y"] + b["h"])
+            end = (b["x"] + b["w"] / 2, b["y"] + b["h"])
+            label_xy = (start[0] - 0.018, (start[1] + end[1]) / 2)
+            label_ha = "right"
+        elif (source, target) == ("q1", "q2"):
+            start = (a["x"] + 0.04, a["y"])
+            end = (b["x"] + b["w"], b["y"] + b["h"] * 0.62)
+            connectionstyle = "arc3,rad=0.18"
+            label_xy = (0.555, 0.625)
+        elif source in {"q2", "q3", "q4"} and target == "verify":
+            start = (a["x"] + a["w"] / 2, a["y"])
+            ports = {"q2": 0.43, "q3": 0.61, "q4": 0.75}
+            end = (ports[source], b["y"] + b["h"])
+        elif (source, target) == ("q4", "delivery"):
+            start = (a["x"] + a["w"] / 2, a["y"])
+            end = (b["x"] + b["w"] / 2, b["y"] + b["h"])
+            label_xy = (0.94, 0.31)
+            label_ha = "right"
+        elif (source, target) == ("verify", "delivery"):
+            label_xy = ((start[0] + end[0]) / 2, start[1] + 0.025)
         ax.annotate(
             "", xy=end, xytext=start,
             arrowprops={
                 "arrowstyle": "->", "color": "#52616B", "lw": 1.0,
                 "linestyle": "--" if style == "dashed" else "-",
+                "connectionstyle": connectionstyle,
             },
         )
         if label:
-            ax.text((start[0] + end[0]) / 2, (start[1] + end[1]) / 2 + 0.025, label, ha="center", fontsize=7, color=COLORS["gray"])
+            ax.text(
+                *label_xy, label, ha=label_ha, va="center", fontsize=7,
+                color=COLORS["gray"],
+                bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.8, "alpha": 0.88},
+            )
     _save(fig, figure_dir / "fig01_model_roadmap.pdf")
 
 
@@ -229,7 +254,7 @@ def _environment_and_radius(
 
     fig, axes = plt.subplots(1, 3, figsize=(10.4, 3.45), layout="constrained")
     for axis, variable, ylabel, color, label in (
-        (axes[0], "environment_temperature_C", "环境温度 / °C", COLORS["blue"], "Tₑ"),
+        (axes[0], "environment_temperature_C", "环境温度 / °C", COLORS["blue"], r"$T_e$"),
         (axes[1], "environment_Ce", r"等效边界水分 $C_e$ / (kg/kg)", COLORS["green"], r"$C_e$"),
     ):
         obs_h, obs_v = series(variable, "attachment_observation")
@@ -252,7 +277,7 @@ def _environment_and_radius(
     axes[2].scatter(obs_h, obs_r, s=8, facecolor="white", edgecolor=COLORS["red"], linewidth=0.6, label="附件2观测点", zorder=3)
     axes[2].set(xlabel="时间 / h", ylabel="材料表面半径 / cm", xlim=(0, 72))
     axes[2].text(0.98, 0.96, "附件2覆盖 0–72 h\n无外推、无限幅", transform=axes[2].transAxes, ha="right", va="top", fontsize=7, color=COLORS["gray"])
-    axes[2].legend(frameon=False, fontsize=7, loc="lower left")
+    axes[2].legend(frameon=False, fontsize=7, loc="center right", bbox_to_anchor=(0.98, 0.53))
     for axis, label in zip(axes, ["(a)", "(b)", "(c)"]):
         _panel_label(axis, label)
     _save(fig, figure_dir / "fig02_environment_radius.pdf")
@@ -394,9 +419,10 @@ def _physical_radius(
         axis.plot(
             [float(row["time_h"]) for row in boundary],
             [float(row["surface_radius_cm"]) for row in boundary],
-            color="#E6C04B", linewidth=1.4, label="物理表面 R(t)",
+            color="#E6C04B", linewidth=1.6, label="物理表面 R(t)", zorder=4,
         )
         axis.set(xlabel="时间 / h", ylabel="物理半径 / cm", title=title)
+        axis.set_ylim(0.0, max(2.03, float(np.nanmax(radii)) + 0.03))
         axis.legend(frameon=False, fontsize=7, loc="lower left")
     colorbar = fig.colorbar(meshes[-1], ax=axes[0, :].tolist(), shrink=0.88, pad=0.02)
     colorbar.set_label("干基含水率 / (kg/kg)")
@@ -482,7 +508,10 @@ def _criteria_and_numerics(source_dir: Path, figure_dir: Path, verification: dic
         axes[0].plot(time_h, values, style, color=color, label=label, linewidth=1.4)
     axes[0].axhline(0.15, color=COLORS["gray"], ls=":", label="全域判据")
     axes[0].set(xlabel="时间 / h", ylabel="干基含水率 / (kg/kg)")
-    axes[0].legend(frameon=False, fontsize=8, ncols=2)
+    axes[0].legend(
+        frameon=False, fontsize=7.5, ncols=4, loc="upper center",
+        bbox_to_anchor=(0.5, -0.17), borderaxespad=0.0,
+    )
     crossing_colors = {"surface_C": COLORS["red"], "mean_C": COLORS["gold"], "global_max_C": COLORS["blue"]}
     for offset, crossing in enumerate(crossings):
         value_h = float(crossing["time_s"]) / 3600.0
@@ -507,10 +536,15 @@ def _criteria_and_numerics(source_dir: Path, figure_dir: Path, verification: dic
     axes[1].vlines(x, 1e-7, values, color=[COLORS["blue"], COLORS["gold"], COLORS["red"], COLORS["gray"]], linewidth=1.4)
     axes[1].scatter(x, values, color=[COLORS["blue"], COLORS["gold"], COLORS["red"], COLORS["gray"]], s=32, zorder=3)
     axes[1].set_yscale("log")
+    axes[1].set_ylim(5e-7, 3e-1)
     axes[1].set_xticks(x, [item["layer"] for item in plotted_numerical], fontsize=8)
     axes[1].set(ylabel="临界时间数值差异尺度 / s", title="数值层分开报告")
     for index, item in enumerate(plotted_numerical):
-        axes[1].annotate(item["setting"], (index, values[index]), xytext=(0, 8), textcoords="offset points", ha="center", fontsize=6.5, rotation=12)
+        offset = -17 if index == 0 else 8
+        axes[1].annotate(
+            item["setting"], (index, values[index]), xytext=(0, offset),
+            textcoords="offset points", ha="center", fontsize=6.5, rotation=12,
+        )
     axes[1].grid(axis="y", which="both", color="#DDDDDD", linewidth=0.5)
     _panel_label(axes[0], "(a)")
     _panel_label(axes[1], "(b)")
@@ -612,7 +646,15 @@ def _mechanism_and_structure(
     }
     for row in plotted_markers:
         color, label = marker_style[row["state"]]
-        axes[1, 0].scatter(float(row["C"]), float(row["D4_over_D3"]), color=color, s=30, label=label, zorder=3)
+        marker_c = float(row["C"])
+        marker_ratio = float(row["D4_over_D3"])
+        axes[1, 0].scatter(marker_c, marker_ratio, color=color, s=30, label=label, zorder=3)
+        if row["state"] in {"crossover", "formal_root_surface"}:
+            axes[1, 0].annotate(
+                f"C={marker_c:.4f}\n比值={marker_ratio:.2f}",
+                (marker_c, marker_ratio), xytext=(6, 7), textcoords="offset points",
+                fontsize=6.5, color=color,
+            )
     axes[1, 0].set_xscale("log")
     axes[1, 0].set_yscale("log")
     axes[1, 0].set(xlabel="干基含水率 C / (kg/kg)", ylabel=r"$D_4/D_3$", title="干表层扩散系数比值反转")
@@ -629,6 +671,7 @@ def _mechanism_and_structure(
         axes[1, 1].annotate(f"{value:+.2f}", (index, value), xytext=(0, 7 if value >= 0 else -12), textcoords="offset points", ha="center", fontsize=7)
     axes[1, 1].set_xticks(sx, labels, rotation=12, ha="right")
     axes[1, 1].set(ylabel="相对线性基准 / min", title="确定性结构情景（非置信区间）")
+    axes[1, 1].set_ylim(min(values) - 2.0, max(values) + 2.0)
     for axis, label in zip(axes.ravel(), ["(a)", "(b)", "(c)", "(d)"]):
         _panel_label(axis, label)
     _save(fig, figure_dir / "fig06_mechanism_structural_sensitivity.pdf")

@@ -42,7 +42,8 @@
         "fixed": false,
         "interpolation": "linear",
         "record_offset_cm": 0.0,
-        "horizon_s": 259200.0
+        "horizon_s": 259200.0,
+        "observed_end_s": 259200.0
       },
       "q4_template": {
         "sha256": "86e9300ffa3d30c43de895ea6723da943e85b8740b137bcae5af7107f076eeac",
@@ -116,18 +117,18 @@
       "q2/solver.py": "717e393c89a4f4ad6c53e92f303cc6ab97a9d188235832fef1165f8fb1221a5d",
       "q3/solver.py": "741951af295276cde4f447c9b26ed66e5191c9fb0c5d91d4b154898f4ead9278",
       "q4/__init__.py": "fea2712dee760e86f0f959eec312a27bddbbbd24b48abddc10091599486a5d9e",
-      "q4/inputs.py": "e8d21ff9150a756606b23f9e218f0f6b5c3c77d4b1298097db102a27b5dec028",
+      "q4/inputs.py": "7cf5712dc902b2b1dedae9369ff7d894306c0b2550ca28ed10074c3ebca71515",
       "q4/model.py": "885a9f890644d438b19a96ffa0a5b75194d07dde7ac4ca26fc9c03b88f9e7142",
       "q4/solver.py": "4c7cd95ba1963c926e750d085b85c1ee41f6061639d471dcec39ae6bb299f0b3",
       "q4/run.py": "1f1097dca092dc865906785f34494e290ef9002ce9ce0b01d1e09a6227ddf1ba",
-      "q4/provenance.py": "a222e2c31d9425e9e19a99c7a765ed3de9ff8806ddb0f4aefbda73a64fae3bd8",
+      "q4/provenance.py": "e8d880815d69cc17352d0f964beed4fc95c056b0b3e94ea1703a089172b4508d",
       "common/hashing.py": "805769e9de2eebc6b450da06da92f12dfad2387d6dde2dd508e5f37f4cb53997",
       "configs/q2.json": "03b76801552c8ce2b9bdf5730a5409caabc9ecf6ae9c1d042e2b583d306aff13",
-      "configs/q4.json": "0830dfe145a410ea9591416b3f0932290dd8de2597f55c87a887c1f9a6e43594",
+      "configs/q4.json": "5fc139d1e2ae6d6642ccb21c23fb9b86fcea12cb9ff0de4e9c2c469e2df66a1e",
       "requirements.lock.txt": "94a8bada4517084f5868b5327251c343bf6789a5d9d270b597adaebf5448cf4f"
     },
-    "source_digest": "dda00699b89b8f6cd2f8dfe95ab6ab5ab6e10ce18e4b1b0e2e3ad258dceaeb6f",
-    "code_commit": "5010d51043561f4b4de6466b121b4cdf44d7027f",
+    "source_digest": "c39300d5f9df6503c42534c1e3deff3dcc510fa19f906af30a3aacb1c4fb3fcb",
+    "code_commit": "15dad4de12e621176723be24a5094f8b0cfb2395",
     "python": "3.13.9",
     "packages": {
       "numpy": "2.3.5",
@@ -239,5 +240,44 @@
       "hash_scheme": "sha256-text-lf-v2",
       "sha256": "0cef15112f0361880340d23f9964871f4a4acdcbc2928728cedd304335669660"
     }
-  }
+  },
+  "metadata_migration_history": [
+    {
+      "schema_version": 1,
+      "kind": "metadata-only-q4-evidence-contract-refresh",
+      "from_hash_scheme": "sha256-text-lf-v2",
+      "to_hash_scheme": "sha256-text-lf-v2",
+      "old_record_raw_sha256": "d6b2495850fb986e11e63081438e3778dcce281ede45b6c7b8bfd66b16dcb786",
+      "verified_unchanged_numerical_files": [
+        "q1/fvm.py",
+        "q2/inputs.py",
+        "q2/model.py",
+        "q2/solver.py",
+        "q3/solver.py",
+        "q4/__init__.py",
+        "q4/model.py",
+        "q4/solver.py",
+        "q4/run.py",
+        "configs/q2.json",
+        "requirements.lock.txt"
+      ],
+      "migration_source": {
+        "hash_scheme": "sha256-text-lf-v2",
+        "sha256": "e291658f32fcee28d0b5d553988bab88fba628dca93414e9df1ae26f0cf42111"
+      },
+      "record": "results/q4/sensitivity/runs/sensitivity_environment_terminal_hold_N5120/run.json",
+      "reason": "Add separate radius observation metadata and strengthen archive loading; PDE operators, case parameters, solver settings, NPZ, and accepted steps are unchanged.",
+      "previous_source_digest": "dda00699b89b8f6cd2f8dfe95ab6ab5ab6e10ce18e4b1b0e2e3ad258dceaeb6f",
+      "refreshed_metadata_files": [
+        "common/hashing.py",
+        "configs/q4.json",
+        "q4/inputs.py",
+        "q4/provenance.py"
+      ],
+      "unchanged_artifact_raw_sha256": {
+        "fields.npz": "0d2c039c242570e67a22dab2480f69d97709ff52e4a0a30346371bfd223afc3d",
+        "accepted_steps.csv": "6a7b1678a8e81ebce5fa5b33827f2ecc43df1c96a600a2298df773c8281cdd41"
+      }
+    }
+  ]
 }

@@ -8,7 +8,7 @@
   "terminal_time_difference_s": 0.0,
   "workbook_hash": {
     "hash_scheme": "sha256-raw-v1",
-    "sha256": "332244a5bbc27e2beb2f98851c6dd9463ec2516b2a1122a53bfb56e3a89938b0"
+    "sha256": "80933316eec62bfd6425e3560653b319ed4a1b03b009b754bf4d4ac39131e061"
   },
   "headers": [
     "时间\\到药材中心的距离",
@@ -37,16 +37,16 @@
   ],
   "verification_hash": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "de1b8fff881b5e2e6e900a4f427d04982e5159019ad4246deecfb69e17678fae"
+    "sha256": "0418873d2a804e0c8510550167d8afe7241385390e4845505ff4a0f5a27ca1a8"
   },
   "delivery_sources": {
     "q4/export.py": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "ceaf7af6249d8e7d90c50b580368d13a874ac618fe4f9c7cdc01966b5aedac98"
+      "sha256": "0aa1abedc93f0f84e9419600f88a7ffe5bc9c9ad38fe59b0385160d5c842c449"
     },
     "q4/check_export.py": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "132cb70b5f40929da511b73f3ca71ace6ffbc9a40c05df060ec7299c85927343"
+      "sha256": "c7bd569495ec05c0f29327bc13ad3d7871b90c3e91747d56379dcf058999104d"
     },
     "common/workbooks.py": {
       "hash_scheme": "sha256-text-lf-v2",
@@ -64,6 +64,14 @@
   "table6_hash": {
     "hash_scheme": "sha256-text-lf-v2",
     "sha256": "8b0a567dd9cc50f72ce24de99370938a9ab88fe689d64652f3323f0f2e84fca2"
+  },
+  "radius_input_manifest_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "f1c0ac6f817c1bf028936ef1ca80b3710a1d20f2a84262c85138f3d14ee6b46f"
+  },
+  "radius_observations_hash": {
+    "hash_scheme": "sha256-text-lf-v2",
+    "sha256": "b55d5310d5f41bc5c453eb38eba3b266804102e01dc39b91c5e2993266f543cb"
   },
   "writer": "openpyxl normal mode"
 }

@@ -15,19 +15,19 @@
     },
     "Q3_VERIFY_REPORT.md": {
       "hash_scheme": "sha256-text-lf-v2",
-      "sha256": "38bf8c7bfd3e8472b70564d8ef10b0f3eeac874007b1c0f4fe7a04d47a8558ef"
+      "sha256": "038d3c5afb30f7ab445ea2dd2f85ba3bfb6f8a5b858e5530aede2453c3814c5b"
     }
   },
   "verification": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "71d9b58e3e40250c5027885b413990ce23b34004b56fe43d4fba9821a614d07d"
+    "sha256": "c4a50348aa912c2fa78581bc979da4efe33959bded8b1b0b0a2d04567cf5fe6d"
   },
   "export_verification": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "ec53f82f9f99dd937eea8b5f06bcc0abe6efdbe8a4fe1b399481217ec4ca5086"
+    "sha256": "a077a59edf88a31e8d7cd4371f1d08d56378798c9745ba50fe8ac95f67a6ac70"
   },
   "figure_manifest": {
     "hash_scheme": "sha256-text-lf-v2",
-    "sha256": "7242181c11b2ff7186ae4ded8a80542d49cb32ab201e9ebbb272b0a7a025daad"
+    "sha256": "582e8d4973732bbe5c28ff5f1f5cb43fe7427fd1575d80a786a6201f12cf4796"
   }
 }
