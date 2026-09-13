@@ -58,7 +58,7 @@ class RadiusHistory:
         return values if values[-1] == self.horizon_s else np.r_[values, self.horizon_s]
 
 
-def read_radius(path):
+def read_radius(path, expected_observed_end_s=None):
     workbook = load_workbook(path, data_only=True, read_only=True)
     try:
         rows = list(workbook.active.values)
@@ -68,6 +68,8 @@ def read_radius(path):
     if numeric.shape != (145, 2):
         raise ValueError("Expected 145 radius rows after the header")
     numeric[:, 1] *= 0.01
+    if expected_observed_end_s is not None and numeric[-1, 0] != float(expected_observed_end_s):
+        raise ValueError("Unexpected radius observation endpoint")
     return RadiusHistory(numeric)
 
 
@@ -99,7 +101,8 @@ def read_inputs(
     for key, expected in config["input_sha256"].items():
         if hashes[key] != expected:
             raise ValueError(f"Unreviewed Q4 {key} input hash: {hashes[key]}")
-    radius = read_radius(paths["radius"])
+    expected_radius_end_s = float(config["radius"]["observed_end_s"])
+    radius = read_radius(paths["radius"], expected_radius_end_s)
     offset_m = float(radius_offset_cm) * 0.01
     if offset_m:
         observations = radius.observations.copy()
@@ -136,6 +139,7 @@ def read_inputs(
         "fixed": fixed_radius,
         "interpolation": selected_interpolation,
         "record_offset_cm": float(radius_offset_cm),
+        "observed_end_s": float(radius.observations[-1, 0]),
         "horizon_s": selected_horizon,
     }
     metadata["environment_extension"] = {

@@ -4,9 +4,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
+
 from common.hashing import file_record, verify_file
 from q2.archive import write_json
 from q4.export import delivery_sources
+from q4.sensitivity import verified_summary
 from q4.validation import verified
 
 
@@ -22,6 +25,8 @@ def require_export(directory="results/q4", workbook="results/result4.xlsx"):
         verify_file(workbook, evidence["workbook_hash"])
         verify_file(directory / "verification.json", evidence["verification_hash"])
         verify_file(directory / "table6.csv", evidence["table6_hash"])
+        verify_file(directory / "radius_input_manifest.json", evidence["radius_input_manifest_hash"])
+        verify_file(directory / "radius_observations.csv", evidence["radius_observations_hash"])
     except (KeyError, ValueError) as exc:
         raise ValueError("Q4 Excel evidence belongs to a different workbook or is stale") from exc
     if evidence["delivery_sources"] != delivery_sources():
@@ -31,7 +36,7 @@ def require_export(directory="results/q4", workbook="results/result4.xlsx"):
 
 def require_figures(directory: Path):
     manifest = json.loads((directory / "figure_manifest.json").read_text(encoding="utf-8"))
-    if manifest.get("schema_version") != 2:
+    if manifest.get("schema_version") != 3:
         raise ValueError("Versioned Q4 figure evidence is required")
     verify_file("q4/figures.py", manifest["generator"])
     verify_file(directory / "verification.json", manifest["verification"])
@@ -44,19 +49,7 @@ def require_figures(directory: Path):
 
 
 def require_sensitivity(directory: Path):
-    root = directory / "sensitivity"
-    summary = json.loads((root / "summary.json").read_text(encoding="utf-8"))
-    if summary.get("passed") is not True:
-        raise ValueError("Q4 structural sensitivity verification failed")
-    verify_file("configs/q4_sensitivity.json", summary["configuration_hash"])
-    verify_file("q4/sensitivity.py", summary["generator_hash"])
-    verify_file(root / "summary.csv", summary["summary_csv_hash"])
-    for scenario, digest in summary["run_record_hashes"].items():
-        matches = list((root / "runs").glob(f"sensitivity_{scenario}_N*/run.json"))
-        if len(matches) != 1:
-            raise ValueError(f"Expected one sensitivity run for {scenario}")
-        verify_file(matches[0], digest)
-    return summary
+    return verified_summary(directory / "sensitivity")
 
 
 def _case_table(summary: list[dict]) -> str:
@@ -83,13 +76,19 @@ def _case_table(summary: list[dict]) -> str:
 def write_reports(directory="results/q4"):
     directory = Path(directory)
     REPORT_DIR.mkdir(parents=True, exist_ok=True)
-    verification, record, _ = verified(directory)
+    verification, record, fields = verified(directory)
     export = require_export(directory)
     figures = require_figures(directory)
     sensitivity = require_sensitivity(directory)
     root = record["root"]
     diagnostics = record["diagnostics"]
     interaction = verification["factorial_interaction"]
+    n = record["identity"]["case"]["N"] + 1
+    root_C = np.asarray(fields["near_states"][1, n:], dtype=float)
+    ratio = 0.175 * np.exp(0.15 / root_C)
+    crossover_C = 0.15 / np.log(1.0 / 0.175)
+    surface_ratio = float(ratio[-1])
+    reversed_nodes = int(np.count_nonzero(ratio > 1.0))
 
     model_spec = r"""# 问题四模型规范
 
@@ -128,7 +127,7 @@ D_4=4.2\times10^{-4}\exp(-0.30/C)
 \exp[-3850/(\theta+273.15)].
 \]
 
-附件2半径记录以 **分段线性插值**作为主方案，观测结束后沿既定趋势外推，并在 1.2 cm 处限幅。PCHIP 仅作为结构敏感性情景。环境 0–4 h 使用附件1逐段线性插值，之后主方案保持最后一小时均值；末值保持另列为结构情景。
+附件2半径记录覆盖 **0–72 h**，主方案只在观测点之间作分段线性插值，不作半径外推，也没有 1.2 cm 限幅规则。正式 Q4 事件发生在半径记录覆盖内；附录4固定半径 C 组超过 72 h 时始终保持 2 cm，不需要移动半径。PCHIP 仅作为观测点间结构敏感性情景。环境 0–4 h 使用附件1逐段线性插值，之后主方案保持最后一小时均值；末值保持另列为结构情景。
 
 Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是独立标定的干骨架密度，热方程不含蒸发潜热，模型忽略端面和轴向梯度。因此它是竞赛题设下的一维有效模型，不是完整焓守恒或实验校准模型。
 
@@ -159,7 +158,7 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 
 在相同 C、T 下，D4/D3 = 0.175 exp(0.15/C)。
 
-在本题 C 从 2.55 降至 0.15 的区间，该比值约由 0.186 增至 0.476，附录4扩散仍慢于附录3；另一方面半径从 2 cm 收缩到 1.2 cm，使扩散时间尺度中的 R 的平方倒数最多增至约 2.78 倍。两种机制方向相反且非线性耦合。
+该比值在 C={crossover_C:.7f} 处等于 1。湿芯 C≥0.15 时比值约为 0.186–0.476，附录4局部扩散较慢；但正式根时刻表面 C={root_C[-1]:.10f}，对应 D4/D3={surface_ratio:.5f}，共有 {reversed_nodes}/{len(root_C)} 个材料节点出现 D4/D3>1。另一方面半径由 2 cm 收缩至事件时的 {root['radius_m'] * 100:.4f} cm，缩短了扩散路径。故 A–D 时间差是湿芯减慢、干表层反转、几何收缩及温湿耦合共同作用的净结果，不能把全场概括为“附录4扩散始终更慢”。
 
 以事件时间为响应，附录3条件下收缩效应为 {interaction['geometry_effect_appendix3_s'] / 3600:+.4f} h，附录4条件下为 {interaction['geometry_effect_appendix4_s'] / 3600:+.4f} h；固定半径下物性效应为 {interaction['property_effect_fixed_s'] / 3600:+.4f} h，收缩半径下为 {interaction['property_effect_shrinking_s'] / 3600:+.4f} h，交互项为 {interaction['interaction_s'] / 3600:+.4f} h。交互项很大，不能把“换物性”和“收缩”解释成两个可简单相加的修正。
 
@@ -173,11 +172,11 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 
 ## 图表与工作簿
 
-五张 Q4 PDF 分别展示过程与半径、真实动态表面剖面、A–D 案例、数值层和结构情景；每张图由 results/q4/figure_data/ 中的 CSV 重建。results/result4.xlsx 共 {export['rows']} 个数据行、{export['columns']} 列；固定物理半径超过当前表面时留空，末列始终保存真实动态表面值。独立回读核对 {export['cells_checked']} 个数值与 {export['blank_cells_checked']} 个域外空白。
+五张 Q4 PDF 分别展示过程与半径、真实动态表面剖面、A–D 案例、数值层和结构情景；每张图由 results/q4/figure_data/ 中的完整绘图 CSV 重建。results/result4.xlsx 共 {export['rows']} 个数据行、{export['columns']} 列；固定物理半径超过当前表面时留空，末列始终保存真实动态表面值。独立回读核对 {export['cells_checked']} 个数值与 {export['blank_cells_checked']} 个域外空白。
 
 ## 解释边界
 
-4 h 后环境和半径外推对结果有结构影响，且没有内部含水率实验数据可校准；因此 51.0920 h 是明示模型与输入延拓下的情景预测。数值误差、Excel 四位小数舍入、结构情景和真实模型误差必须分开陈述。
+4 h 后环境延拓、半径观测点间插值及记录显示精度对结果有结构影响，且没有内部含水率实验数据可校准；因此 51.0920 h 是明示模型与输入规则下的情景预测。数值误差、Excel 四位小数舍入、结构情景和真实模型误差必须分开陈述。
 """
     (REPORT_DIR / "Q4_RESULTS_REPORT.md").write_text(results_report, encoding="utf-8")
 
@@ -198,7 +197,7 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 |---|---:|---:|---:|
 {spatial_lines}
 
-后一组 N=10240→20480 的临界时间差为 {verification['spatial'][-1]['root_time_difference_s']:.9f} s；空间预算门禁 passed = {verification['spatial_budget']['passed']}。比较覆盖全部共同 60 s 时刻、21 个固定物理半径列和动态表面列，并单列 24 h 端点。
+后一组 N=10240→20480 的临界时间差为 {verification['spatial'][-1]['root_time_difference_s']:.9f} s；空间预算门禁 passed = {verification['spatial_budget']['passed']}。比较覆盖全部共同 60 s 时刻、21 个固定物理半径列和动态表面列；24 h 仅作为中间检查点，另在各对照共同事件覆盖前的最后一个规则时刻保存完整 T/C 近根状态。
 
 ## 时间、方法与根定位
 
@@ -206,6 +205,8 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 |---|---:|---:|---:|
 | BDF 基准与收紧/半步 | {temporal['root_time_difference_s']:.9f} | {temporal['field_difference']['C']['max_abs']:.8e} | {temporal['field_difference']['T']['max_abs']:.8e} |
 | BDF 与 Radau | {method['root_time_difference_s']:.9f} | {method['field_difference']['C']['max_abs']:.8e} | {method['field_difference']['T']['max_abs']:.8e} |
+
+BDF/Radau 对照使用相同 N=5120；其共同近根时刻为 {method['field_difference']['near_root_common']['time_s']:.0f} s，直接取双方精确归档的 60 s 状态，无时间插值或重建误差。该时刻共有 {method['field_difference']['near_root_common']['C']['valid_columns']} 个共同有效含水率输出列（含动态表面），最大 C 差为 {method['field_difference']['near_root_common']['C']['max_abs']:.8e}，最大 T 差为 {method['field_difference']['near_root_common']['T']['max_abs']:.8e} °C。
 
 正式根区间宽度为 {verification['root_resolution']['formal_bracket_width_s']:.9e} s，根残差为 {verification['root_resolution']['formal_root_residual']:.3e}。这些层次分别保存，未相互替代，也未包装成统一置信区间。
 
@@ -220,10 +221,10 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 
 - 工作簿哈希方案 {export['workbook_hash']['hash_scheme']}，SHA-256 {export['workbook_hash']['sha256']}；末时间误差 {export['terminal_time_difference_s']:.3e} s。
 - 图表字体 {figures['font']}，五张 PDF 和全部 CSV 由 results/q4/figure_manifest.json 逐文件绑定。
-- 结构敏感性配置、生成器、五个运行记录和汇总 CSV 均由 results/q4/sensitivity/summary.json 绑定。
+- 结构敏感性配置、生成器、五个运行记录及其 NPZ/接受步文件和汇总 CSV 均由 results/q4/sensitivity/summary.json 递归绑定。
 - 正式数值源码提交 {record['source']['code_commit']}，源摘要 {record['source']['source_digest']}；测试输出见 results/q4/unit_tests.txt。
 
-这里的 passed 是数值与交付门禁，不代表实物试验验证，也不把长期输入外推的不确定性归入数值误差。
+这里的 passed 是数值与交付门禁，不代表实物试验验证，也不把长期环境延拓的不确定性归入数值误差。
 """
     (REPORT_DIR / "Q4_VERIFY_REPORT.md").write_text(verify_report, encoding="utf-8")
 
@@ -232,7 +233,7 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
 
 四问计算、验证、表格和论文图源均按同一证据链交付。
 
-- [问题一：常物性数值基准与表1–2](Q1_RESULTS_REPORT.md)
+- [问题一：附录2常热物性与非线性水分扩散基准](Q1_RESULTS_REPORT.md)
 - [问题二：72 h 变物性热湿耦合与表3–4](Q2_RESULTS_REPORT.md)
 - [问题三：固定半径全域达标事件与表5](Q3_RESULTS_REPORT.md)
 - [问题四：收缩域机制、全域达标事件与表6](Q4_RESULTS_REPORT.md)
@@ -247,7 +248,7 @@ Ce、h、hm、rho cp 均按题设尺度视为有效闭合量；经验 rho 不是
         index,
     ]
     write_json(directory / "report_manifest.json", {
-        "schema_version": 2,
+        "schema_version": 3,
         "generator": file_record("q4/reports.py"),
         "reports": {path.name: file_record(path) for path in report_paths},
         "verification": file_record(directory / "verification.json"),

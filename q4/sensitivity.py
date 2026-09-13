@@ -8,7 +8,9 @@ import csv
 import json
 from pathlib import Path
 
-from common.hashing import file_record
+import numpy as np
+
+from common.hashing import file_record, verify_file
 from q2.archive import write_json
 from q2.inputs import read_config
 from q4.provenance import load_run
@@ -52,17 +54,19 @@ def summarize(directory, main_config, sensitivity_config):
     if any(record[0]["status"] != "computed" for record in runs.values()):
         raise ValueError("Every structural scenario must reach the full-domain event")
     baseline_record, baseline_fields = runs["linear"]
-    endpoint = main_config["validation"]["common_endpoint_s"]
+    checkpoint = main_config["validation"]["intermediate_checkpoint_s"]
     spacing = main_config["validation"]["regular_spacing_s"]
     rows = []
     comparisons = {}
     for scenario, (record, fields) in runs.items():
         difference = compare(
-            baseline_fields, fields, spacing_s=spacing, endpoint_s=endpoint
+            baseline_fields, fields, spacing_s=spacing,
+            intermediate_checkpoint_s=checkpoint,
         )
         event_delta = record["root"]["time_s"] - baseline_record["root"]["time_s"]
         rows.append({
             "scenario": scenario,
+            "case_name": record["identity"]["case"]["name"],
             "event_time_s": record["root"]["time_s"],
             "event_time_h": record["root"]["time_h"],
             "event_delta_vs_linear_s": event_delta,
@@ -76,6 +80,7 @@ def summarize(directory, main_config, sensitivity_config):
     by_name = {row["scenario"]: row for row in rows}
     radius_times = [by_name[name]["event_time_s"] for name in ("radius_lower", "radius_upper")]
     result = {
+        "schema_version": 2,
         "passed": True,
         "uncertainty_type": "deterministic structural scenario range; not a confidence interval",
         "base_case": sensitivity_config["base_case"],
@@ -88,8 +93,14 @@ def summarize(directory, main_config, sensitivity_config):
         "field_comparisons": comparisons,
         "configuration_hash": file_record("configs/q4_sensitivity.json"),
         "generator_hash": file_record("q4/sensitivity.py"),
-        "run_record_hashes": {
-            scenario: file_record(directory / "runs" / record[0]["identity"]["case"]["name"] / "run.json")
+        "runs": {
+            scenario: {
+                "case_name": record[0]["identity"]["case"]["name"],
+                "directory": f"runs/{record[0]['identity']['case']['name']}",
+                "run_record": file_record(
+                    directory / "runs" / record[0]["identity"]["case"]["name"] / "run.json"
+                ),
+            }
             for scenario, record in runs.items()
         },
     }
@@ -101,6 +112,57 @@ def summarize(directory, main_config, sensitivity_config):
     result["summary_csv_hash"] = file_record(directory / "summary.csv")
     write_json(directory / "summary.json", result)
     return result
+
+
+def verified_summary(
+    directory="results/q4/sensitivity",
+    main_config_path="configs/q4.json",
+    sensitivity_config_path="configs/q4_sensitivity.json",
+):
+    root = Path(directory)
+    main_config = read_config(main_config_path)
+    sensitivity_config = read_config(sensitivity_config_path)
+    summary = json.loads((root / "summary.json").read_text(encoding="utf-8"))
+    if summary.get("schema_version") != 2 or summary.get("passed") is not True:
+        raise ValueError("Versioned Q4 structural sensitivity evidence is required")
+    verify_file(sensitivity_config_path, summary["configuration_hash"])
+    verify_file("q4/sensitivity.py", summary["generator_hash"])
+    verify_file(root / "summary.csv", summary["summary_csv_hash"])
+
+    configured = {case["scenario"]: case for case in scenario_cases(main_config, sensitivity_config)}
+    if summary.get("base_case") != sensitivity_config["base_case"]:
+        raise ValueError("Q4 sensitivity base case differs from current config")
+    if set(summary.get("runs", {})) != set(configured):
+        raise ValueError("Incomplete Q4 sensitivity run manifest")
+    rows = {row["scenario"]: row for row in summary.get("scenarios", [])}
+    if set(rows) != set(configured):
+        raise ValueError("Incomplete Q4 sensitivity scenario summary")
+    with (root / "summary.csv").open("r", encoding="utf-8", newline="") as stream:
+        csv_rows = {row["scenario"]: row for row in csv.DictReader(stream)}
+    if set(csv_rows) != set(configured):
+        raise ValueError("Incomplete Q4 sensitivity summary CSV")
+
+    for scenario, expected_case in configured.items():
+        entry = summary["runs"][scenario]
+        expected_name = expected_case["name"]
+        expected_directory = f"runs/{expected_name}"
+        if entry.get("case_name") != expected_name or entry.get("directory") != expected_directory:
+            raise ValueError(f"Q4 sensitivity identity mismatch for {scenario}")
+        run_directory = root / expected_directory
+        verify_file(run_directory / "run.json", entry["run_record"])
+        record, _ = load_run(run_directory)
+        if record["identity"]["case"] != expected_case or record.get("status") != "computed":
+            raise ValueError(f"Q4 sensitivity run configuration mismatch for {scenario}")
+        row = rows[scenario]
+        csv_row = csv_rows[scenario]
+        if row.get("case_name") != expected_name or csv_row.get("case_name") != expected_name:
+            raise ValueError(f"Q4 sensitivity summary identity mismatch for {scenario}")
+        event_time = float(record["root"]["time_s"])
+        if not np.isclose(float(row["event_time_s"]), event_time, rtol=0, atol=1e-9):
+            raise ValueError(f"Q4 sensitivity JSON event time mismatch for {scenario}")
+        if not np.isclose(float(csv_row["event_time_s"]), event_time, rtol=0, atol=1e-9):
+            raise ValueError(f"Q4 sensitivity CSV event time mismatch for {scenario}")
+    return summary
 
 
 def main():

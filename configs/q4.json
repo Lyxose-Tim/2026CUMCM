@@ -13,7 +13,7 @@
   },
   "formal_case": "main_appendix4_shrink_N20480",
   "validation": {
-    "common_endpoint_s": 86400,
+    "intermediate_checkpoint_s": 86400,
     "regular_spacing_s": 60,
     "spatial_group": [
       "D_appendix4_shrink_N5120",
@@ -32,6 +32,7 @@
   "radius": {
     "interpolation": "linear",
     "unit": "cm",
+    "observed_end_s": 259200,
     "record_display_increment_cm": 0.001,
     "record_half_increment_cm": 0.0005,
     "fixed_output_radius_cm": [

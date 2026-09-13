@@ -5,7 +5,10 @@ from scipy.sparse import diags
 from q2.inputs import LongEnvironment
 from q4.inputs import RadiusHistory
 from q4.model import material_grid
+from q4.provenance import load_run, snapshot
+from q4.run import save_solution
 from q4.solver import StrictPostStateUnavailable, ThresholdNotReached, integrate_event
+from q4.validation import check_typed_outcome
 
 
 class UniformDecayModel:
@@ -70,3 +73,40 @@ def test_root_without_strict_post_state_has_distinct_type():
     assert result["outcome"] == "root_found_post_state_unavailable"
     assert result["root"]["time_s"] == pytest.approx(crossing, abs=2e-6)
     assert result["near_states"].shape[0] == 0
+
+
+def archive_and_validate(tmp_path, caught, status):
+    identity = {"case": {"name": f"test_{status}", "N": 4}}
+    save_solution(tmp_path, caught.value.result, status, identity, snapshot())
+    record, fields = load_run(tmp_path)
+    outcome = check_typed_outcome(record, fields)
+    assert outcome == {"terminal_evidence_verified": True, "status": status}
+    assert fields["trace"].shape[1] == 13
+    assert fields["trace"][-1, 0] == record["terminal"]["time_s"]
+    return record, fields
+
+
+def test_threshold_not_reached_archive_roundtrip(tmp_path):
+    with pytest.raises(ThresholdNotReached) as caught:
+        integrate_event(
+            UniformDecayModel(1.0), SETTINGS, event_config(0.15),
+            fixed_radius_m=np.array([0.0, 0.02]),
+        )
+    record, fields = archive_and_validate(tmp_path, caught, "threshold_not_reached")
+    assert record["terminal"]["g"] > 0
+    assert fields["terminal_state"].shape == (10,)
+
+
+def test_root_without_post_state_archive_roundtrip(tmp_path):
+    crossing = -np.log(0.9) / 0.1
+    with pytest.raises(StrictPostStateUnavailable) as caught:
+        integrate_event(
+            UniformDecayModel(crossing + 0.02), SETTINGS,
+            event_config(0.9, strict_offset_s=0.1),
+            fixed_radius_m=np.array([0.0, 0.02]),
+        )
+    record, fields = archive_and_validate(
+        tmp_path, caught, "root_found_post_state_unavailable"
+    )
+    assert record["root"]["time_s"] == pytest.approx(crossing, abs=2e-6)
+    assert fields["near_states"].shape[0] == 0

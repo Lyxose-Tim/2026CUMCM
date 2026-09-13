@@ -17,7 +17,8 @@ def _report_manifest(question: str, generator: str) -> dict:
     directory = Path("results") / question
     manifest_path = directory / "report_manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("schema_version") != 2:
+    expected_schema = 3 if question == "q4" else 2
+    if manifest.get("schema_version") != expected_schema:
         raise ValueError(f"Versioned {question} report manifest is required")
     verify_file(generator, manifest["generator"])
     for name, digest in manifest["reports"].items():
@@ -92,6 +93,7 @@ def _q4() -> dict:
         "workbook": export["workbook_hash"],
         "figure_count": len(figures["pdf"]),
         "sensitivity_scenarios": len(sensitivity["scenarios"]),
+        "method_status": verification["method"]["status"],
         **reports,
     }
 
@@ -99,7 +101,7 @@ def _q4() -> dict:
 def _paper_figures() -> dict:
     manifest_path = Path("results/paper_figure_manifest.json")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    if manifest.get("schema_version") != 2 or len(manifest.get("pdf", {})) != 6:
+    if manifest.get("schema_version") != 3 or len(manifest.get("pdf", {})) != 6:
         raise ValueError("Six versioned paper figures are required")
     verify_file("paper_figures.py", manifest["generator"])
     drawio = Path("figures/paper/fig01_model_roadmap.drawio")
@@ -111,6 +113,7 @@ def _paper_figures() -> dict:
         "q3_verification": Path("results/q3/verification.json"),
         "q4_verification": Path("results/q4/verification.json"),
         "q4_sensitivity": Path("results/q4/sensitivity/summary.json"),
+        "q4_radius_input": Path("results/q4/radius_input_manifest.json"),
     }
     for name, path in evidence_paths.items():
         verify_file(path, manifest["evidence"][name])

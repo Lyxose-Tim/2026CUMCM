@@ -1,11 +1,12 @@
 """Independent readback for result4.xlsx with out-of-material blanks."""
 import argparse
+import json
 from pathlib import Path
 
 import numpy as np
 from openpyxl import load_workbook
 
-from common.hashing import file_record
+from common.hashing import file_record, verify_file
 from q2.archive import write_json
 from q2.inputs import sha256
 from q2.provenance import portable_artifact_sha256
@@ -31,6 +32,17 @@ def check(directory="results/q4", workbook="results/result4.xlsx"):
     directory = Path(directory)
     write_json(directory / "export_verification.json", {"passed": False, "status": "checking"})
     verification, record, fields = verified(directory)
+    radius_manifest_path = directory / "radius_input_manifest.json"
+    radius_manifest = json.loads(radius_manifest_path.read_text(encoding="utf-8"))
+    if (radius_manifest.get("schema_version") != 1
+            or radius_manifest.get("attachment_sha256")
+            != record["identity"]["inputs"]["q4_radius"]["sha256"]
+            or radius_manifest.get("observed_end_s")
+            != record["identity"]["inputs"]["q4_radius"]["observed_end_s"]):
+        raise ValueError("Q4 radius observation evidence differs from the verified input")
+    verify_file("q4/export.py", radius_manifest["generator"])
+    verify_file(directory / "verification.json", radius_manifest["verification"])
+    verify_file(directory / "radius_observations.csv", radius_manifest["csv"])
     wb = load_workbook(workbook, read_only=False, data_only=True)
     try:
         if wb.sheetnames != ["Sheet1"]:
@@ -81,6 +93,8 @@ def check(directory="results/q4", workbook="results/result4.xlsx"):
         "verification_hash": file_record(directory / "verification.json"),
         "delivery_sources": delivery_sources(),
         "table6_hash": file_record(directory / "table6.csv"),
+        "radius_input_manifest_hash": file_record(radius_manifest_path),
+        "radius_observations_hash": file_record(directory / "radius_observations.csv"),
         "writer": "openpyxl normal mode",
     }
     write_json(directory / "export_verification.json", result)

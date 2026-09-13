@@ -12,6 +12,7 @@ from q2.archive import write_json
 from q2.inputs import sha256
 from q2.provenance import portable_artifact_sha256
 from q3.solver import output_axis
+from q4.inputs import read_radius
 from q4.validation import verified
 
 
@@ -56,12 +57,42 @@ def json_rows(rows):
     return result
 
 
+def write_radius_input_snapshot(data_root, directory, record):
+    directory = Path(directory)
+    radius_path = Path(data_root) / "附件" / "附件2.xlsx"
+    radius_identity = record["identity"]["inputs"]["q4_radius"]
+    if sha256(radius_path) != radius_identity["sha256"]:
+        raise ValueError("Changed Q4 radius attachment")
+    radius = read_radius(radius_path, radius_identity["observed_end_s"])
+    csv_path = directory / "radius_observations.csv"
+    np.savetxt(
+        csv_path,
+        np.c_[radius.observations[:, 0], radius.observations[:, 1] * 100.0],
+        delimiter=",",
+        comments="",
+        header="time_s,radius_cm",
+        fmt="%.17g",
+    )
+    manifest = {
+        "schema_version": 1,
+        "generator": file_record("q4/export.py"),
+        "attachment_sha256": radius_identity["sha256"],
+        "observed_end_s": float(radius.observations[-1, 0]),
+        "rows": int(len(radius.observations)),
+        "csv": file_record(csv_path),
+        "verification": file_record(directory / "verification.json"),
+    }
+    write_json(directory / "radius_input_manifest.json", manifest)
+    return manifest
+
+
 def prepare(data_root, directory="results/q4", payload=".scratch/q4/workbook_payload.json"):
     directory = Path(directory)
     verification, record, fields = verified(directory)
     template = Path(data_root) / "附件" / "附件3" / "result4.xlsx"
     if sha256(template) != record["identity"]["inputs"]["q4_template"]["sha256"]:
         raise ValueError("Changed result4 template")
+    write_radius_input_snapshot(data_root, directory, record)
     end = record["root"]["time_s"]
     t6 = output_axis(end, 21600)
     indices = np.array([np.argmin(abs(fields["time_s"] - t)) for t in t6])

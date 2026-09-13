@@ -32,15 +32,15 @@ def validation_sources():
     return {path: file_record(path) for path in paths if Path(path).exists()}
 
 
-def _comparison_indices(a, b, spacing_s, endpoint_s):
+def _comparison_indices(a, b, spacing_s, checkpoint_s):
     ta = np.asarray(a["time_s"], dtype=float)
     tb = np.asarray(b["time_s"], dtype=float)
     regular_a = ta[np.isclose(ta / spacing_s, np.rint(ta / spacing_s), rtol=0, atol=1e-10)]
     regular_b = tb[np.isclose(tb / spacing_s, np.rint(tb / spacing_s), rtol=0, atol=1e-10)]
     common = np.intersect1d(regular_a, regular_b)
-    if endpoint_s not in ta or endpoint_s not in tb:
-        raise ValueError(f"Configured common endpoint {endpoint_s} s is absent")
-    times = np.unique(np.r_[common, float(endpoint_s)])
+    if checkpoint_s not in ta or checkpoint_s not in tb:
+        raise ValueError(f"Configured intermediate checkpoint {checkpoint_s} s is absent")
+    times = np.unique(np.r_[common, float(checkpoint_s)])
     ia = np.searchsorted(ta, times)
     ib = np.searchsorted(tb, times)
     if not np.array_equal(ta[ia], times) or not np.array_equal(tb[ib], times):
@@ -89,34 +89,91 @@ def _summary_difference(a, b, times, ia, ib, column):
     return {"max_abs": float(delta[index]), "time_s": float(times[index])}
 
 
-def compare(a, b, *, spacing_s=60.0, endpoint_s=86400.0):
+def _checkpoint_field(name, a, b, index_a, index_b):
+    left = np.asarray(a[name][index_a], dtype=float)
+    right = np.asarray(b[name][index_b], dtype=float)
+    if left.shape != (22,) or right.shape != (22,):
+        raise ValueError("Q4 checkpoint fields require 21 fixed radii plus the dynamic surface")
+    fixed = np.asarray(a["fixed_radius_m"], dtype=float)
+    if len(fixed) != 21 or not np.array_equal(fixed, np.asarray(b["fixed_radius_m"], dtype=float)):
+        raise ValueError("Q4 fixed output radii differ between compared runs")
+    valid = np.isfinite(left) & np.isfinite(right)
+    if not valid[-1]:
+        raise ValueError("Dynamic surface must be finite in both Q4 checkpoint states")
+    rows = []
+    for column in np.flatnonzero(valid):
+        dynamic = bool(column == 21)
+        radius_a = float(a["surface_radius_m"][index_a]) if dynamic else float(fixed[column])
+        radius_b = float(b["surface_radius_m"][index_b]) if dynamic else float(fixed[column])
+        rows.append({
+            "column_index": int(column),
+            "column": "surface" if dynamic else f"fixed_{radius_a * 100:.1f}_cm",
+            "dynamic_surface": dynamic,
+            "radius_m_a": radius_a,
+            "radius_m_b": radius_b,
+            "value_a": float(left[column]),
+            "value_b": float(right[column]),
+            "abs_difference": float(abs(left[column] - right[column])),
+        })
+    return {
+        "valid_columns": len(rows),
+        "max_abs": max(row["abs_difference"] for row in rows),
+        "columns": rows,
+    }
+
+
+def _checkpoint_difference(a, b, time_s, index_a, index_b, acquisition):
+    return {
+        "time_s": float(time_s),
+        "state_acquisition": acquisition,
+        "time_reconstruction_error_s": 0.0,
+        "surface_radius_m_a": float(a["surface_radius_m"][index_a]),
+        "surface_radius_m_b": float(b["surface_radius_m"][index_b]),
+        "T": _checkpoint_field("temperature_C", a, b, index_a, index_b),
+        "C": _checkpoint_field("moisture", a, b, index_a, index_b),
+    }
+
+
+def compare(a, b, *, spacing_s=60.0, intermediate_checkpoint_s=86400.0):
     """Compare every valid fixed radius and the separately sampled moving surface."""
-    times, ia, ib, common = _comparison_indices(a, b, spacing_s, endpoint_s)
+    times, ia, ib, common = _comparison_indices(
+        a, b, spacing_s, intermediate_checkpoint_s
+    )
+    checkpoint_index = int(np.flatnonzero(times == intermediate_checkpoint_s)[0])
+    near_root_time = float(common[-1])
+    near_root_index = int(np.flatnonzero(times == near_root_time)[0])
+    common_coverage_end = min(float(np.max(a["time_s"])), float(np.max(b["time_s"])))
+    if common_coverage_end - near_root_time > spacing_s + 1e-8:
+        raise ValueError("Last common regular Q4 state is not adjacent to the common event horizon")
     result = {
         "regular_spacing_s": float(spacing_s),
         "common_regular_times": int(len(common)),
         "comparison_times": int(len(times)),
         "common_start_s": float(times[0]),
         "common_end_s": float(times[-1]),
-        "unified_endpoint_s": float(endpoint_s),
+        "intermediate_checkpoint_s": float(intermediate_checkpoint_s),
         "dynamic_surface_included": True,
         "T": _field_difference("temperature_C", a, b, times, ia, ib),
         "C": _field_difference("moisture", a, b, times, ia, ib),
     }
     for name, column in SUMMARY_INDEX.items():
         result[name] = _summary_difference(a, b, times, ia, ib, column)
-    endpoint_index = int(np.flatnonzero(times == endpoint_s)[0])
-    result["endpoint"] = {
-        "time_s": float(endpoint_s),
-        "Cmax_abs": float(abs(a["summary"][ia[endpoint_index], SUMMARY_INDEX["Cmax"]]
-                                - b["summary"][ib[endpoint_index], SUMMARY_INDEX["Cmax"]])),
-        "mean_C_abs": float(abs(a["summary"][ia[endpoint_index], SUMMARY_INDEX["mean_C"]]
-                                  - b["summary"][ib[endpoint_index], SUMMARY_INDEX["mean_C"]])),
+    result["intermediate_checkpoint"] = _checkpoint_difference(
+        a, b, intermediate_checkpoint_s, ia[checkpoint_index], ib[checkpoint_index],
+        "exact_archived_regular_sample",
+    )
+    result["near_root_common"] = {
+        **_checkpoint_difference(
+            a, b, near_root_time, ia[near_root_index], ib[near_root_index],
+            "exact_archived_regular_sample",
+        ),
+        "common_coverage_end_s": common_coverage_end,
+        "gap_to_common_coverage_end_s": common_coverage_end - near_root_time,
     }
     return result
 
 
-def compare_q3_fixed(q4_fields, q3_fields, *, spacing_s, endpoint_s):
+def compare_q3_fixed(q4_fields, q3_fields, *, spacing_s, intermediate_checkpoint_s):
     q4_view = {
         "time_s": q4_fields["time_s"],
         "temperature_C": q4_fields["temperature_C"][:, :21],
@@ -126,12 +183,12 @@ def compare_q3_fixed(q4_fields, q3_fields, *, spacing_s, endpoint_s):
     tb = np.asarray(q3_fields["time_s"])
     common = np.intersect1d(ta, tb)
     common = common[np.isclose(common / spacing_s, np.rint(common / spacing_s), rtol=0, atol=1e-10)]
-    if endpoint_s not in common:
-        raise ValueError("Q3 regression endpoint is unavailable")
+    if intermediate_checkpoint_s not in common:
+        raise ValueError("Q3 regression intermediate checkpoint is unavailable")
     ia, ib = np.searchsorted(ta, common), np.searchsorted(tb, common)
     return {
         "common_regular_times": int(len(common)),
-        "unified_endpoint_s": float(endpoint_s),
+        "intermediate_checkpoint_s": float(intermediate_checkpoint_s),
         "C": float(np.max(np.abs(q4_view["moisture"][ia] - q3_fields["moisture"][ib]))),
         "T": float(np.max(np.abs(q4_view["temperature_C"][ia] - q3_fields["temperature_C"][ib]))),
     }
@@ -185,10 +242,39 @@ def check_typed_outcome(record, fields):
     status = record["status"]
     if status not in {"threshold_not_reached", "root_found_post_state_unavailable"}:
         raise ValueError(f"Unexpected typed outcome: {status}")
-    if not np.isfinite(fields["terminal_state"]).all() or len(fields["trace"]) == 0:
+    n = record["identity"]["case"]["N"] + 1
+    state = np.asarray(fields["terminal_state"], dtype=float)
+    trace = np.asarray(fields["trace"], dtype=float)
+    if state.shape != (2 * n,) or not np.isfinite(state).all() or len(trace) == 0:
         raise ValueError("Typed Q4 outcome lacks terminal fields or accepted-step trace")
-    if fields["time_s"][-1] != record["terminal"]["time_s"]:
+    if fields["time_s"][-1] != record["terminal"]["time_s"] or trace[-1, 0] != fields["time_s"][-1]:
         raise ValueError("Typed Q4 terminal output is not archived")
+    terminal = record["terminal"]
+    if not np.array_equal(trace[-1, :12], np.asarray(fields["summary"][-1], dtype=float)):
+        raise ValueError("Typed Q4 terminal summary differs from the accepted-step trace")
+    T, C = state[:n], state[n:]
+    cmax, index = full_max(state, n)
+    reconstructed = {
+        "Cmax": cmax,
+        "argmax_xi": float(fields["xi"][index]),
+        "argmax_radius_m": float(terminal["radius_m"] * fields["xi"][index]),
+        "center_C": float(C[0]),
+        "mean_C": float(np.dot(fields["volume_xi"], C) / np.sum(fields["volume_xi"])),
+        "surface_C": float(C[-1]),
+        "Cmin": float(C.min()),
+        "Tmin_C": float(T.min()),
+        "Tmax_C": float(T.max()),
+        "radial_increase": float(np.diff(C).max()),
+    }
+    for name, value in reconstructed.items():
+        if not np.isclose(value, terminal[name], rtol=2e-13, atol=2e-14):
+            raise ValueError(f"Typed Q4 terminal_state differs from terminal {name}")
+    if fields["surface_radius_m"][-1] != terminal["radius_m"]:
+        raise ValueError("Typed Q4 terminal radius differs from the archived output")
+    if not np.isclose(fields["moisture"][-1, 0], C[0], rtol=0, atol=2e-14):
+        raise ValueError("Typed Q4 terminal center output differs from terminal_state")
+    if not np.isclose(fields["moisture"][-1, -1], C[-1], rtol=0, atol=2e-14):
+        raise ValueError("Typed Q4 terminal surface output differs from terminal_state")
     if status == "threshold_not_reached" and record["terminal"]["g"] <= 0:
         raise ValueError("Threshold-not-reached record has a crossed terminal state")
     if status == "root_found_post_state_unavailable" and record.get("root") is None:
@@ -246,7 +332,7 @@ def _pair_comparison(name_a, run_a, name_b, run_b, config):
         fields_a,
         fields_b,
         spacing_s=config["validation"]["regular_spacing_s"],
-        endpoint_s=config["validation"]["common_endpoint_s"],
+        intermediate_checkpoint_s=config["validation"]["intermediate_checkpoint_s"],
     )
     return {
         "a": name_a,
@@ -297,8 +383,7 @@ def validate(directory="results/q4"):
         raise RuntimeError("Unit/regression tests failed")
 
     configured = cases(config)
-    required = [case for case in configured if not case.get("diagnostic_only")]
-    runs = {case["name"]: load_case(directory, case["name"]) for case in required}
+    runs = {case["name"]: load_case(directory, case["name"]) for case in configured}
     checks = {name: check_run(*run, config) for name, run in runs.items()}
 
     q3_record, q3_fields = load_q3_run("results/q3/runs/base_N5120")
@@ -306,7 +391,7 @@ def validate(directory="results/q4"):
         runs["A_appendix3_fixed_N5120"][1],
         q3_fields,
         spacing_s=config["validation"]["regular_spacing_s"],
-        endpoint_s=config["validation"]["common_endpoint_s"],
+        intermediate_checkpoint_s=config["validation"]["intermediate_checkpoint_s"],
     )
     regression["root_time_difference_s"] = abs(
         runs["A_appendix3_fixed_N5120"][0]["root"]["time_s"] - q3_record["root"]["time_s"]
@@ -331,25 +416,12 @@ def validate(directory="results/q4"):
     temporal_budget = check_comparison_budget(temporal, budgets, "time")
 
     method_names = config["validation"]["method_group"]
-    method_directory = directory / "runs" / method_names[1]
-    try:
-        method_run = load_case(directory, method_names[1])
-        if method_run[0]["status"] != "computed":
-            method = {"status": method_run[0]["status"]}
-        else:
-            method = {
-                "status": "computed",
-                "comparison": _pair_comparison(
-                    method_names[0], runs[method_names[0]], method_names[1], method_run, config
-                ),
-            }
-    except (FileNotFoundError, ValueError) as exc:
-        failure = method_directory / "failure.json"
-        method = {
-            "status": "unavailable",
-            "reason": str(exc),
-            "failure_hash": file_record(failure) if failure.is_file() else None,
-        }
+    method = {
+        "status": "computed",
+        "comparison": _pair_comparison(
+            method_names[0], runs[method_names[0]], method_names[1], runs[method_names[1]], config
+        ),
+    }
 
     main_names = [
         "A_appendix3_fixed_N5120", "B_appendix3_shrink_N5120",
@@ -373,6 +445,7 @@ def validate(directory="results/q4"):
     formal_case = config["formal_case"]
     formal = runs[formal_case][0]
     result = {
+        "schema_version": 3,
         "passed": True,
         "status": "verified",
         "formal_case": formal_case,
@@ -391,7 +464,7 @@ def validate(directory="results/q4"):
         "uncertainty_layers": {
             "space": "same BDF settings across N=5120/10240/20480",
             "time": "same N=20480 and physical inputs; base versus tightened/half-step BDF",
-            "method": "same configured diagnostic grid; BDF versus Radau",
+            "method": "same N=5120 configured diagnostic grid; BDF versus Radau",
             "root": "bracket width and residual only",
             "not_combined": True,
         },
@@ -411,21 +484,26 @@ def validate(directory="results/q4"):
 def verified(directory="results/q4"):
     directory = Path(directory)
     verification = json.loads((directory / "verification.json").read_text(encoding="utf-8"))
-    if verification.get("passed") is not True or verification["validation_sources"] != validation_sources():
+    if (verification.get("schema_version") != 3 or verification.get("passed") is not True
+            or verification["validation_sources"] != validation_sources()):
         raise ValueError("Current-source Q4 verification missing/failed")
     verify_file(directory / "unit_tests.txt", verification["unit_tests_hash"])
     config = read_config("configs/q4.json")
     if verification["formal_case"] != config["formal_case"]:
         raise ValueError("Verified Q4 formal_case differs from current config")
-    expected = {
-        case["name"] for case in cases(config) if not case.get("diagnostic_only")
-    }
+    expected = {case["name"] for case in cases(config)}
     if set(verification["run_record_hashes"]) != expected:
         raise ValueError("Incomplete Q4 verification run set")
+    configured = {case["name"]: case for case in cases(config)}
+    loaded = {}
     for name, digest in verification["run_record_hashes"].items():
         verify_file(directory / "runs" / name / "run.json", digest)
-        load_case(directory, name)
-    record, fields = load_run(directory / "runs" / verification["formal_case"])
+        record, fields = load_case(directory, name)
+        if record["identity"]["case"] != configured[name]:
+            raise ValueError(f"Verified Q4 case identity differs from current config: {name}")
+        check_run(record, fields, config)
+        loaded[name] = (record, fields)
+    record, fields = loaded[verification["formal_case"]]
     return verification, record, fields
 
 

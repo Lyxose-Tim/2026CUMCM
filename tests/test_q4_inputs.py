@@ -1,7 +1,8 @@
 import numpy as np
 import pytest
+from openpyxl import Workbook
 
-from q4.inputs import RadiusHistory
+from q4.inputs import RadiusHistory, read_radius
 
 
 def test_radius_history_linear_and_fixed():
@@ -35,4 +36,18 @@ def test_pchip_radius_hits_observations_and_stays_monotone():
 def test_radius_history_rejects_growth():
     with pytest.raises(ValueError):
         RadiusHistory(np.array([[0.0, 0.02], [10.0, 0.021]]))
+
+
+def test_radius_attachment_endpoint_is_checked_independently(tmp_path):
+    path = tmp_path / "radius.xlsx"
+    workbook = Workbook()
+    sheet = workbook.active
+    sheet.append(["时间", "半径"])
+    for index in range(145):
+        sheet.append([index * 1800, 2.0 - index * 0.005])
+    workbook.save(path)
+    history = read_radius(path, 259200)
+    assert history.observations[-1, 0] == 259200
+    with pytest.raises(ValueError, match="observation endpoint"):
+        read_radius(path, 14400)
 

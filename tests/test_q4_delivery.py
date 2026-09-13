@@ -67,7 +67,7 @@ def test_q4_spatial_budget_overrun_fails(key, value):
         })
 
 
-def test_q4_compare_includes_dynamic_surface_and_unified_endpoint():
+def test_q4_compare_includes_dynamic_surface_and_near_root_checkpoint():
     times = np.array([0.0, 60.0, 120.0])
     fixed = np.arange(21) * 0.001
     base = np.tile(np.linspace(2.0, 1.0, 22), (3, 1))
@@ -83,11 +83,15 @@ def test_q4_compare_includes_dynamic_surface_and_unified_endpoint():
     }
     b = {key: np.array(value, copy=True) for key, value in a.items()}
     b["moisture"][1, -1] += 0.25
-    result = compare(a, b, spacing_s=60, endpoint_s=60)
+    result = compare(a, b, spacing_s=60, intermediate_checkpoint_s=60)
     assert result["dynamic_surface_included"] is True
     assert result["C"]["dynamic_surface"] is True
     assert result["C"]["time_s"] == 60
-    assert result["unified_endpoint_s"] == 60
+    assert result["intermediate_checkpoint_s"] == 60
+    assert result["near_root_common"]["time_s"] == 120
+    assert result["near_root_common"]["state_acquisition"] == "exact_archived_regular_sample"
+    assert result["near_root_common"]["time_reconstruction_error_s"] == 0
+    assert result["near_root_common"]["C"]["valid_columns"] == 22
 
 
 def test_q4_failed_export_blocks_reports(tmp_path):

@@ -1,4 +1,4 @@
-"""Migrate unchanged Q1-Q3 numerical evidence to the versioned hash contract."""
+"""Migrate unchanged numerical evidence to current versioned metadata contracts."""
 from __future__ import annotations
 
 import argparse
@@ -18,6 +18,7 @@ from common.hashing import (
 from q1.provenance import NUMERICAL_FILES as Q1_NUMERICAL, artifact_sha256, source_snapshot as q1_snapshot
 from q2.provenance import NUMERICAL_FILES as Q2_NUMERICAL, source_snapshot as q2_snapshot
 from q3.provenance import NUMERICAL as Q3_NUMERICAL, snapshot as q3_snapshot
+from q4.provenance import NUMERICAL as Q4_NUMERICAL, snapshot as q4_snapshot
 
 
 Q1_EVIDENCE_ONLY = {"q1/provenance.py", "common/hashing.py"}
@@ -25,6 +26,9 @@ Q2_EVIDENCE_ONLY = {"q2/archive.py", "q2/provenance.py", "q2/run.py", "common/ha
 Q3_EVIDENCE_ONLY = {
     "q1/provenance.py", "q2/archive.py", "q2/provenance.py",
     "q3/run.py", "q3/provenance.py", "common/hashing.py",
+}
+Q4_EVIDENCE_ONLY = {
+    "q4/inputs.py", "q4/provenance.py", "common/hashing.py", "configs/q4.json",
 }
 
 
@@ -59,10 +63,17 @@ def verify_legacy_sources(record: dict, root: Path, files, evidence_only) -> lis
     return critical
 
 
-def migration_record(path: Path, old_raw: str, critical: list[str], from_scheme=LEGACY_TEXT_HASH_SCHEME) -> dict:
-    return {
+def migration_record(
+    path: Path,
+    old_raw: str,
+    critical: list[str],
+    from_scheme=LEGACY_TEXT_HASH_SCHEME,
+    kind="metadata-only-hash-contract-migration",
+    reason=None,
+) -> dict:
+    record = {
         "schema_version": 1,
-        "kind": "metadata-only-hash-contract-migration",
+        "kind": kind,
         "from_hash_scheme": from_scheme,
         "to_hash_scheme": TEXT_HASH_SCHEME,
         "old_record_raw_sha256": old_raw,
@@ -70,6 +81,9 @@ def migration_record(path: Path, old_raw: str, critical: list[str], from_scheme=
         "migration_source": file_record(Path(__file__)),
         "record": path.as_posix(),
     }
+    if reason is not None:
+        record["reason"] = reason
+    return record
 
 
 def append_migration(record: dict, migration: dict) -> None:
@@ -176,6 +190,77 @@ def migrate_q3(root: Path) -> dict:
     return {"status": "migrated", "records": migrated}
 
 
+def migrate_q4(root: Path) -> dict:
+    config = read_json(root / "configs/q4.json")
+    observed_end_s = float(config["radius"]["observed_end_s"])
+    paths = sorted((root / "results/q4/runs").glob("*/run.json"))
+    paths += sorted((root / "results/q4/sensitivity/runs").glob("*/run.json"))
+    if len(paths) != 13:
+        raise ValueError(f"Expected 13 Q4 run records, found {len(paths)}")
+    current_source = q4_snapshot(root)
+    migrated = 0
+    unchanged_artifacts = 0
+    for path in paths:
+        record = read_json(path)
+        source = record.get("source", {})
+        if source.get("hash_scheme") != TEXT_HASH_SCHEME:
+            raise ValueError(f"Q4 record does not use the current hash scheme: {path}")
+        critical = [name for name in Q4_NUMERICAL if name not in Q4_EVIDENCE_ONLY]
+        changed = [
+            name for name in critical
+            if file_sha256(root / name, TEXT_HASH_SCHEME)
+            != source.get("source_hashes", {}).get(name)
+        ]
+        if changed:
+            raise ValueError("Q4 numerical source changed; migration refused: " + ", ".join(changed))
+        artifact_records = record.get("files", {})
+        if set(artifact_records) != {"fields.npz", "accepted_steps.csv"}:
+            raise ValueError(f"Incomplete Q4 artifact set: {path}")
+        before = {}
+        for name, digest in artifact_records.items():
+            artifact = path.parent / name
+            verify_file(artifact, digest)
+            before[name] = raw_sha256(artifact)
+        radius = record["identity"]["inputs"]["q4_radius"]
+        if (radius.get("sha256") != config["input_sha256"]["radius"]
+                or int(radius.get("rows", 0)) != 145):
+            raise ValueError(f"Q4 radius identity is not eligible for migration: {path}")
+        if not radius.get("fixed") and float(radius["horizon_s"]) > observed_end_s:
+            raise ValueError(f"Shrinking Q4 run exceeds the observed radius domain: {path}")
+        old_raw = raw_sha256(path)
+        previous_digest = source.get("source_digest")
+        radius["observed_end_s"] = observed_end_s
+        record["source"] = current_source
+        migration = migration_record(
+            path.relative_to(root),
+            old_raw,
+            critical,
+            from_scheme=TEXT_HASH_SCHEME,
+            kind="metadata-only-q4-evidence-contract-refresh",
+            reason=(
+                "Add separate radius observation metadata and strengthen archive loading; "
+                "PDE operators, case parameters, solver settings, NPZ, and accepted steps are unchanged."
+            ),
+        )
+        migration["previous_source_digest"] = previous_digest
+        migration["refreshed_metadata_files"] = sorted(Q4_EVIDENCE_ONLY)
+        migration["unchanged_artifact_raw_sha256"] = before
+        append_migration(record, migration)
+        write_json(path, record)
+        for name, expected in before.items():
+            if raw_sha256(path.parent / name) != expected:
+                raise ValueError(f"Q4 artifact changed during metadata migration: {path.parent.name}/{name}")
+            unchanged_artifacts += 1
+        migrated += 1
+    return {
+        "status": "migrated",
+        "records": migrated,
+        "unchanged_artifacts": unchanged_artifacts,
+        "source_digest": current_source["source_digest"],
+        "code_commit": current_source["code_commit"],
+    }
+
+
 def migrate_q1_sensitivity(root: Path) -> dict:
     base = root / "results/q1_sensitivity"
     manifest_path = base / "manifest.json"
@@ -253,13 +338,19 @@ def migrate_q1_sensitivity(root: Path) -> dict:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", default=".")
+    parser.add_argument(
+        "--questions", nargs="+", choices=["q1_sensitivity", "q2", "q3", "q4"],
+        default=["q1_sensitivity", "q2", "q3", "q4"],
+    )
     args = parser.parse_args()
     root = Path(args.root).resolve()
-    result = {
-        "q1_sensitivity": migrate_q1_sensitivity(root),
-        "q2": migrate_q2(root),
-        "q3": migrate_q3(root),
+    operations = {
+        "q1_sensitivity": migrate_q1_sensitivity,
+        "q2": migrate_q2,
+        "q3": migrate_q3,
+        "q4": migrate_q4,
     }
+    result = {name: operations[name](root) for name in args.questions}
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 

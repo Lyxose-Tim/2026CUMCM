@@ -15,6 +15,7 @@ import numpy as np
 
 from common.hashing import file_record, verify_file
 from q2.archive import write_json
+from q4.sensitivity import verified_summary
 from q4.validation import verified
 
 
@@ -45,19 +46,7 @@ def _font() -> str:
 
 
 def _load_sensitivity(directory: Path) -> dict:
-    root = directory / "sensitivity"
-    summary = json.loads((root / "summary.json").read_text(encoding="utf-8"))
-    if summary.get("passed") is not True:
-        raise ValueError("Verified Q4 structural sensitivity is required")
-    verify_file("configs/q4_sensitivity.json", summary["configuration_hash"])
-    verify_file("q4/sensitivity.py", summary["generator_hash"])
-    verify_file(root / "summary.csv", summary["summary_csv_hash"])
-    for scenario, digest in summary["run_record_hashes"].items():
-        matches = list((root / "runs").glob(f"sensitivity_{scenario}_N*/run.json"))
-        if len(matches) != 1:
-            raise ValueError(f"Expected one sensitivity run for {scenario}, found {len(matches)}")
-        verify_file(matches[0], digest)
-    return summary
+    return verified_summary(directory / "sensitivity")
 
 
 def make(directory="results/q4", figure_dir="figures/q4"):
@@ -118,8 +107,9 @@ def make(directory="results/q4", figure_dir="figures/q4"):
         index = int(np.argmin(abs(fields["time_s"] - target_time)))
         time_s = float(fields["time_s"][index])
         selected_times.append(time_s)
+        surface_radius_m = float(fields["surface_radius_m"][index])
         for radius_m, moisture in zip(fields["fixed_radius_m"], fields["moisture"][index, :21]):
-            if np.isfinite(moisture) and radius_m <= fields["surface_radius_m"][index] + 1e-12:
+            if (np.isfinite(moisture) and radius_m < surface_radius_m - 1e-12):
                 profile_rows.append({
                     "time_s": f"{time_s:.17g}",
                     "radius_cm": f"{radius_m * 100:.17g}",
@@ -128,7 +118,7 @@ def make(directory="results/q4", figure_dir="figures/q4"):
                 })
         profile_rows.append({
             "time_s": f"{time_s:.17g}",
-            "radius_cm": f"{fields['surface_radius_m'][index] * 100:.17g}",
+            "radius_cm": f"{surface_radius_m * 100:.17g}",
             "C": f"{fields['moisture'][index, 21]:.17g}",
             "point_type": "dynamic_surface",
         })
@@ -161,7 +151,7 @@ def make(directory="results/q4", figure_dir="figures/q4"):
         ("空间", "N=5120→10240", verification["spatial"][0]),
         ("空间", "N=10240→20480", verification["spatial"][1]),
         ("时间", "BDF 基准→收紧", verification["temporal"][0]),
-        ("方法", "BDF→Radau", verification["method"]["comparison"]),
+        ("方法", "N=5120 BDF→Radau", verification["method"]["comparison"]),
     ]
     for layer, label, item in comparisons:
         numerical_rows.append({
@@ -220,17 +210,22 @@ def make(directory="results/q4", figure_dir="figures/q4"):
     axes[1].set(xlabel="时间 / h", ylabel="材料表面半径 / cm")
     save(fig, "q4_moisture_radius")
 
+    with (source / "fixed_radius_profiles.csv").open("r", encoding="utf-8", newline="") as stream:
+        plotted_profiles = list(csv.DictReader(stream))
     fig, ax = plt.subplots(figsize=(6.5, 3.4), layout="constrained")
     colors = plt.colormaps["viridis"](np.linspace(0.05, 0.85, len(selected_times)))
     for selected_time, color in zip(selected_times, colors):
-        fixed = [row for row in profile_rows if float(row["time_s"]) == selected_time and row["point_type"] == "fixed_radius"]
-        surface = [row for row in profile_rows if float(row["time_s"]) == selected_time and row["point_type"] == "dynamic_surface"][0]
+        points = sorted(
+            [row for row in plotted_profiles if float(row["time_s"]) == selected_time],
+            key=lambda row: float(row["radius_cm"]),
+        )
+        surface = [row for row in points if row["point_type"] == "dynamic_surface"][0]
         label = f"{selected_time / 3600:.0f} h"
         if np.isclose(selected_time, record["root"]["time_s"]):
             label = f"结束 {record['root']['time_h']:.4f} h"
         ax.plot(
-            [float(row["radius_cm"]) for row in fixed],
-            [float(row["C"]) for row in fixed],
+            [float(row["radius_cm"]) for row in points],
+            [float(row["C"]) for row in points],
             color=color,
             label=label,
         )
@@ -290,7 +285,7 @@ def make(directory="results/q4", figure_dir="figures/q4"):
 
     csv_paths = sorted(source.glob("*.csv"))
     write_json(directory / "figure_manifest.json", {
-        "schema_version": 2,
+        "schema_version": 3,
         "font": font,
         "generator": file_record("q4/figures.py"),
         "verification": file_record(directory / "verification.json"),
