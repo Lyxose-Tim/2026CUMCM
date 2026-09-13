@@ -53,7 +53,19 @@ python -m q4.reproduce --data-root 你的A题目录 --workers 1
 
 ### 论文主图
 
+生成论文主图前，系统需安装并确保 Matplotlib 能识别 `Microsoft YaHei`、`SimHei` 或 `Noto Sans CJK SC` 中的至少一种中文字体。该系统字体不由 `requirements.lock.txt` 安装，可先运行：
+
+```bash
+python -c "from paper_figures import _font; print(_font())"
+```
+
+缺少上述字体时，生成器会明确报错 `RuntimeError: A Chinese font is required`。仓库已提交的 PDF 自身嵌入所用字体，直接查看这些 PDF 不要求本机安装同一种字体。
+
+随后运行：
+
+```bash
 python paper_figures.py
+```
 
 输出六张主图、对应 CSV 和 results/paper_figure_manifest.json。图1同时保留 figures/paper/fig01_model_roadmap.drawio。
 
