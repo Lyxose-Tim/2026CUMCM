@@ -1,4 +1,4 @@
-# fix: 完成四问独立审议综合返修
+# fix: 完成四问独立审议综合返修与可复现交付
 
 ## 摘要
 
@@ -39,6 +39,7 @@
 - 新增六张论文主图、逐图 CSV、DrawIO 技术路线源和版本化清单。
 - 新增 common.portable_audit，用于 LF 干净检出和无 Git ZIP 的只读验收。
 - Radau、五个结构情景及其 run.json、NPZ、accepted_steps 均递归校验；删除或篡改证据会使验证、报告、绘图和便携审计失败。
+- 全量测试 `127 passed`；当前工作树、LF全新克隆和无Git archive快照的便携审计均为 `passed: true`，399个受控文本文件的CR数量为0。
 
 ## 模型边界
 
